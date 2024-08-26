@@ -21,7 +21,7 @@ class Lexer(val code: String) {
         AssignationHandler(),
         SemicolonHandler(),
         NumberHandler(),
-                ParenthesisHandler(),
+        ParenthesisHandler(),
         ColonAndTypeHandler(),
         ArithmeticOperatorHandler(),
     )
