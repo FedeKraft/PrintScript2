@@ -1,0 +1,12 @@
+print(2-3);
+print(2+3);
+print(2*3 + 4);
+let name : String = "Hola" + " Mundo";
+print(name);
+let number : Number = 2;
+let number2 : Number = 3;
+print(number + number2);
+print(number - number2);
+number = number + number2;
+print(number);
+print(number * number2 + number);

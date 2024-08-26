@@ -1,0 +1,83 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm'
+    id "org.jlleitschuh.gradle.ktlint"
+    id 'org.jetbrains.kotlinx.kover'
+}
+
+repositories {
+    mavenCentral()
+    gradlePluginPortal()
+}
+
+dependencies {
+    constraints {
+        implementation 'org.apache.commons:commons-text:1.11.0'
+    }
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation("org.jlleitschuh.gradle:ktlint-gradle:12.1.1")
+    implementation("org.jetbrains.kotlinx:kover-gradle-plugin:0.8.3")
+
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(11)
+    }
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+ktlint {
+    version.set "0.49.1"
+    android.set(true)
+    outputToConsole.set(true)
+    coloredOutput.set(true)
+    ignoreFailures.set(false)
+
+    reporters {
+        reporter org.jlleitschuh.gradle.ktlint.reporter.ReporterType.PLAIN
+    }
+
+    additionalEditorconfig.set([
+            'indent_size'        : '4',
+            'indent_style'       : 'space',
+            'max_line_length'    : '120',
+            'insert_final_newline': 'true'
+    ])
+
+    filter {
+        exclude '/generated/'
+        include '/kotlin/'
+    }
+}
+
+
+subprojects { subproject ->
+    // Aplica el plugin kover si está disponible
+    if (subproject.plugins.hasPlugin("org.jetbrains.kotlinx.kover")) {
+        subproject.kover {
+            filters {
+                classes {
+                    includes = [
+                            'lexer.*',
+                            'parser.*',
+                            'interpreter.*'
+                    ]
+                    excludes = ['ast.*']
+                }
+            }
+            verify {
+                rule {
+                    bound {
+                        minValue = 80  // Cobertura mínima del 80%
+                        valueType = kotlinx.kover.api.VerificationValueType.COVERED_LINES
+                    }
+                }
+            }
+        }
+    }
+}
