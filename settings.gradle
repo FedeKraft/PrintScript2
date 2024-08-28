@@ -16,4 +16,5 @@ include 'parser'
 include 'ast'
 include 'interpreter'
 include 'linter'
+include 'formatter'
 
