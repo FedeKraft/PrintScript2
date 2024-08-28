@@ -8,11 +8,11 @@ import org.example.rules.FormatterRule
 class Formatter(private val rules: List<FormatterRule>) {
     fun format(program: ProgramNode, code: String): String {
         val formattedCode = StringBuilder()
-        for (statement in program.statements){
+        for (statement in program.statements) {
             formattedCode.append(applyRules(statement, StringBuilder(code)))
         }
         return formattedCode.toString()
-      }
+    }
 
     private fun applyRules(node: ASTNode, code: StringBuilder): String {
         var formattedCode = StringBuilder()

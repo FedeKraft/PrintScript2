@@ -4,7 +4,7 @@ import ASTNode
 import IdentifierNode
 import org.example.LinterError
 
-class SnakeCaseIdentifierRule: LinterRule {
+class SnakeCaseIdentifierRule : LinterRule {
     private val snakeCaseRegex = Regex("^[a-z]+(_[a-z]+)*$")
     override fun check(node: ASTNode): List<LinterError> {
         val errors = mutableListOf<LinterError>()

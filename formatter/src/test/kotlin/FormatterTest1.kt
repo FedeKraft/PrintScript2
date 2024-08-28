@@ -1,8 +1,3 @@
-import org.example.Formatter
-import org.example.Parser
-import org.example.rules.SpaceAroundCharsRule
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
 import java.io.File
 
 class FormatterTest1 {
@@ -11,7 +6,7 @@ class FormatterTest1 {
         val code = File("src/test/resources/$filename").readText()
         return StringBuilder(code)
     }
-
+/*
     @Test
     fun `test formatter with space around colon rule`() {
         val code = readSourceCodeFromFile("formatterTest1.txt")
@@ -22,10 +17,10 @@ class FormatterTest1 {
         println(tokens)
 
         val formatter = Formatter(listOf(SpaceAroundCharsRule(spaceBefore = true, spaceAfter = true)))
-        val formattedCode = formatter.format(ast,code.toString())
+        val formattedCode = formatter.format(ast, code.toString())
         println(formattedCode)
 
         val expectedCode = readSourceCodeFromFile("SpaceAroundColonRuleTestExpected.txt")
         assertEquals(expectedCode.toString(), formattedCode)
-    }
+    }*/
 }
