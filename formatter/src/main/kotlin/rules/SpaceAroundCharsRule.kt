@@ -13,7 +13,7 @@ class SpaceAroundCharsRule(
             return StringBuilder()
         }
         var formattedCode = code
-        var colonIndex = findCharIndex(code, ':', node.line, node.column)
+        var colonIndex = findCharIndex(code, CharToFormat, node.line, node.column)
         //eliminar todos los espacios antes del colon
         while (formattedCode[colonIndex - 1] == ' ') {
             formattedCode = formattedCode.deleteCharAt(colonIndex - 1)

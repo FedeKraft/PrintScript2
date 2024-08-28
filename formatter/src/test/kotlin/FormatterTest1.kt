@@ -21,11 +21,13 @@ class FormatterTest1 {
         val ast = parser.parse(tokens)
         println(tokens)
 
-        val formatter = Formatter(listOf(SpaceAroundCharsRule(spaceBefore = true, spaceAfter = true)))
-        val formattedCode = formatter.format(ast,code.toString())
-        println(formattedCode)
+        val formatter = Formatter(listOf(SpaceAroundCharsRule(spaceBefore = false, spaceAfter = true, ':') , SpaceAroundCharsRule(spaceBefore = true, spaceAfter = true, '=')))
+        val formattedCode = formatter.format(ast, code.toString())
+        println("Formatted Code:\n'$formattedCode'")
 
-        val expectedCode = readSourceCodeFromFile("SpaceAroundColonRuleTestExpected.txt")
-        assertEquals(expectedCode.toString(), formattedCode)
+        val expectedCode = readSourceCodeFromFile("SpaceAroundColonRuleTestExpected.txt").toString().trim()
+        println("Expected Code:\n'$expectedCode'")
+
+        assertEquals(expectedCode, formattedCode)
     }
 }
