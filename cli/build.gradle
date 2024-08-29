@@ -1,0 +1,17 @@
+plugins {
+    id 'buildlogic.kotlin-application-conventions'
+}
+
+dependencies {
+    implementation project(':ast')
+    implementation project(':lexer')
+    implementation project(':parser')
+    implementation project(':formatter')
+    implementation project(':linter')
+    implementation project(':interpreter')
+    implementation 'com.github.ajalt.clikt:clikt:4.0.0'
+
+}
+application {
+    mainClass.set("AppKt")
+}
