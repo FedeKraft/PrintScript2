@@ -3,7 +3,7 @@ package org.example.rules
 import ASTNode
 
 class NewlineBeforePrintlnRule(
-    newlineCount: Int
+    newlineCount: Int,
 ) : FormatterRule {
     var newlineCount: Int = newlineCount
         set(value) {

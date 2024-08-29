@@ -1,4 +1,5 @@
 
+import org.example.Linter
 import org.example.rules.CamelCaseIdentifierRule
 import org.example.rules.CamelORSnakeRules
 import org.example.rules.PrintSimpleExpressionRule
@@ -63,15 +64,39 @@ class LinterTests {
     }
 
     @Test
-    fun `test print with Binary expression`() {
-        val rule = PrintSimpleExpressionRule()
-        val printNode =
-            PrintStatementNode(
-                BinaryExpressionNode(NumberLiteralNode(1.0, 1, 1), TokenType.SUM, NumberLiteralNode(2.0, 1, 1), 1, 1),
-                1,
-                1,
-            )
-        val errors = rule.check(printNode)
-        assertEquals(1, errors.size) // Error expected for binary expressions
+    fun `test Linter with PrintSimpleExpressionRule enabled`() {
+        val rules = listOf(PrintSimpleExpressionRule())
+        val config = mapOf("print_simple_expression" to true) // Activamos la regla
+        val linter = Linter(rules, config)
+
+        val printNode = PrintStatementNode(
+            BinaryExpressionNode(NumberLiteralNode(1.0, 1, 1), TokenType.SUM, NumberLiteralNode(2.0, 1, 1), 1, 1),
+            1,
+            1,
+        )
+        val program = ProgramNode(listOf(printNode))
+
+        val errors = linter.lint(program)
+
+        assertEquals(1, errors.size) // Esperamos un error porque la regla está activada
+        assertEquals("Binary expression should be simple", errors[0].message)
+    }
+
+    @Test
+    fun `test Linter with PrintSimpleExpressionRule disabled`() {
+        val rules = listOf(PrintSimpleExpressionRule())
+        val config = mapOf("print_simple_expression" to false) // Desactivamos la regla
+        val linter = Linter(rules, config)
+
+        val printNode = PrintStatementNode(
+            BinaryExpressionNode(NumberLiteralNode(1.0, 1, 1), TokenType.SUM, NumberLiteralNode(2.0, 1, 1), 1, 1),
+            1,
+            1,
+        )
+        val program = ProgramNode(listOf(printNode))
+
+        val errors = linter.lint(program)
+
+        assertEquals(0, errors.size) // No esperamos errores porque la regla está desactivada
     }
 }
