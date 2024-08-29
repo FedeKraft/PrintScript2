@@ -1,45 +1,47 @@
 package org.example.rules
 
 import ASTNode
+import SpaceAroundCharsConfig
 import VariableDeclarationNode
 
-class SpaceAroundCharsRule(
-    private val spaceBefore: Boolean,
-    private val spaceAfter: Boolean,
-    private val CharToFormat: Char,
-) : FormatterRule {
+class SpaceAroundCharsRule(private val config: SpaceAroundCharsConfig) : FormatterRule {
 
     override fun apply(node: ASTNode, code: StringBuilder): StringBuilder {
-        // fijarse la configuracion de la regla para ese caracter
+        if (!config.enabled || node !is VariableDeclarationNode) {
+            return code
+        }
 
-        if (node !is VariableDeclarationNode) {
-            return StringBuilder()
-        }
         var formattedCode = code
-        var colonIndex = findCharIndex(code, CharToFormat, node.line, node.column)
-        // eliminar todos los espacios antes del colon
-        while (formattedCode[colonIndex - 1] == ' ') {
-            formattedCode = formattedCode.deleteCharAt(colonIndex - 1)
-            colonIndex--
+        var charIndex = findCharIndex(code, config.charToFormat, node.line, node.column)
+
+        // Elimina los espacios antes del carácter si config.spaceBefore es falso
+        if (!config.spaceBefore) {
+            while (charIndex > 0 && formattedCode[charIndex - 1] == ' ') {
+                formattedCode.deleteCharAt(charIndex - 1)
+                charIndex--
+            }
         }
-        // agregar un espacio antes si spaceBefore es true
-        if (spaceBefore) {
-            formattedCode = formattedCode.insert(colonIndex, ' ')
-            colonIndex++
+
+        // Añade un espacio antes del carácter si config.spaceBefore es verdadero
+        if (config.spaceBefore) {
+            formattedCode.insert(charIndex, ' ')
+            charIndex++
         }
-        // eliminar todos los espacios despues del colon
-        while (formattedCode[colonIndex + 1] == ' ') {
-            formattedCode = formattedCode.deleteCharAt(colonIndex + 1)
+
+        // Elimina los espacios después del carácter si config.spaceAfter es falso
+        while (charIndex < formattedCode.length - 1 && formattedCode[charIndex + 1] == ' ') {
+            formattedCode.deleteCharAt(charIndex + 1)
         }
-        // agregar un espacio despues si spaceAfter es true
-        if (spaceAfter) {
-            formattedCode = formattedCode.insert(colonIndex + 1, ' ')
+
+        // Añade un espacio después del carácter si config.spaceAfter es verdadero
+        if (config.spaceAfter) {
+            formattedCode.insert(charIndex + 1, ' ')
         }
 
         return formattedCode
     }
 
     private fun findCharIndex(code: StringBuilder, charToFind: Char, line: Int, column: Int): Int {
-        return code.indexOf(charToFind)
+        return code.indexOfFirst {  it == charToFind }
     }
 }

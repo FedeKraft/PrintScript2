@@ -2,6 +2,7 @@ package org.example.rules
 
 import ASTNode
 import IdentifierNode
+import SnakeCaseIdentifierConfig
 import org.example.LinterError
 
 class SnakeCaseIdentifierRule : LinterRule {

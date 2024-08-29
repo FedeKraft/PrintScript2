@@ -1,25 +1,18 @@
 package org.example.rules
 
 import ASTNode
+import NewlineBeforePrintlnConfig
 
-class NewlineBeforePrintlnRule(
-    newlineCount: Int,
-) : FormatterRule {
-    var newlineCount: Int = newlineCount
-        set(value) {
-            require(value in 0..2) { "newlineCount must be 0, 1, or 2" }
-            field = value
-        }
-
-    init {
-        this.newlineCount = newlineCount
-    }
+class NewlineBeforePrintlnRule(private val config: NewlineBeforePrintlnConfig) : FormatterRule {
 
     override fun apply(node: ASTNode, code: StringBuilder): StringBuilder {
-        // Encontrar la primera aparición de "println("
-        var printlnIndex = code.indexOf("println(")
+        if (!config.enabled) {
+            return code
+        }
 
-        // Contar saltos de línea antes de println
+        val printlnIndex = code.indexOf("println(")
+        if (printlnIndex == -1) return code
+
         var newlineBeforeCount = 0
         var currentIndex = printlnIndex - 1
 
@@ -28,16 +21,14 @@ class NewlineBeforePrintlnRule(
             currentIndex--
         }
 
-        // Ajustar el número de saltos de línea
-        while (newlineBeforeCount > newlineCount) {
+        // Ajusta los saltos de línea antes de `println` según `config.newlineCount`
+        while (newlineBeforeCount > config.newlineCount) {
             code.deleteCharAt(printlnIndex - 1)
-            printlnIndex--
             newlineBeforeCount--
         }
 
-        while (newlineBeforeCount < newlineCount) {
+        while (newlineBeforeCount < config.newlineCount) {
             code.insert(printlnIndex, '\n')
-            printlnIndex++
             newlineBeforeCount++
         }
 
