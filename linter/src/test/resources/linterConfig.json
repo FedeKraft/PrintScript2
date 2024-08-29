@@ -1,0 +1,11 @@
+{
+  "printSimpleExpression": {
+    "enabled": true
+  },
+  "snakeCaseIdentifier": {
+    "enabled": true
+  },
+  "camelCaseIdentifier": {
+    "enabled": true
+  }
+}

@@ -1,6 +1,6 @@
 import org.example.Formatter
 import org.example.Parser
-import org.example.util.ConfigLoader
+import org.example.util.FormatterConfigLoader
 import org.example.rules.SingleSpaceBetweenTokensRule
 import org.example.rules.SpaceAroundCharsRule
 import org.example.rules.SpaceAroundSemicolonRule
@@ -17,7 +17,7 @@ class FormatterTest1 {
     @Test
     fun `test formatter with space around colon rule`() {
         // Cargar la configuración desde el archivo JSON
-        val config = ConfigLoader.loadConfig("src/test/resources/formatter-config.json")
+        val config = FormatterConfigLoader.loadConfig("src/test/resources/formatter-config.json")
 
         // Crear las reglas basadas en la configuración cargada
         val rules = listOf(

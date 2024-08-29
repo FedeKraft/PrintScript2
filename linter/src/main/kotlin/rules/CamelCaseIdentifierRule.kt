@@ -1,10 +1,11 @@
 package org.example.rules
 
 import ASTNode
+import CamelCaseIdentifierConfig
 import IdentifierNode
 import org.example.LinterError
 
-class CamelCaseIdentifierRule : LinterRule {
+class CamelCaseIdentifierRule: LinterRule {
     override fun check(node: ASTNode): List<LinterError> {
         val errors = mutableListOf<LinterError>()
         if (node is IdentifierNode) {
