@@ -17,4 +17,5 @@ include 'ast'
 include 'interpreter'
 include 'linter'
 include 'formatter'
+include 'cli'
 
