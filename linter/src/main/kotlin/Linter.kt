@@ -1,7 +1,6 @@
 package org.example
 
 import ASTNode
-import ExpressionNode
 import PrintStatementNode
 import ProgramNode
 import VariableDeclarationNode
@@ -19,10 +18,10 @@ class Linter(private val rules: List<LinterRule>) {
     private fun checkNode(node: ASTNode): List<LinterError> {
         val errors = mutableListOf<LinterError>()
         for (rule in rules) {
-            if  (node is VariableDeclarationNode) {
+            if (node is VariableDeclarationNode) {
                 errors.addAll(rule.check(node.identifier))
             }
-            if (node is PrintStatementNode){
+            if (node is PrintStatementNode) {
                 errors.addAll(rule.check(node.expression))
             }
         }
