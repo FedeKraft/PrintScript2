@@ -1,0 +1,12 @@
+{
+  "spaceAroundChars": {
+    "enabled": true,
+    "spaceBefore": true,
+    "spaceAfter": true,
+    "charToFormat": ":"
+  },
+  "newlineBeforePrintln": {
+    "enabled": true,
+    "newlineCount": 1
+  }
+}

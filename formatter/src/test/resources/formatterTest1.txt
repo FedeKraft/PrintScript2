@@ -1,4 +1,1 @@
-let name: String= "Olive";
-let name2: String ="John";
-print(name);
-print(name2);
+let name: String = "Olive";

@@ -1,6 +1,6 @@
 import org.example.Formatter
 import org.example.Parser
-import org.example.rules.FormatterRule
+import org.example.util.ConfigLoader
 import org.example.rules.SingleSpaceBetweenTokensRule
 import org.example.rules.SpaceAroundCharsRule
 import org.example.rules.SpaceAroundSemicolonRule
@@ -14,27 +14,30 @@ class FormatterTest1 {
         return File("src/test/resources/$filename").readText().replace("\r\n", "\n")
     }
 
-    private val rules1 = emptyList<FormatterRule>()
-    private val rules2 = listOf(
-        SpaceAroundCharsRule(spaceBefore = false, spaceAfter = true, ':'),
-        SpaceAroundCharsRule(spaceBefore = true, spaceAfter = true, '='), SingleSpaceBetweenTokensRule(),
-        SpaceAroundSemicolonRule()
-    )
-
     @Test
     fun `test formatter with space around colon rule`() {
+        // Cargar la configuración desde el archivo JSON
+        val config = ConfigLoader.loadConfig("src/test/resources/formatter-config.json")
+
+        // Crear las reglas basadas en la configuración cargada
+        val rules = listOf(
+            SpaceAroundCharsRule(config.spaceAroundChars), // Usar config.spaceAroundChars
+            SingleSpaceBetweenTokensRule(),
+            SpaceAroundSemicolonRule()
+        )
+
+        // El código original del test
         val code = readSourceCodeFromFile("formatterTest1.txt")
         val lexer = Lexer(code)
         val tokens = lexer.tokenize()
         val parser = Parser()
         val ast = parser.parse(tokens)
 
-        val formatter = Formatter(rules2)
+        val formatter = Formatter(rules)
         val formattedCode = formatter.format(ast, code)
         val expectedCode = readSourceCodeFromFile("SpaceAroundColonRuleTestExpected.txt")
 
-
+        // Validar que el código formateado es el esperado
         assertEquals(expectedCode, formattedCode)
     }
-
 }
