@@ -1,0 +1,22 @@
+{
+  "rules": {
+    "spaceAroundColon": {
+      "enabled": true,
+      "spaceBefore": false,
+      "spaceAfter": true
+    },
+    "spaceAroundEquals": {
+      "enabled": true,
+      "spaceBefore": true,
+      "spaceAfter": true
+    },
+    "newlineAfterSemicolon": {
+      "enabled": true,
+      "newlineCount": 1
+    },
+    "spaceBetweenTokens": {
+      "enabled": true,
+      "maxSpaces": 1
+    }
+  }
+}

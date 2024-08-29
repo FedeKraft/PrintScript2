@@ -37,6 +37,6 @@ class SpaceAroundCharsRule(
     }
 
     private fun findCharIndex(code: StringBuilder, charToFind: Char, line: Int, column: Int): Int {
-        return code.indexOf(charToFind)
+        return code.indexOfFirst {  it == charToFind }
     }
 }
