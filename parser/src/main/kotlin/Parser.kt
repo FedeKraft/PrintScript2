@@ -1,53 +1,30 @@
 package org.example
 
-import PrintStatementCommand
-import ProgramNode
+import Lexer
 import StatementNode
-import Token
 import TokenType
-import command.VariableDeclarationStatementCommand
-import org.example.command.AssignationCommand
+import command.ParseCommand
+class Parser(private val lexer: Lexer, private val commands : Map<TokenType, ParseCommand>) {
+    // Este método produce un statement a la vez.
+    fun nextStatement(): StatementNode? {
+        // Obtén el siguiente conjunto de tokens que representan un statement.
+        val statementTokens = lexer.tokenizeByStatement().iterator()
 
-class Parser {
-
-    private val commands = mapOf(
-        TokenType.LET to VariableDeclarationStatementCommand(),
-        TokenType.PRINT to PrintStatementCommand(),
-        TokenType.IDENTIFIER to AssignationCommand(),
-    )
-
-    fun parse(tokens: List<Token>): ProgramNode {
-        val statements = mutableListOf<StatementNode>()
-        var index = 0
-        while (index < tokens.size) {
-            val currentStatement = getStatement(tokens, index)
-            val statementTokens = currentStatement.first
-            val token = tokens[index]
-            val command = commands[token.type]
-            if (command != null) {
-                val node = command.execute(statementTokens)
-                statements.add(node as StatementNode)
-                index = currentStatement.second
-            } else {
-                throw RuntimeException(
-                    "Token inesperado en linea ${token.line}, columna ${token.column}: ${token.type}",
-                )
-            }
+        if (!statementTokens.hasNext()) {
+            return null  // No hay más statements.
         }
-        return ProgramNode(statements)
-    }
 
-    private fun getStatement(tokens: List<Token>, index: Int): Pair<List<Token>, Int> {
-        val statementTokens = mutableListOf<Token>()
-        var currentIndex = index
-        while (currentIndex < tokens.size) {
-            val token = tokens[currentIndex]
-            if (token.type == TokenType.SEMICOLON) {
-                return Pair(statementTokens, currentIndex + 1)
-            }
-            statementTokens.add(token)
-            currentIndex++
+        val tokens = statementTokens.next()
+        if (tokens.isEmpty()) return null  // No hay tokens para procesar.
+
+        val firstToken = tokens.first()
+        val command = commands[firstToken.type]
+        if (command != null) {
+            return command.execute(tokens) as StatementNode
+        } else {
+            throw RuntimeException(
+                "Token inesperado en línea ${firstToken.line}, columna ${firstToken.column}: ${firstToken.type}"
+            )
         }
-        throw RuntimeException("No se encontró un punto y coma al final de la línea")
     }
 }

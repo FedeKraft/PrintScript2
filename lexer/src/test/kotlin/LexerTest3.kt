@@ -1,3 +1,4 @@
+import handlers.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.io.File
@@ -11,7 +12,17 @@ class LexerTest3 {
     @Test
     fun `test full code with types and operators`() {
         val code = readSourceCodeFromFile("AllKnownTokens.txt")
-        val lexer = Lexer(code)
+        val lexer = Lexer(code, listOf(
+            WhitespaceHandler(),
+            IdentifierOrKeywordHandler(),
+            StringLiteralHandler(),
+            AssignationHandler(),
+            SemicolonHandler(),
+            NumberHandler(),
+            ParenthesisHandler(),
+            ColonAndTypeHandler(),
+            ArithmeticOperatorHandler(),
+        ))
         val tokens = lexer.tokenize()
 
         // Imprimir los tokens generados por el lexer

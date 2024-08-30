@@ -1,5 +1,7 @@
+import command.VariableDeclarationStatementCommand
 import org.example.Formatter
 import org.example.Parser
+import org.example.command.AssignationCommand
 import org.example.util.FormatterConfigLoader
 import org.example.rules.SingleSpaceBetweenTokensRule
 import org.example.rules.SpaceAroundCharsRule
@@ -30,7 +32,11 @@ class FormatterTest1 {
         val code = readSourceCodeFromFile("formatterTest1.txt")
         val lexer = Lexer(code)
         val tokens = lexer.tokenize()
-        val parser = Parser()
+        val parser = Parser(mapOf(
+            TokenType.LET to VariableDeclarationStatementCommand(),
+            TokenType.PRINT to PrintStatementCommand(),
+            TokenType.IDENTIFIER to AssignationCommand(),
+        ))
         val ast = parser.parse(tokens)
 
         val formatter = Formatter(rules)
