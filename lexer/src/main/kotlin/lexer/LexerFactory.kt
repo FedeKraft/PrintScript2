@@ -24,7 +24,7 @@ class LexerFactory {
             ColonAndTypeHandler(),
             ArithmeticOperatorHandler(),
         )
-        return Lexer(code, handlers)
+        return Lexer(code)
     }
 
     fun createLexer1_1(code: String): Lexer {
@@ -39,6 +39,6 @@ class LexerFactory {
             ColonAndTypeHandler(),
             ArithmeticOperatorHandler(), // agregar nuevos handlers cuando hagamos version 1.1
         )
-        return Lexer(code, handlers)
+        return Lexer(code)
     }
 }

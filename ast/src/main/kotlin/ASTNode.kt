@@ -1,3 +1,4 @@
+import token.TokenType
 
 // Other node types that are part of the AST
 sealed class StatementNode

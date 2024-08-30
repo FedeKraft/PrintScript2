@@ -9,6 +9,7 @@ import StringLiteralNode
 import NumberLiteralNode
 import BinaryExpressionNode
 import StatementNode
+import token.TokenType
 
 class Interpreter {
 
