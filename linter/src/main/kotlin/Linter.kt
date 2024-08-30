@@ -4,7 +4,7 @@ import ASTNode
 import PrintStatementNode
 import ProgramNode
 import VariableDeclarationNode
-import org.example.rules.*
+import org.example.rules.LinterRule
 
 class Linter(private val rules: List<LinterRule>) {
     fun lint(program: ProgramNode): List<LinterError> {
@@ -18,10 +18,10 @@ class Linter(private val rules: List<LinterRule>) {
     private fun checkNode(node: ASTNode): List<LinterError> {
         val errors = mutableListOf<LinterError>()
         for (rule in rules) {
-            if (node is PrintStatementNode){
+            if (node is PrintStatementNode) {
                 errors.addAll(rule.check(node.expression))
             }
-            if( node is VariableDeclarationNode){
+            if (node is VariableDeclarationNode) {
                 errors.addAll(rule.check(node.identifier))
             }
         }

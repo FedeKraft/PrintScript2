@@ -1,5 +1,8 @@
 import command.ParseCommand
 import org.example.errorCheckers.syntactic.PrintSyntaxErrorChecker
+import token.Token
+import token.TokenType
+import token.TokenValue
 
 class PrintStatementCommand : ParseCommand {
     override fun execute(tokens: List<Token>): ASTNode {

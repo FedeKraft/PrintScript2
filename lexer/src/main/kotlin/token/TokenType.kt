@@ -1,3 +1,5 @@
+package token
+
 enum class TokenType {
 
     // LITERAL TYPES

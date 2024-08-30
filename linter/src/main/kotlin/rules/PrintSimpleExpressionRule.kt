@@ -7,7 +7,6 @@ import org.example.LinterError
 
 class PrintSimpleExpressionRule(private val config: PrintSimpleExpressionConfig) : LinterRule {
 
-
     override fun check(node: ASTNode): List<LinterError> {
         val errors = mutableListOf<LinterError>()
         if (!config.enabled) {

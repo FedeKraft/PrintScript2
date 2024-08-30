@@ -1,3 +1,6 @@
+import token.Token
+import token.TokenType
+
 class BinaryOperatorParselet(private val precedence: Int) : InfixParselet {
     override fun parse(parser: PrattParser, left: ExpressionNode, token: Token): ExpressionNode {
         val right = parser.parseExpression(precedence)

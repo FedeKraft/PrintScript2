@@ -1,15 +1,21 @@
-import handlers.*
+package lexer
 
-class Lexer(val code: String, private val handlers: List<TokenHandler>) {
-    private var position = 0
-    private var line = 1
-    private var column = 1
+import token.Token
+import token.TokenHandler
+import token.TokenProvider
+import token.TokenType
+import token.TokenValue
+
+class Lexer(val code: String, private val handlers: List<TokenHandler>) : TokenProvider {
+    var position = 0
+    var line = 1
+    var column = 1
 
     // Método para obtener el siguiente token en la secuencia.
     private fun nextToken(): Token? {
         while (position < code.length) {
             val currentChar = code[position]
-            var matched = false
+            val matched = false
 
             for (handler in handlers) {
                 val token = handler.handle(currentChar, this)
@@ -26,7 +32,7 @@ class Lexer(val code: String, private val handlers: List<TokenHandler>) {
                     TokenType.UNKNOWN,
                     TokenValue.StringValue(currentChar.toString()),
                     line,
-                    column
+                    column,
                 )
                 throw IllegalArgumentException("Unknown token found: $unknownToken")
             }
@@ -40,29 +46,15 @@ class Lexer(val code: String, private val handlers: List<TokenHandler>) {
         return null
     }
 
-    // Secuencia que produce tokens de manera incremental.
-    fun tokenize(): Sequence<Token> = sequence {
+    override fun getNextStatementTokens(): List<Token>? {
+        val statementTokens = mutableListOf<Token>()
         while (true) {
             val token = nextToken() ?: break
-            yield(token)
-        }
-    }
-
-    // Secuencia que produce listas de tokens, una por cada statement.
-    fun tokenizeByStatement(): Sequence<List<Token>> = sequence {
-        val statementTokens = mutableListOf<Token>()
-
-        for (token in tokenize()) {
             statementTokens.add(token)
-
-            // Emitimos los tokens acumulados como un statement al encontrar un punto y coma.
             if (token.type == TokenType.SEMICOLON) {
-                yield(statementTokens.toList())  // Emitimos una copia inmutable de los tokens
-                statementTokens.clear()  // Limpiamos la lista para el próximo statement
+                break
             }
         }
-
-        // Emitir los tokens restantes si no hay punto y coma final.
-        if (statementTokens.isNotEmpty()) yield(statementTokens.toList())
+        return if (statementTokens.isEmpty()) null else statementTokens
     }
 }

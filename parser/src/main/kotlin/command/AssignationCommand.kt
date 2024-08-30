@@ -6,10 +6,11 @@ import IdentifierNode
 import NumberLiteralNode
 import PrattParser
 import StringLiteralNode
-import Token
-import TokenType
 import command.ParseCommand
 import org.example.errorCheckers.syntactic.AssignationSyntaxErrorChecker
+import token.Token
+import token.TokenType
+import token.TokenValue
 
 class AssignationCommand : ParseCommand {
     override fun execute(tokens: List<Token>): ASTNode {

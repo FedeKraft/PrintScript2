@@ -1,7 +1,7 @@
 package command
 
 import ASTNode
-import Token
+import token.Token
 
 interface ParseCommand {
     fun execute(tokens: List<Token>): ASTNode
