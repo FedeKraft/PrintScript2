@@ -1,35 +1,44 @@
-import org.example.visitor.ASTVisitor
+package interpreter
 
-class InterpreterVisitor(private var context: ExecutionContext) : ASTVisitor {
-    override fun visit(programNode: ProgramNode) {
-        for (statement in programNode.statements) {
-            statement.accept(this)
+import VariableDeclarationNode
+import AssignationNode
+import PrintStatementNode
+import ExpressionNode
+import IdentifierNode
+import StringLiteralNode
+import NumberLiteralNode
+import BinaryExpressionNode
+import StatementNode
+
+class Interpreter {
+
+    private var context = ExecutionContext()
+
+    // Método principal para interpretar una declaración
+    fun interpret(statement: StatementNode) {
+        interpretStatement(statement)
+    }
+
+    // Método para interpretar cada tipo de declaración (statement)
+    private fun interpretStatement(statement: StatementNode) {
+        when (statement) {
+            is VariableDeclarationNode -> {
+                val value = evaluateExpression(statement.value)
+                context = context.addVariable(statement.identifier.name, value)
+            }
+            is AssignationNode -> {
+                val value = evaluateExpression(statement.value)
+                context = context.addVariable(statement.identifier.name, value)
+            }
+            is PrintStatementNode -> {
+                val value = evaluateExpression(statement.expression)
+                println(value)
+            }
+            else -> throw IllegalArgumentException("Tipo de declaración no soportada: ${statement::class.java.simpleName}")
         }
     }
 
-    override fun visit(variableDeclarationNode: VariableDeclarationNode) {
-        val value = evaluateExpression(variableDeclarationNode.value)
-        context = context.addVariable(variableDeclarationNode.identifier.name, value)
-    }
-
-    override fun visit(assignationNode: AssignationNode) {
-        val value = evaluateExpression(assignationNode.value)
-        context = context.addVariable(assignationNode.identifier.name, value)
-    }
-
-    override fun visit(binaryExpressionNode: BinaryExpressionNode) {
-        binaryExpressionNode.accept(this)
-    }
-
-    override fun visit(printStatementNode: PrintStatementNode) {
-        val value = evaluateExpression(printStatementNode.expression)
-        println(value)
-    }
-
-    override fun visit(identifierNode: IdentifierNode) {}
-    override fun visit(numberLiteralNode: NumberLiteralNode) {}
-    override fun visit(stringLiteralNode: StringLiteralNode) {}
-
+    // Método para evaluar expresiones
     private fun evaluateExpression(expression: ExpressionNode): Any? {
         return when (expression) {
             is IdentifierNode -> context.getVariable(expression.name)
@@ -47,7 +56,7 @@ class InterpreterVisitor(private var context: ExecutionContext) : ASTVisitor {
                             leftValue is String && rightValue is Double -> leftValue + rightValue.toString()
                             leftValue is Double && rightValue is String -> leftValue.toString() + rightValue
                             else -> throw IllegalArgumentException(
-                                "No Soportada: ${leftValue?.javaClass?.name} y ${rightValue?.javaClass?.name}",
+                                "No soportada: ${leftValue?.javaClass?.name} y ${rightValue?.javaClass?.name}"
                             )
                         }
                     }
@@ -57,9 +66,7 @@ class InterpreterVisitor(private var context: ExecutionContext) : ASTVisitor {
                     else -> throw IllegalArgumentException("Operador binario inesperado: ${expression.operator}")
                 }
             }
-            else -> throw IllegalArgumentException(
-                "Tipo de expresión no soportada: ${expression::class.java.simpleName}",
-            )
+            else -> throw IllegalArgumentException("Tipo de expresión no soportada: ${expression::class.java.simpleName}")
         }
     }
 }

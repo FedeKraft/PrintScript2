@@ -1,8 +1,9 @@
+import interpreter.Interpreter
 import org.example.Parser
 import org.junit.jupiter.api.Test
 import java.io.File
 
-class InterpreterImpTests {
+class InterpreterTests {
     private fun readSourceCodeFromFile(filename: String): String {
         return File("src/test/resources/$filename").readText()
     }
@@ -14,7 +15,7 @@ class InterpreterImpTests {
         val tokens = lexer.tokenize()
         val parser = Parser()
         val nodes = parser.parse(tokens)
-        val interpreter = InterpreterImp()
+        val interpreter = Interpreter()
         interpreter.interpret(nodes)
     }
 }

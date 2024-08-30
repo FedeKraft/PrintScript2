@@ -1,6 +1,5 @@
 package commands
 
-import InterpreterImp
 import Lexer
 import ProgramNode
 import Token
@@ -17,7 +16,7 @@ class ExecutionCommand : CliktCommand(help = "Execute the file") {
         val tokens : List<Token> = lexer.tokenize()
         val parser = Parser()
         val programNode : ProgramNode = parser.parse(tokens)
-        val interpreter : InterpreterImp = InterpreterImp()
+        val interpreter : Interpreter = Interpreter()
         interpreter.interpret(programNode)
         println("file executed")
     }
