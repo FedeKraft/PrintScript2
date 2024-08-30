@@ -5,9 +5,11 @@ import IdentifierNode
 import NumberLiteralNode
 import PrattParser
 import StringLiteralNode
-import Token
 import VariableDeclarationNode
 import org.example.errorCheckers.syntactic.VariableDeclarationSyntaxErrorChecker
+import token.Token
+import token.TokenType
+import token.TokenValue
 
 class VariableDeclarationStatementCommand : ParseCommand {
 

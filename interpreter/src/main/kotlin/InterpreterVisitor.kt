@@ -1,4 +1,5 @@
 import org.example.visitor.ASTVisitor
+import token.TokenType
 
 class InterpreterVisitor(private var context: ExecutionContext) : ASTVisitor {
     override fun visit(programNode: ProgramNode) {

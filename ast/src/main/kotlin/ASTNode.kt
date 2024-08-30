@@ -1,4 +1,5 @@
 import org.example.visitor.ASTVisitor
+import token.TokenType
 
 interface ASTNode {
     fun accept(visitor: ASTVisitor)

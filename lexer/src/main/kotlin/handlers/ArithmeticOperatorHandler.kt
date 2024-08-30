@@ -1,11 +1,11 @@
 
 package handlers
 
-import Lexer
-import Token
-import TokenHandler
-import TokenType
-import TokenValue
+import lexer.Lexer
+import token.Token
+import token.TokenHandler
+import token.TokenType
+import token.TokenValue
 
 class ArithmeticOperatorHandler : TokenHandler {
     override fun handle(currentChar: Char, lexer: Lexer): Token? {

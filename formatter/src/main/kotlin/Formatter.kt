@@ -13,8 +13,8 @@ class Formatter(private val rules: List<FormatterRule>) {
         val formattedCode = StringBuilder()
         for ((index, statement) in program.statements.withIndex()) {
             formattedCode.append(applyRules(statement, StringBuilder(splittedCode[index].trim())))
-            if (index != program.statements.size - 1){
-                formattedCode.append("\n")  // Añade un salto de línea después de cada statement
+            if (index != program.statements.size - 1) {
+                formattedCode.append("\n") // Añade un salto de línea después de cada statement
             }
         }
         return normalizeLineEndings(formattedCode.toString().trim())

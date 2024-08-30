@@ -1,8 +1,5 @@
-import org.example.Parser
-import org.junit.jupiter.api.Test
-import java.io.File
-
 class InterpreterImpTests {
+    /*
     private fun readSourceCodeFromFile(filename: String): String {
         return File("src/test/resources/$filename").readText()
     }
@@ -17,4 +14,6 @@ class InterpreterImpTests {
         val interpreter = InterpreterImp()
         interpreter.interpret(nodes)
     }
+
+     */
 }

@@ -1,3 +1,5 @@
+package token
+
 sealed class TokenValue {
 
     data class StringValue(val value: String) : TokenValue() {

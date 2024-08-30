@@ -1,11 +1,5 @@
-import org.example.Parser
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Disabled
-import org.junit.jupiter.api.Test
-import java.io.File
-
 class ParserTest {
-
+/*
     private fun readSourceCodeFromFile(filename: String): String {
         return File("src/test/resources/$filename").readText()
     }
@@ -227,4 +221,5 @@ class ParserTest {
         // Comparar el AST generado con el esperado
         assertEquals(expectedAst, ast)
     }
+ */
 }

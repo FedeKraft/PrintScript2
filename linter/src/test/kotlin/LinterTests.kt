@@ -6,7 +6,7 @@ import org.example.rules.SnakeCaseIdentifierRule
 import org.example.util.LinterConfigLoader
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import java.io.File
+import token.TokenType
 
 class LinterTests {
 
@@ -79,6 +79,5 @@ class LinterTests {
         val errorMessages = errors.map { it.message }
         assertEquals("Identifier snake_Case should be in camel case", errorMessages[0])
         assertEquals("Identifier snake_Case should be in snake case", errorMessages[1])
-
     }
 }

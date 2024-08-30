@@ -1,3 +1,5 @@
+import token.Token
+
 interface PrefixParselet {
     fun parse(parser: PrattParser, token: Token): ExpressionNode
 }

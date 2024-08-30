@@ -1,8 +1,8 @@
 package handlers
 
-import Lexer
-import Token
-import TokenHandler
+import lexer.Lexer
+import token.Token
+import token.TokenHandler
 
 class WhitespaceHandler : TokenHandler {
     override fun handle(currentChar: Char, lexer: Lexer): Token? {
