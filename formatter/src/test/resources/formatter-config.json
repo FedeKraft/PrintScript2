@@ -1,12 +1,24 @@
 {
-  "spaceAroundChars": {
-    "enabled": true,
-    "spaceBefore": true,
-    "spaceAfter": true,
-    "charToFormat": ":"
+  "spaceBeforeColon": {
+    "enabled": true
+  },
+  "spaceAfterColon": {
+    "enabled": true
+  },
+  "spaceAroundEquals": {
+    "enabled": true
   },
   "newlineBeforePrintln": {
     "enabled": true,
-    "newlineCount": 1
+    "newlineCount": 2
+  },
+  "newlineAfterSemicolon": {
+    "enabled": true
+  },
+  "singleSpaceBetweenTokens": {
+    "enabled": true
+  },
+  "spaceAroundOperators": {
+    "enabled": true
   }
 }
