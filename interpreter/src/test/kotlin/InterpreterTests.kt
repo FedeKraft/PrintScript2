@@ -1,6 +1,10 @@
+import command.VariableDeclarationStatementCommand
 import interpreter.Interpreter
-import org.example.Parser
+import lexer.Lexer
+import org.example.command.AssignationCommand
+import org.example.parser.Parser
 import org.junit.jupiter.api.Test
+import token.TokenType
 import java.io.File
 
 class InterpreterTests {
@@ -12,10 +16,13 @@ class InterpreterTests {
     fun `test interpreter`() {
         val code = readSourceCodeFromFile("testCodeIdentifier.txt")
         val lexer = Lexer(code)
-        val tokens = lexer.tokenize()
-        val parser = Parser()
-        val nodes = parser.parse(tokens)
-        val interpreter = Interpreter()
-        interpreter.interpret(nodes)
+        val parser = Parser(lexer, mapOf(
+            TokenType.LET to VariableDeclarationStatementCommand(),
+            TokenType.PRINT to PrintStatementCommand(),
+            TokenType.IDENTIFIER to AssignationCommand()
+        ))
+        val interpreter = Interpreter(parser)
+        interpreter.interpret()
+
     }
 }

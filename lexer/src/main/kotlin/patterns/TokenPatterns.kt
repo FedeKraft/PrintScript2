@@ -2,13 +2,27 @@
 package token
 
 object TokenPatterns {
-    val KEYWORDS = Regex("\\b(let|println)\\b")
-    val IDENTIFIER = Regex("\\b[a-zA-Z_][a-zA-Z0-9_]*\\b")
-    val NUMBER = Regex("\\b\\d+(\\.\\d+)?\\b")
-    val STRING = Regex("\".*?\"|'.*?'")  // Mantiene las comillas para extracción
+    // KEYWORDS
+    val LET = Regex("\\blet\\b")
+    val PRINT = Regex("\\bprint\\b")
+    // VAL TYPES
     val STRING_TYPE = Regex("\\bString\\b")
     val NUMBER_TYPE = Regex("\\bNumber\\b")
-    val OPERATOR = Regex("[+\\-*/=]")
-    val SYMBOL = Regex("[;:(){}]")
-    val WHITESPACE = Regex("\\s+")
+    val IDENTIFIER = Regex("\\b[a-zA-Z_][a-zA-Z0-9_]*\\b")
+    // LITERALS
+    val NUMBER = Regex("\\b\\d+(\\.\\d+)?\\b")
+    val STRING = Regex("\".*?\"|'.*?'")
+
+    // OPERATORS
+    val SUM = Regex("\\+")
+    val SUBTRACT = Regex("-")
+    val MULTIPLY = Regex("\\*")
+    val DIVIDE = Regex("/")
+    // SYMBOLS
+    val ASSIGN = Regex("=")
+    val SEMICOLON = Regex(";")
+    val COLON = Regex(":")
+    val LEFT_PARENTHESIS = Regex("\\(")
+    val RIGHT_PARENTHESIS = Regex("\\)")
+
 }

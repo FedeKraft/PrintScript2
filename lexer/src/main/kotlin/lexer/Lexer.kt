@@ -1,128 +1,102 @@
 package lexer
 
-import token.Token
-import token.TokenType
-import token.TokenValue
-import token.TokenPatterns  // Importar el objeto TokenPatterns
+import token.*
 
-class Lexer(val code: String) {
-    var position = 0
-    var line = 1
-    var column = 1
+class Lexer(val code: String): TokenProvider {
+    private var currentIndex = 0
+    private var currentLine = 1
+    private var currentColumn = 1
+    private val patternsMap = mapOf(
+        TokenPatterns.NUMBER to TokenType.NUMBER,
+        TokenPatterns.STRING to TokenType.STRING,
+        TokenPatterns.LET to TokenType.LET,
+        TokenPatterns.PRINT to TokenType.PRINT,
+        TokenPatterns.STRING_TYPE to TokenType.STRING_TYPE,
+        TokenPatterns.NUMBER_TYPE to TokenType.NUMBER_TYPE,
+        TokenPatterns.IDENTIFIER to TokenType.IDENTIFIER,
+        TokenPatterns.ASSIGN to TokenType.ASSIGN,
+        TokenPatterns.SUM to TokenType.SUM,
+        TokenPatterns.SUBTRACT to TokenType.SUBTRACT,
+        TokenPatterns.MULTIPLY to TokenType.MULTIPLY,
+        TokenPatterns.DIVIDE to TokenType.DIVIDE,
+        TokenPatterns.SEMICOLON to TokenType.SEMICOLON,
+        TokenPatterns.COLON to TokenType.COLON,
+        TokenPatterns.LEFT_PARENTHESIS to TokenType.LEFT_PARENTHESIS,
+        TokenPatterns.RIGHT_PARENTHESIS to TokenType.RIGHT_PARENTHESIS
+    )
 
-    fun tokenize(): List<Token> {
-        val tokens = mutableListOf<Token>()
-        while (true) {
-            val token = nextToken() ?: break
-            tokens.add(token)
-        }
-        return tokens
+    override fun hasNextToken(): Boolean {
+        skipWhitespace()
+        return currentIndex < code.length
     }
 
-    // Método para obtener el siguiente token en la secuencia.
-    private fun nextToken(): Token? {
-        if (position >= code.length) return null
-
-        val remainingCode = code.substring(position)
-
-        // Manejo de nueva línea
-        if (remainingCode.startsWith("\n")) {
-            line++
-            column = 1 // Reiniciar la columna al comenzar una nueva línea
-            position++
-            return nextToken() // Continuar con el siguiente token
+    fun nextToken(): Token {
+        if (!hasNextToken()) {
+            return Token(TokenType.UNKNOWN, TokenValue.StringValue("unknown"), currentLine, currentColumn)
         }
 
-        // Match y creación de tokens basado en patrones
-        return when {
-            TokenPatterns.KEYWORDS.find(remainingCode)?.range?.first == 0 -> {
-                matchToken(TokenPatterns.KEYWORDS, TokenType.LET, TokenType.PRINT)
+        val startingLine = currentLine
+        val startingColumn = currentColumn
+        val remainingCode = code.substring(currentIndex)
+
+        for ((pattern, tokenType) in patternsMap) {
+            val matchResult = pattern.find(remainingCode)
+            if (matchResult != null && matchResult.range.first == 0) { // Coincidencia al inicio
+                val matchedText = matchResult.value
+                updatePosition(matchedText)
+                currentIndex += matchedText.length
+                return Token(tokenType, getTokenValue(matchedText, tokenType), startingLine, startingColumn)
             }
-            TokenPatterns.STRING_TYPE.find(remainingCode)?.range?.first == 0 -> {
-                matchToken(TokenPatterns.STRING_TYPE, TokenType.STRING_TYPE)
-            }
-            TokenPatterns.NUMBER_TYPE.find(remainingCode)?.range?.first == 0 -> {
-                matchToken(TokenPatterns.NUMBER_TYPE, TokenType.NUMBER_TYPE)
-            }
-            TokenPatterns.IDENTIFIER.find(remainingCode)?.range?.first == 0 -> {
-                matchToken(TokenPatterns.IDENTIFIER, TokenType.IDENTIFIER)
-            }
-            TokenPatterns.NUMBER.find(remainingCode)?.range?.first == 0 -> {
-                val match = TokenPatterns.NUMBER.find(remainingCode)!!
-                val tokenValue = match.value.toDouble() // Convertir a Double
-                val token = Token(TokenType.NUMBER, TokenValue.NumberValue(tokenValue), line, column)
-                position += match.value.length
-                column += match.value.length
-                return token
-            }
-            TokenPatterns.STRING.find(remainingCode)?.range?.first == 0 -> {
-                val match = TokenPatterns.STRING.find(remainingCode)!!
-                val tokenValue = match.value.trim('"', '\'')  // Quita las comillas del literal String
-                val token = Token(TokenType.STRING, TokenValue.StringValue(tokenValue), line, column)
-                position += match.value.length
-                column += match.value.length
-                return token
-            }
-            TokenPatterns.OPERATOR.find(remainingCode)?.range?.first == 0 -> {
-                matchToken(TokenPatterns.OPERATOR, TokenType.ARITHMETIC_OP)
-            }
-            TokenPatterns.SYMBOL.find(remainingCode)?.range?.first == 0 -> {
-                matchToken(TokenPatterns.SYMBOL, TokenType.SEMICOLON, TokenType.COLON, TokenType.LEFT_PARENTHESIS, TokenType.RIGHT_PARENTHESIS)
-            }
-            TokenPatterns.WHITESPACE.find(remainingCode)?.range?.first == 0 -> {
-                // Ignorar espacios en blanco
-                val match = TokenPatterns.WHITESPACE.find(remainingCode)!!
-                position += match.value.length
-                column += match.value.length
-                return nextToken() // Continuar con el siguiente token
-            }
-            else -> {
-                // Token no reconocido
-                val unknownToken = Token(
-                    TokenType.UNKNOWN,
-                    TokenValue.StringValue(remainingCode[0].toString()),
-                    line,
-                    column
-                )
-                throw IllegalArgumentException("Unknown token found: $unknownToken")
+        }
+
+        // Si no se encuentra ningún token, avanzar en uno e indicar token desconocido
+        updatePosition(code[currentIndex].toString())
+        currentIndex++
+        return Token(TokenType.UNKNOWN, TokenValue.StringValue("unknown"), startingLine, startingColumn)
+    }
+
+    private fun skipWhitespace() {
+        while (currentIndex < code.length && code[currentIndex].isWhitespace()) {
+            updatePosition(code[currentIndex].toString())
+            currentIndex++
+        }
+    }
+
+    private fun updatePosition(text: String) {
+        for (char in text) {
+            if (char == '\n') {
+                currentLine++
+                currentColumn = 1
+            } else {
+                currentColumn++
             }
         }
     }
 
-    private fun matchToken(pattern: Regex, vararg types: TokenType): Token {
-        val match = pattern.find(code.substring(position))!!
-        val tokenType = when (match.value) {
-            "let" -> TokenType.LET
-            "println" -> TokenType.PRINT
-            "+" -> TokenType.SUM
-            "-" -> TokenType.SUBTRACT
-            "*" -> TokenType.MULTIPLY
-            "/" -> TokenType.DIVIDE
-            "=" -> TokenType.ASSIGN
-            ";" -> TokenType.SEMICOLON
-            ":" -> TokenType.COLON
-            "(" -> TokenType.LEFT_PARENTHESIS
-            ")" -> TokenType.RIGHT_PARENTHESIS
-            "String" -> TokenType.STRING_TYPE // Tipo específico para String
-            "Number" -> TokenType.NUMBER_TYPE // Tipo específico para Number
-            else -> types.first()
+    private fun getTokenValue(word: String, tokenType: TokenType): TokenValue {
+        return when (tokenType) {
+            TokenType.NUMBER -> TokenValue.NumberValue(word.toDouble())
+            TokenType.STRING -> TokenValue.StringValue(word)
+            TokenType.LET -> TokenValue.StringValue("let")
+            TokenType.PRINT -> TokenValue.StringValue("print")
+            TokenType.STRING_TYPE -> TokenValue.StringValue("String")
+            TokenType.NUMBER_TYPE -> TokenValue.StringValue("Number")
+            TokenType.IDENTIFIER -> TokenValue.StringValue(word)
+            TokenType.ASSIGN -> TokenValue.StringValue("=")
+            TokenType.SUM -> TokenValue.StringValue("+")
+            TokenType.SUBTRACT -> TokenValue.StringValue("-")
+            TokenType.MULTIPLY -> TokenValue.StringValue("*")
+            TokenType.DIVIDE -> TokenValue.StringValue("/")
+            TokenType.SEMICOLON -> TokenValue.StringValue(";")
+            TokenType.COLON -> TokenValue.StringValue(":")
+            TokenType.LEFT_PARENTHESIS -> TokenValue.StringValue("(")
+            TokenType.RIGHT_PARENTHESIS -> TokenValue.StringValue(")")
+            else -> TokenValue.StringValue("unknown")
         }
-        val token = Token(tokenType, TokenValue.StringValue(match.value), line, column)
-        position += match.value.length
-        column += match.value.length // Incrementar la columna por la longitud del token
-        return token
     }
 
-    // Método existente para obtener tokens de la siguiente declaración
-    fun getNextStatementTokens(): List<Token>? {
-        val statementTokens = mutableListOf<Token>()
-        while (true) {
-            val token = nextToken() ?: break
-            statementTokens.add(token)
-            if (token.type == TokenType.SEMICOLON) {
-                break
-            }
-        }
-        return if (statementTokens.isEmpty()) null else statementTokens
+    override fun getNextToken(): Token {
+        return nextToken()
     }
+
 }

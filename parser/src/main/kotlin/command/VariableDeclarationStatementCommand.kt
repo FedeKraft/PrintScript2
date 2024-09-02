@@ -1,9 +1,9 @@
 package command
 
-import ASTNode
 import IdentifierNode
 import NumberLiteralNode
 import PrattParser
+import StatementNode
 import StringLiteralNode
 import VariableDeclarationNode
 import org.example.errorCheckers.syntactic.VariableDeclarationSyntaxErrorChecker
@@ -13,7 +13,7 @@ import token.TokenValue
 
 class VariableDeclarationStatementCommand : ParseCommand {
 
-    override fun execute(tokens: List<Token>): ASTNode {
+    override fun execute(tokens: List<Token>): StatementNode {
         val errorChecker = VariableDeclarationSyntaxErrorChecker()
         if (!errorChecker.check(tokens)) {
             throw RuntimeException("Syntax error in variable declaration statement")

@@ -1,5 +1,6 @@
 package token
 
 interface TokenProvider {
-    fun getNextStatementTokens(): List<Token>?
+    fun getNextToken(): Token
+    fun hasNextToken(): Boolean
 }

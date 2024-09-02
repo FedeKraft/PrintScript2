@@ -18,7 +18,7 @@ class FormatterTest1 {
 
         // El código original del test
         val code = readSourceCodeFromFile("formatterTest1.txt")
-        val lexer = Lexer(code)
+        val lexer = lexer.Lexer(code)
         val tokens = lexer.tokenize()
         val parser = Parser(
             mapOf(

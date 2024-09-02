@@ -1,11 +1,11 @@
 package commands
 
-import Lexer
-import ProgramNode
-import Token
+import lexer.Lexer
+
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
-import org.example.Parser
+import org.example.parser.Parser
+import token.Token
 import java.io.File
 
 class ExecutionCommand : CliktCommand(help = "Execute the file") {
