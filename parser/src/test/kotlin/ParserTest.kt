@@ -20,10 +20,10 @@ class ParserTest{
             TokenType.PRINT to PrintStatementCommand(),
             TokenType.IDENTIFIER to AssignationCommand()
         ))
-        var statement = parser.nextStatement()
-        while(true){
-            println(statement)
+        var statement: StatementNode
+        while(parser.hasNextAST()){
             statement = parser.nextStatement()
+            println(statement)
         }
     }
     @Test
@@ -34,10 +34,10 @@ class ParserTest{
             TokenType.PRINT to PrintStatementCommand(),
             TokenType.IDENTIFIER to AssignationCommand()
         ))
-        var statement = parser.nextStatement()
-        while (statement != null) {
-            println(statement)
+        var statement: StatementNode
+        while (parser.hasNextAST()) {
             statement = parser.nextStatement()
+            println(statement)
 
         }
 

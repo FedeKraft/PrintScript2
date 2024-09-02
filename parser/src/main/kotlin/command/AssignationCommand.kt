@@ -28,6 +28,7 @@ class AssignationCommand : ParseCommand {
                 Token(TokenType.RIGHT_PARENTHESIS, TokenValue.StringValue(")"), 0, 0),
             )
             val expressionNode = PrattParser(newArgs).parseExpression()
+            println("oooo")
             return AssignationNode(identifierNode, expressionNode, tokens[0].line, tokens[0].column)
         }
         val expressionToken = tokens[2]

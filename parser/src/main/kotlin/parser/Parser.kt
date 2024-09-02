@@ -16,6 +16,9 @@ class Parser(private val tokenProvider: TokenProvider, private val commands: Map
             }
             tokens.add(token)
         }
+        if (tokens.isEmpty()) {
+            throw NoSuchElementException("No more tokens available")
+        }
         val command = commands[tokens[0].type] ?: throw IllegalArgumentException("Unknown command")
         return command.execute(tokens)
     }
