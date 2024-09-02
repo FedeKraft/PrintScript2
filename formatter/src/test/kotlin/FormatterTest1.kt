@@ -1,41 +1,43 @@
+import command.VariableDeclarationStatementCommand
+import formatter.Formatter
+import formatter.FormatterConfigLoader
+import lexer.Lexer
+import org.example.command.AssignationCommand
+import org.example.parser.Parser
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
+import rules.SpaceAroundEqualsRule
+import token.TokenType
+import java.io.File
+
 class FormatterTest1 {
-/*
+    private val config = FormatterConfigLoader.loadConfig("src/test/resources/formatter-config.json")
+
+    private val rules = listOf(
+        SpaceAroundEqualsRule(config.spaceAroundEquals.enabled)
+    )
+
     private fun readSourceCodeFromFile(filename: String): String {
         return File("src/test/resources/$filename").readText().replace("\r\n", "\n")
     }
-
     @Test
-    fun `test formatter with space around colon rule`() {
-        // Cargar la configuración desde el archivo JSON
-        val config = FormatterConfigLoader.loadConfig("src/test/resources/formatter-config.json")
+    fun `test SpaceAroundEqualsRule with formatterTest1`() {
+        val sourceCode = readSourceCodeFromFile("formatterTest1.txt")
+        val expected = readSourceCodeFromFile("formatterTest1Expected.txt")
+        val lexer = Lexer(sourceCode)
+        val parser = Parser(lexer, mapOf(
+            TokenType.PRINT to PrintStatementCommand(),
+            TokenType.LET to VariableDeclarationStatementCommand(),
+            TokenType.IDENTIFIER to AssignationCommand(),
+        ))
 
-        // Crear las reglas basadas en la configuración cargada
-        val rules = listOf(
-            SpaceAroundCharsRule(config.spaceAroundChars), // Usar config.spaceAroundChars
-            SingleSpaceBetweenTokensRule(),
-            SpaceAroundSemicolonRule(),
-        )
+        val formatter = Formatter(rules, parser)
+        val result = formatter.format().joinToString("\n")
 
-        // El código original del test
-        val code = readSourceCodeFromFile("formatterTest1.txt")
-        val lexer = lexer.Lexer(code)
-        val tokens = lexer.tokenize()
-        val parser = Parser(
-            mapOf(
-                TokenType.LET to VariableDeclarationStatementCommand(),
-                TokenType.PRINT to PrintStatementCommand(),
-                TokenType.IDENTIFIER to AssignationCommand(),
-            ),
-        )
-        val ast = parser.parse(tokens)
+        println("Generated output:\n$result")
+        println("Expected output:\n$expected")
 
-        val formatter = Formatter(rules)
-        val formattedCode = formatter.format(ast, code)
-        val expectedCode = readSourceCodeFromFile("SpaceAroundColonRuleTestExpected.txt")
-
-        // Validar que el código formateado es el esperado
-        assertEquals(expectedCode, formattedCode)
+        assertEquals(expected, result)
     }
 
- */
 }

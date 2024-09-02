@@ -1,11 +1,10 @@
-package org.example.rules
+package rules
 
-import ASTNode
+import StatementNode
 
 class SingleSpaceBetweenTokensRule : FormatterRule {
-    override fun apply(node: ASTNode, code: StringBuilder): StringBuilder {
-        val regex = Regex("\\s{2,}")
-        val formattedCode = regex.replace(code.toString(), " ")
-        return StringBuilder(formattedCode)
+    override fun applyRule(node: StatementNode,variableTypes: Map<String, Any>): String {
+        val formatted = node.toString().replace("\\s+".toRegex(), " ")
+        return formatted.trim()  // Asegura que no haya espacios al inicio o final
     }
 }

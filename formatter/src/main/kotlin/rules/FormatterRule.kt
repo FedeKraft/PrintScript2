@@ -1,7 +1,7 @@
-package org.example.rules
+package rules
 
-import ASTNode
+import StatementNode
 
 interface FormatterRule {
-    fun apply(node: ASTNode, code: StringBuilder): StringBuilder
+    fun applyRule(node: StatementNode, variableTypes: Map<String, Any>): String
 }
