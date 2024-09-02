@@ -1,8 +1,10 @@
+package token
+
 sealed class TokenValue {
 
     data class StringValue(val value: String) : TokenValue() {
         override fun toString(): String {
-            return value
+            return  value.replace('"', '\'').replace("'", "")
         }
     }
     data class NumberValue(val value: Double) : TokenValue() {

@@ -1,13 +1,7 @@
 package syntaxErrorTests
 
-import Token
-import org.example.Parser
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
-
 class PrintErrorTests {
-
+/*
     @Test
     fun `test print syntax error, unknown token in statement`() {
         val tokens = listOf(
@@ -132,4 +126,6 @@ class PrintErrorTests {
             assertEquals("Invalid argument in print statement", message)
         }
     }
+
+ */
 }

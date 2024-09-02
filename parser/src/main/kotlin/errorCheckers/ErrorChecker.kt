@@ -1,6 +1,6 @@
 package org.example.errorCheckers
 
-import Token
+import token.Token
 
 interface ErrorChecker {
     fun check(tokens: List<Token>): Boolean

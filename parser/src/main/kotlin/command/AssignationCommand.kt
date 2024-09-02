@@ -1,18 +1,19 @@
 package org.example.command
 
-import ASTNode
 import AssignationNode
 import IdentifierNode
 import NumberLiteralNode
 import PrattParser
+import StatementNode
 import StringLiteralNode
-import Token
-import TokenType
 import command.ParseCommand
 import org.example.errorCheckers.syntactic.AssignationSyntaxErrorChecker
+import token.Token
+import token.TokenType
+import token.TokenValue
 
 class AssignationCommand : ParseCommand {
-    override fun execute(tokens: List<Token>): ASTNode {
+    override fun execute(tokens: List<Token>): StatementNode {
         val errorChecker = AssignationSyntaxErrorChecker()
         if (!errorChecker.check(tokens)) {
             throw RuntimeException("Syntax error in assignation statement")

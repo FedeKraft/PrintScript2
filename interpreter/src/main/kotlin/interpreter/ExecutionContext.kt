@@ -1,3 +1,5 @@
+package interpreter
+
 data class ExecutionContext(val variables: Map<String, Any?> = emptyMap()) {
 
     fun addVariable(name: String, value: Any?): ExecutionContext {

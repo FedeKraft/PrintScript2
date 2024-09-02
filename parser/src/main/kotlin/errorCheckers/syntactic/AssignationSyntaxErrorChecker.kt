@@ -1,8 +1,8 @@
 package org.example.errorCheckers.syntactic
 
-import Token
-import TokenType
 import org.example.errorCheckers.ErrorChecker
+import token.Token
+import token.TokenType
 
 class AssignationSyntaxErrorChecker : ErrorChecker {
     override fun check(tokens: List<Token>): Boolean {

@@ -42,6 +42,6 @@ class SpaceAroundCharsRule(private val config: SpaceAroundCharsConfig) : Formatt
     }
 
     private fun findCharIndex(code: StringBuilder, charToFind: Char, line: Int, column: Int): Int {
-        return code.indexOfFirst {  it == charToFind }
+        return code.indexOfFirst { it == charToFind }
     }
 }

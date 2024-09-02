@@ -1,3 +1,7 @@
+import token.Token
+import token.TokenType
+import token.TokenValue
+
 class PrattParser(private val tokens: List<Token>) {
     private var currentPosition = 0
 

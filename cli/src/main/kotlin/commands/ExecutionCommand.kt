@@ -1,12 +1,11 @@
 package commands
 
-import InterpreterImp
-import Lexer
-import ProgramNode
-import Token
+import lexer.Lexer
+
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
-import org.example.Parser
+import org.example.parser.Parser
+import token.Token
 import java.io.File
 
 class ExecutionCommand : CliktCommand(help = "Execute the file") {
@@ -17,7 +16,7 @@ class ExecutionCommand : CliktCommand(help = "Execute the file") {
         val tokens : List<Token> = lexer.tokenize()
         val parser = Parser()
         val programNode : ProgramNode = parser.parse(tokens)
-        val interpreter : InterpreterImp = InterpreterImp()
+        val interpreter : Interpreter = Interpreter()
         interpreter.interpret(programNode)
         println("file executed")
     }

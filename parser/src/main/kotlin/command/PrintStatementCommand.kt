@@ -1,15 +1,17 @@
 import command.ParseCommand
 import org.example.errorCheckers.syntactic.PrintSyntaxErrorChecker
+import token.Token
+import token.TokenType
+import token.TokenValue
 
 class PrintStatementCommand : ParseCommand {
-    override fun execute(tokens: List<Token>): ASTNode {
+    override fun execute(tokens: List<Token>): StatementNode {
         val errorChecker = PrintSyntaxErrorChecker()
 
         if (!errorChecker.check(tokens)) {
             throw RuntimeException("Syntax error in print statement")
         }
         val args = tokens.subList(1, tokens.size)
-        println(args)
 
         if (args.size > 3) {
             val expressionNode = PrattParser(args).parseExpression()
