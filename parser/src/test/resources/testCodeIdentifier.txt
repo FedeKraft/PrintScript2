@@ -1,4 +1,6 @@
 let name: String = "Olive";
+let age: Number = 21;
 print(name);
-print("Hola mundo");
-name = "NO, NO EXISTE";
+print("Hola");
+name = "Juan";
+age = 22;

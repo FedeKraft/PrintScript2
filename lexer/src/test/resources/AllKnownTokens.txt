@@ -1,2 +1,10 @@
 let name: String = "Olive";
-let age: Int = 21;
+let age: Number = 21;
+print(age);
+age = 22;
+
+
+
+
+
+
