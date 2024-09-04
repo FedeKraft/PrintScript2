@@ -6,24 +6,27 @@ import org.example.command.AssignationCommand
 import org.example.parser.Parser
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import rules.SpaceAroundEqualsRule
+import rules.*
 import token.TokenType
 import java.io.File
 
-class FormatterTest1 {
+class FormatterTest2 {
     private val config = FormatterConfigLoader.loadConfig("src/test/resources/formatter-config.json")
 
     private val rules = listOf(
-        SpaceAroundEqualsRule(config.spaceAroundEquals.enabled),
-    )
+    SpaceAroundEqualsRule(config.spaceAroundEquals.enabled),
+    SpaceBeforeColonRule(config.spaceBeforeColon.enabled),
+    SpaceAroundOperatorsRule(),
+    SpaceAfterColonRule(config.spaceAfterColon.enabled),
+)
 
     private fun readSourceCodeFromFile(filename: String): String {
         return File("src/test/resources/$filename").readText().replace("\r\n", "\n")
     }
     @Test
-    fun `test SpaceAroundEqualsRule with formatterTest1`() {
-        val sourceCode = readSourceCodeFromFile("formatterTest1.txt")
-        val expected = readSourceCodeFromFile("formatterTest1Expected.txt")
+    fun `test SpaceAroundEqualsRule with formatterTest2`() {
+        val sourceCode = readSourceCodeFromFile("formatterTest2.txt")
+        val expected = readSourceCodeFromFile("formatterTest2Expected.txt")
         val lexer = Lexer(sourceCode)
         val parser = Parser(lexer, mapOf(
             TokenType.PRINT to PrintStatementCommand(),

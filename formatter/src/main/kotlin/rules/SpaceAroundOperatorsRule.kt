@@ -8,34 +8,27 @@ import VariableDeclarationNode
 import PrintStatementNode
 
 class SpaceAroundOperatorsRule : FormatterRule {
-    override fun applyRule(node: StatementNode, variableTypes: Map<String, Any>): String {
-        return when (node) {
-            is AssignationNode -> {
-                val leftPart = node.identifier.toString()
-                val rightPart = formatExpression(node.value)
-                "$leftPart = $rightPart;"
-            }
-            is VariableDeclarationNode -> {
-                val identifierPart = node.identifier.toString()
-                val valuePart = formatExpression(node.value)
-                "$identifierPart: ${node.value} = $valuePart;"
-            }
-            is PrintStatementNode -> {
-                "println(${formatExpression(node.expression)});"
-            }
-            else -> node.toString()  // Devuelve el nodo original si no coincide
-        }
-    }
+    override fun applyRule(node: StatementNode, variableTypes: Map<String, Any>, result: String): String {
+        val operators = setOf('+', '-', '*', '/')
+        val modifiedResult = StringBuilder()
+        var i = 0
 
-    private fun formatExpression(expression: ExpressionNode): String {
-        return when (expression) {
-            is BinaryExpressionNode -> {
-                val leftPart = expression.left.toString()
-                val operatorPart = " ${expression.operator} "
-                val rightPart = expression.right.toString()
-                "$leftPart$operatorPart$rightPart"
+        while (i < result.length) {
+            val char = result[i]
+            if (char in operators) {
+                if (i > 0 && result[i - 1] != ' ') {
+                    modifiedResult.append(' ')
+                }
+                modifiedResult.append(char)
+                if (i < result.length - 1 && result[i + 1] != ' ') {
+                    modifiedResult.append(' ')
+                }
+            } else {
+                modifiedResult.append(char)
             }
-            else -> expression.toString()  // Si no es una expresión binaria, devolver como está
+            i++
         }
+        return modifiedResult.toString()
     }
 }
+
