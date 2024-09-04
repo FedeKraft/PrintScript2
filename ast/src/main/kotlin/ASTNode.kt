@@ -42,7 +42,7 @@ data class AssignationNode(
     val column: Int,
 ) : StatementNode() {
     override fun toFormattedString(variableTypes: MutableMap<String, Any>): String {
-        return "${identifier.toFormattedString(variableTypes)}: ${variableTypes[identifier.name] ?: "UnknownType"} = ${value.toFormattedString(variableTypes)};"
+        return "${identifier.toFormattedString(variableTypes)} = ${value.toFormattedString(variableTypes)};"
     }
 }
 
@@ -52,7 +52,24 @@ data class PrintStatementNode(
     val column: Int,
 ) : StatementNode() {
     override fun toFormattedString(variableTypes: MutableMap<String, Any>): String {
-        return "println(${expression.toFormattedString(variableTypes)});"
+        return "print(${expression.toFormattedString(variableTypes)});"
+    }
+    fun inferType(expression: ExpressionNode, variableTypes: Map<String, Any>): String {
+        return when (expression) {
+            is NumberLiteralNode -> "Number"
+            is StringLiteralNode -> "String"
+            is IdentifierNode -> variableTypes[expression.name] as String? ?: "UnknownType"
+            is BinaryExpressionNode -> {
+                val leftType = inferType(expression.left, variableTypes)
+                val rightType = inferType(expression.right, variableTypes)
+                if (leftType == rightType) {
+                    leftType
+                } else {
+                    "UnknownType"
+                }
+            }
+            else -> "UnknownType"
+        }
     }
 }
 
@@ -95,4 +112,25 @@ data class BinaryExpressionNode(
         }
         return "${left.toFormattedString(variableTypes)} $operatorSymbol ${right.toFormattedString(variableTypes)}"
     }
+
+
+
+
 }
+fun inferType(node: ExpressionNode, variableTypes: Map<String, Any>): String {
+    return when (node) {
+        is NumberLiteralNode -> "Number"
+        is StringLiteralNode -> "String"
+        is BinaryExpressionNode -> {
+            val leftType = inferType(node.left, variableTypes)
+            val rightType = inferType(node.right, variableTypes)
+            if (leftType == rightType) {
+                leftType
+            } else {
+                "UnknownType"
+            }
+        }
+        else -> "UnknownType"
+    }
+}
+

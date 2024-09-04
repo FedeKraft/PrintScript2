@@ -4,13 +4,21 @@ import StatementNode
 import VariableDeclarationNode
 
 class SpaceBeforeColonRule(private val enabled: Boolean) : FormatterRule {
-    override fun applyRule(node: StatementNode,variableTypes: Map<String, Any>): String {
+    override fun applyRule(node: StatementNode, variableTypes: Map<String, Any>, result: String): String {
         if (node is VariableDeclarationNode) {
-            val identifierPart = node.identifier.name
-            val colonPart = if (enabled) " : " else ":"
-            val valuePart = node.value.toString()
-            return "$identifierPart$colonPart$valuePart;"
+            val modifiedResult = StringBuilder()
+            for (i in result.indices) {
+                if (result[i] == ':') {
+                    if (enabled && i > 0 && result[i - 1] != ' ') {
+                        modifiedResult.append(' ')
+                    } else if (!enabled && i > 0 && result[i - 1] == ' ') {
+                        modifiedResult.deleteCharAt(modifiedResult.length - 1)
+                    }
+                }
+                modifiedResult.append(result[i])
+            }
+            return modifiedResult.toString()
         }
-        return node.toString()  // Devuelve el nodo original si no aplica
+        return result  // Devuelve el nodo original si no aplica
     }
 }

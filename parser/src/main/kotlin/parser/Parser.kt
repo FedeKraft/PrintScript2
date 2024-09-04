@@ -30,4 +30,5 @@ class Parser(private val tokenProvider: TokenProvider, private val commands: Map
     override fun hasNextAST(): Boolean {
         return tokenProvider.hasNextToken()
     }
+
 }

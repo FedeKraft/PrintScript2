@@ -1,0 +1,19 @@
+let a   : Number = 10;
+let b: Number    = 20;
+let c  : Number =   a + b + a;
+print("The value of c is: ");
+
+let name: String = "Alice";
+c=a+b;
+let greeting: String = "Hello, " + name + "!";
+print(greeting);
+
+let    x    :  Number = 3.14;
+let    y   :   Number = 2.71;
+let z    : Number = x*y;
+print("The value of z is: ");
+
+let isTrue: String = "true";
+let isFalse: String = "false";
+print("isTrue: ");
+print("isFalse: ");
