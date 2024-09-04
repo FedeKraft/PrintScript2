@@ -1,17 +1,19 @@
-data class LinterConfig(
-    val printSimpleExpression: PrintSimpleExpressionConfig,
-    val snakeCaseIdentifier: SnakeCaseIdentifierConfig,
-    val camelCaseIdentifier: CamelCaseIdentifierConfig,
-)
+import rules.LinterRule
 
-data class PrintSimpleExpressionConfig(
-    val enabled: Boolean,
-)
+object LinterConfig {
+    private val rules = mutableListOf<LinterRule>()
 
-data class SnakeCaseIdentifierConfig(
-    val enabled: Boolean,
-)
+    fun addRule(rule: LinterRule) {
+        rules.add(rule)
+    }
 
-data class CamelCaseIdentifierConfig(
-    val enabled: Boolean,
-)
+    fun activateRule(ruleClass: Class<out LinterRule>) {
+        rules.find { it.javaClass == ruleClass }?.let { it.isActive = true }
+    }
+
+    fun deactivateRule(ruleClass: Class<out LinterRule>) {
+        rules.find { it.javaClass == ruleClass }?.let { it.isActive = false }
+    }
+
+    fun getRules(): List<LinterRule> = rules
+}

@@ -1,8 +1,9 @@
-package org.example.rules
+package rules
 
-import ASTNode
-import org.example.LinterError
+import LinterError
+import StatementNode
 
 interface LinterRule {
-    fun check(node: ASTNode): List<LinterError>
+    var isActive: Boolean
+    fun apply(node: StatementNode): List<LinterError>
 }

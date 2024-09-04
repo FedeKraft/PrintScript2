@@ -1,29 +1,23 @@
-package org.example
+import org.example.parser.ASTProvider
+import rules.LinterRule
 
-import ASTNode
-import PrintStatementNode
-import ProgramNode
-import VariableDeclarationNode
-import org.example.rules.LinterRule
-
-class Linter(private val rules: List<LinterRule>) {
-    fun lint(program: ProgramNode): List<LinterError> {
-        val errors = mutableListOf<LinterError>()
-        for (statement in program.statements) {
-            errors.addAll(checkNode(statement))
+class Linter(
+    private val rules: List<LinterRule>,
+    private val astProvider: ASTProvider
+) {
+    fun lint(): Sequence<LinterError> = sequence {
+        while (astProvider.hasNextAST()) {
+            val node = astProvider.getNextAST()
+            val errors = applyRules(node)
+            errors.forEach { yield(it) }
         }
-        return errors
     }
 
-    private fun checkNode(node: ASTNode): List<LinterError> {
+    private fun applyRules(node: StatementNode): List<LinterError> {
         val errors = mutableListOf<LinterError>()
-        for (rule in rules) {
-            if (node is PrintStatementNode) {
-                errors.addAll(rule.check(node.expression))
-            }
-            if (node is VariableDeclarationNode) {
-                errors.addAll(rule.check(node.identifier))
-            }
+        for (rule in rules.filter { it.isActive }) {
+            val ruleErrors = rule.apply(node)
+            errors.addAll(ruleErrors)
         }
         return errors
     }

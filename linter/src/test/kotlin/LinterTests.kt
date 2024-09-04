@@ -1,83 +1,120 @@
-import org.example.Linter
-import org.example.rules.CamelCaseIdentifierRule
-import org.example.rules.CamelORSnakeRules
-import org.example.rules.PrintSimpleExpressionRule
-import org.example.rules.SnakeCaseIdentifierRule
-import org.example.util.LinterConfigLoader
+import rules.CamelCaseIdentifierRule
+import rules.CamelORSnakeRules
+import rules.PrintSimpleExpressionRule
+import rules.SnakeCaseIdentifierRule
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import token.TokenType
+import org.example.parser.ASTProvider
+import token.*
 
 class LinterTests {
 
     @Test
     fun `test CamelCaseIdentifierRule`() {
         val rule = CamelCaseIdentifierRule()
-        val node = IdentifierNode("snake_case", 1, 1)
-        val errors = rule.check(node)
+        val node = VariableDeclarationNode(
+            identifier = IdentifierNode("snake_case", 1, 1),
+            value = StringLiteralNode("value", 1, 1),
+            line = 1,
+            column = 1
+        )
+        val errors = rule.apply(node)
         assertEquals(1, errors.size)
-        assertEquals("Identifier snake_case should be in camel case", errors[0].message)
+        assertEquals("Identifier 'snake_case' should be in camelCase", errors[0].message)
     }
 
     @Test
     fun `test SnakeCaseIdentifierRule`() {
         val rule = SnakeCaseIdentifierRule()
-        val printNode = PrintStatementNode(IdentifierNode("snakeCase", 1, 1), 1, 1)
-        val program = ProgramNode(listOf(printNode))
-        val linter = Linter(listOf(rule))
-        val errors = linter.lint(program)
+        val node = VariableDeclarationNode(
+            identifier = IdentifierNode("snakeCase", 1, 1),
+            value = StringLiteralNode("value", 1, 1),
+            line = 1,
+            column = 1
+        )
+        val errors = rule.apply(node)
         assertEquals(1, errors.size)
-        assertEquals("Identifier snakeCase should be in snake case", errors[0].message)
+        assertEquals("Identifier 'snakeCase' should be in snake_case", errors[0].message)
     }
 
     @Test
     fun `test Linter with PrintSimpleExpressionRule enabled`() {
-        val config = LinterConfigLoader.loadConfig("src/test/resources/linterConfig.json")
-        val rules = listOf(PrintSimpleExpressionRule(config.printSimpleExpression))
-
-        val linter = Linter(rules)
-
-        val printNode = PrintStatementNode(
-            BinaryExpressionNode(NumberLiteralNode(1.0, 1, 1), TokenType.SUM, NumberLiteralNode(2.0, 1, 1), 1, 1),
-            1,
-            1,
+        val rule = PrintSimpleExpressionRule(isActive = true)
+        val node = PrintStatementNode(
+            expression = BinaryExpressionNode(
+                left = StringLiteralNode("ThisIsAVeryLongStringLiteralThatExceedsFortyCharacters", 1, 1),
+                operator = TokenType.SUM,
+                right = StringLiteralNode("AndAnotherLongStringLiteralThatAlsoExceedsFortyCharacters", 1, 1),
+                line = 1,
+                column = 1
+            ),
+            line = 1,
+            column = 1
         )
-        val program = ProgramNode(listOf(printNode))
 
-        val errors = linter.lint(program)
+        val linter = Linter(listOf(rule), object : ASTProvider {
+            private var hasNext = true
+            override fun getNextAST(): StatementNode {
+                hasNext = false
+                return node
+            }
+            override fun hasNextAST(): Boolean = hasNext
+        })
+
+        val errors = linter.lint().toList()
 
         assertEquals(1, errors.size)
-        assertEquals("Binary expression should be simple", errors[0].message)
+        assertEquals("Print statement too complex", errors[0].message)
     }
+
 
     @Test
     fun `test Linter with PrintSimpleExpressionRule disabled`() {
-        val rules = listOf(PrintSimpleExpressionRule(PrintSimpleExpressionConfig(false)))
-        val linter = Linter(rules)
+        val rule = PrintSimpleExpressionRule(isActive = false)
+        val linter = Linter(listOf(rule), TestASTProvider())
 
-        val printNode = PrintStatementNode(
-            BinaryExpressionNode(NumberLiteralNode(1.0, 1, 1), TokenType.SUM, NumberLiteralNode(2.0, 1, 1), 1, 1),
-            1,
-            1,
-        )
-        val program = ProgramNode(listOf(printNode))
-
-        val errors = linter.lint(program)
+        val errors = linter.lint().toList()
 
         assertEquals(0, errors.size)
     }
 
     @Test
-    fun `test CamelORSnakeRules`() { // recibe string mal escrito, deberia estar en camel o snake case
-        val rule = CamelORSnakeRules()
-        val printNode = PrintStatementNode(IdentifierNode("snake_Case", 1, 1), 1, 1)
-        val program = ProgramNode(listOf(printNode))
-        val linter = Linter(listOf(rule))
+    fun `test CamelORSnakeRules`() {
+        val camelCaseRule = CamelCaseIdentifierRule(isActive = true)
+        val snakeCaseRule = SnakeCaseIdentifierRule(isActive = true)
+        val rule = CamelORSnakeRules(camelCaseRule, snakeCaseRule)
 
-        val errors = linter.lint(program)
+        val linter = Linter(listOf(rule), TestASTProvider(identifier = "snake_Case"))
+
+        val errors = linter.lint().toList()
         assertEquals(2, errors.size)
         val errorMessages = errors.map { it.message }
-        assertEquals("Identifier snake_Case should be in camel case", errorMessages[0])
-        assertEquals("Identifier snake_Case should be in snake case", errorMessages[1])
+        assertEquals("Identifier 'snake_Case' should be in camelCase", errorMessages[0])
+        assertEquals("Identifier 'snake_Case' should be in snake_case", errorMessages[1])
+    }
+
+    // ASTProvider mock for testing
+    class TestASTProvider(private val identifier: String = "complexExpression") : ASTProvider {
+        private var hasNext = true
+
+        override fun getNextAST(): StatementNode {
+            hasNext = false
+            return when (identifier) {
+                "complexExpression" -> PrintStatementNode(
+                    BinaryExpressionNode(NumberLiteralNode(1.0, 1, 1), TokenType.SUM, NumberLiteralNode(2.0, 1, 1), 1, 1),
+                    1, 1
+                )
+                else -> VariableDeclarationNode(
+                    identifier = IdentifierNode(identifier, 1, 1),
+                    value = StringLiteralNode("value", 1, 1),
+                    line = 1,
+                    column = 1
+                )
+            }
+        }
+
+        override fun hasNextAST(): Boolean {
+            return hasNext
+        }
     }
 }

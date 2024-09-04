@@ -1,13 +1,15 @@
-package org.example.util
+import org.example.parser.ASTProvider
+import rules.*
 
-import LinterConfig
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
-import java.io.File
+class LinterConfigLoader(private val astProvider: ASTProvider) {
+    fun load(): Linter {
+        // Puedes definir qué reglas están activas o desactivadas aquí
+        val camelCaseRule = CamelCaseIdentifierRule(isActive = true)
+        val snakeCaseRule = SnakeCaseIdentifierRule(isActive = false)
+        val printRule = PrintSimpleExpressionRule(isActive = true)
 
-object LinterConfigLoader {
-    fun loadConfig(filePath: String): LinterConfig {
-        val mapper = jacksonObjectMapper()
-        return mapper.readValue(File(filePath))
+        val rules = listOf(camelCaseRule, snakeCaseRule, printRule)
+
+        return Linter(rules, astProvider)
     }
 }
