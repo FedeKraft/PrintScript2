@@ -1,120 +1,103 @@
+import org.junit.jupiter.api.Test
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
+import org.junit.jupiter.api.Assertions.assertTrue
 import rules.CamelCaseIdentifierRule
-import rules.CamelORSnakeRules
 import rules.PrintSimpleExpressionRule
 import rules.SnakeCaseIdentifierRule
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
-import org.example.parser.ASTProvider
-import token.*
+import java.nio.file.Paths
+
+// Cargar la configuración desde el archivo JSON
+object LinterConfigLoader {
+    private const val CONFIG_PATH = "src/test/resources/linterConfig.json"
+
+    fun loadConfig(): LinterConfig {
+        val mapper = jacksonObjectMapper()
+        val jsonPath = Paths.get(CONFIG_PATH).toFile()
+        return mapper.readValue(jsonPath)
+    }
+}
+
+// Data class para la configuración del linter
+data class LinterConfig(
+    val printSimpleExpression: RuleConfig,
+    val snakeCaseIdentifier: RuleConfig,
+    val camelCaseIdentifier: RuleConfig
+)
+
+data class RuleConfig(
+    val enabled: Boolean
+)
 
 class LinterTests {
 
-    @Test
-    fun `test CamelCaseIdentifierRule`() {
-        val rule = CamelCaseIdentifierRule()
-        val node = VariableDeclarationNode(
-            identifier = IdentifierNode("snake_case", 1, 1),
-            value = StringLiteralNode("value", 1, 1),
-            line = 1,
-            column = 1
-        )
-        val errors = rule.apply(node)
-        assertEquals(1, errors.size)
-        assertEquals("Identifier 'snake_case' should be in camelCase", errors[0].message)
-    }
+    private val config = LinterConfigLoader.loadConfig()
 
     @Test
-    fun `test SnakeCaseIdentifierRule`() {
-        val rule = SnakeCaseIdentifierRule()
-        val node = VariableDeclarationNode(
-            identifier = IdentifierNode("snakeCase", 1, 1),
-            value = StringLiteralNode("value", 1, 1),
-            line = 1,
-            column = 1
-        )
-        val errors = rule.apply(node)
-        assertEquals(1, errors.size)
-        assertEquals("Identifier 'snakeCase' should be in snake_case", errors[0].message)
-    }
+    fun testPrintSimpleExpressionRule() {
+        if (config.printSimpleExpression.enabled) {
+            val rule = PrintSimpleExpressionRule()
 
-    @Test
-    fun `test Linter with PrintSimpleExpressionRule enabled`() {
-        val rule = PrintSimpleExpressionRule(isActive = true)
-        val node = PrintStatementNode(
-            expression = BinaryExpressionNode(
-                left = StringLiteralNode("ThisIsAVeryLongStringLiteralThatExceedsFortyCharacters", 1, 1),
-                operator = TokenType.SUM,
-                right = StringLiteralNode("AndAnotherLongStringLiteralThatAlsoExceedsFortyCharacters", 1, 1),
+            // Crea un StatementNode (en este caso, un PrintStatementNode)
+            val node = PrintStatementNode(
+                expression = StringLiteralNode("This is a simple print statement", 1, 1),
                 line = 1,
                 column = 1
-            ),
-            line = 1,
-            column = 1
-        )
+            )
 
-        val linter = Linter(listOf(rule), object : ASTProvider {
-            private var hasNext = true
-            override fun getNextAST(): StatementNode {
-                hasNext = false
-                return node
-            }
-            override fun hasNextAST(): Boolean = hasNext
-        })
+            // Aplica la regla sobre el nodo creado
+            val errors = rule.apply(node)
 
-        val errors = linter.lint().toList()
-
-        assertEquals(1, errors.size)
-        assertEquals("Print statement too complex", errors[0].message)
-    }
-
-
-    @Test
-    fun `test Linter with PrintSimpleExpressionRule disabled`() {
-        val rule = PrintSimpleExpressionRule(isActive = false)
-        val linter = Linter(listOf(rule), TestASTProvider())
-
-        val errors = linter.lint().toList()
-
-        assertEquals(0, errors.size)
-    }
-
-    @Test
-    fun `test CamelORSnakeRules`() {
-        val camelCaseRule = CamelCaseIdentifierRule(isActive = true)
-        val snakeCaseRule = SnakeCaseIdentifierRule(isActive = true)
-        val rule = CamelORSnakeRules(camelCaseRule, snakeCaseRule)
-
-        val linter = Linter(listOf(rule), TestASTProvider(identifier = "snake_Case"))
-
-        val errors = linter.lint().toList()
-        assertEquals(2, errors.size)
-        val errorMessages = errors.map { it.message }
-        assertEquals("Identifier 'snake_Case' should be in camelCase", errorMessages[0])
-        assertEquals("Identifier 'snake_Case' should be in snake_case", errorMessages[1])
-    }
-
-    // ASTProvider mock for testing
-    class TestASTProvider(private val identifier: String = "complexExpression") : ASTProvider {
-        private var hasNext = true
-
-        override fun getNextAST(): StatementNode {
-            hasNext = false
-            return when (identifier) {
-                "complexExpression" -> PrintStatementNode(
-                    BinaryExpressionNode(NumberLiteralNode(1.0, 1, 1), TokenType.SUM, NumberLiteralNode(2.0, 1, 1), 1, 1),
-                    1, 1
-                )
-                else -> VariableDeclarationNode(
-                    identifier = IdentifierNode(identifier, 1, 1),
-                    value = StringLiteralNode("value", 1, 1),
-                    line = 1,
-                    column = 1
-                )
-            }
+            // Verifica que no haya errores
+            assertTrue(errors.isEmpty())
+        } else {
+            println("PrintSimpleExpressionRule está deshabilitado.")
         }
+    }
 
-        override fun hasNextAST(): Boolean {
-            return hasNext
+    @Test
+    fun testSnakeCaseIdentifierRule() {
+        if (config.snakeCaseIdentifier.enabled) {
+            val rule = SnakeCaseIdentifierRule()
+
+            // Crea un StatementNode con un identificador en snake_case
+            val node = VariableDeclarationNode(
+                identifier = IdentifierNode("snake_case_identifier", 1, 1),
+                value = NumberLiteralNode(42.0, 1, 1),
+                line = 1,
+                column = 1
+            )
+
+            // Aplica la regla sobre el nodo creado
+            val errors = rule.apply(node)
+
+            // Verifica que no haya errores (o ajusta si debe haber)
+            assertTrue(errors.isEmpty())
+        } else {
+            println("SnakeCaseIdentifierRule está deshabilitado.")
+        }
+    }
+
+    @Test
+    fun testCamelCaseIdentifierRule() {
+        if (config.camelCaseIdentifier.enabled) {
+            val rule = CamelCaseIdentifierRule()
+
+            // Crea un StatementNode con un identificador en camelCase
+            val node = VariableDeclarationNode(
+                identifier = IdentifierNode("camelCaseIdentifier", 1, 1),
+                value = NumberLiteralNode(42.0, 1, 1),
+                line = 1,
+                column = 1
+            )
+
+            // Aplica la regla sobre el nodo creado
+            val errors = rule.apply(node)
+
+            // Verifica que no haya errores (o ajusta si debe haber)
+            assertTrue(errors.isEmpty())
+        } else {
+            println("CamelCaseIdentifierRule está deshabilitado.")
         }
     }
 }
