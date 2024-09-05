@@ -17,6 +17,6 @@ class NewlineBeforePrintlnRule(private val config: NewlineBeforePrintlnConfig) :
             formattedStatement.append(result)
             return formattedStatement.toString()
         }
-        return result  // Devuelve el nodo original si no es un PrintStatementNode
+        return result // Devuelve el nodo original si no es un PrintStatementNode
     }
 }

@@ -1,6 +1,5 @@
 package command
 
-
 import StatementNode
 import token.Token
 

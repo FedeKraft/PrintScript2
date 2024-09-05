@@ -1,9 +1,5 @@
 package formatter
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
-import java.io.File
-
 data class SpaceBeforeColonConfig(val enabled: Boolean)
 data class SpaceAfterColonConfig(val enabled: Boolean)
 data class SpaceAroundEqualsConfig(val enabled: Boolean)
@@ -19,7 +15,5 @@ data class FormatterConfig(
     val newlineBeforePrintln: NewlineBeforePrintlnConfig,
     val newlineAfterSemicolon: NewlineAfterSemicolonConfig,
     val singleSpaceBetweenTokens: SingleSpaceBetweenTokensConfig,
-    val spaceAroundOperators: SpaceAroundOperatorsConfig
+    val spaceAroundOperators: SpaceAroundOperatorsConfig,
 )
-
-

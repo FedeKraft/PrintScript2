@@ -23,7 +23,6 @@ class VariableDeclarationStatementCommand : ParseCommand {
         val identifierNode =
             IdentifierNode(identifierToken.value.toString(), identifierToken.line, identifierToken.column)
 
-        val valueToken = tokens[5]
         val args = tokens.subList(5, tokens.size)
         // let a : String = "a"
         if (args.size > 1) {

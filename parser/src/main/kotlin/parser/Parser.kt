@@ -1,11 +1,13 @@
-package org.example.parser
+package parser
 
 import StatementNode
 import command.ParseCommand
+import org.example.parser.ASTProvider
 import token.TokenProvider
 import token.TokenType
 
-class Parser(private val tokenProvider: TokenProvider, private val commands: Map<TokenType, ParseCommand>): ASTProvider {
+class Parser(private val tokenProvider: TokenProvider, private val commands: Map<TokenType, ParseCommand>) :
+    ASTProvider {
 
     fun nextStatement(): StatementNode {
         val tokens = mutableListOf<token.Token>()
@@ -30,5 +32,4 @@ class Parser(private val tokenProvider: TokenProvider, private val commands: Map
     override fun hasNextAST(): Boolean {
         return tokenProvider.hasNextToken()
     }
-
 }

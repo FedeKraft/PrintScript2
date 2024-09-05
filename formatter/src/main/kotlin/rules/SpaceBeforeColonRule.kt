@@ -19,6 +19,6 @@ class SpaceBeforeColonRule(private val enabled: Boolean) : FormatterRule {
             }
             return modifiedResult.toString()
         }
-        return result  // Devuelve el nodo original si no aplica
+        return result // Devuelve el nodo original si no aplica
     }
 }

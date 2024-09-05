@@ -1,8 +1,12 @@
 package lexer
 
-import token.*
+import token.Token
+import token.TokenPatterns
+import token.TokenProvider
+import token.TokenType
+import token.TokenValue
 
-class Lexer(val code: String): TokenProvider {
+class Lexer(val code: String) : TokenProvider {
     private var currentIndex = 0
     private var currentLine = 1
     private var currentColumn = 1
@@ -22,7 +26,7 @@ class Lexer(val code: String): TokenProvider {
         TokenPatterns.SEMICOLON to TokenType.SEMICOLON,
         TokenPatterns.COLON to TokenType.COLON,
         TokenPatterns.LEFT_PARENTHESIS to TokenType.LEFT_PARENTHESIS,
-        TokenPatterns.RIGHT_PARENTHESIS to TokenType.RIGHT_PARENTHESIS
+        TokenPatterns.RIGHT_PARENTHESIS to TokenType.RIGHT_PARENTHESIS,
     )
 
     override fun hasNextToken(): Boolean {
@@ -98,5 +102,4 @@ class Lexer(val code: String): TokenProvider {
     override fun getNextToken(): Token {
         return nextToken()
     }
-
 }

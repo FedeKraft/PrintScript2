@@ -1,15 +1,14 @@
 import command.VariableDeclarationStatementCommand
 import lexer.Lexer
 import org.example.command.AssignationCommand
-import org.example.parser.Parser
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import parser.Parser
 import rules.CamelCaseIdentifierRule
 import rules.PrintSimpleExpressionRule
 import rules.SnakeCaseIdentifierRule
 import token.TokenType
 import java.io.File
-
 
 class LinterFunctionalTest {
 
@@ -20,7 +19,7 @@ class LinterFunctionalTest {
     private val rules = listOf(
         CamelCaseIdentifierRule(config.camelCaseIdentifier.enabled),
         SnakeCaseIdentifierRule(config.snakeCaseIdentifier.enabled),
-        PrintSimpleExpressionRule(config.printSimpleExpression.enabled)
+        PrintSimpleExpressionRule(config.printSimpleExpression.enabled),
     )
 
     private fun readSourceCodeFromFile(filename: String): String {
@@ -34,11 +33,14 @@ class LinterFunctionalTest {
 
         // Inicializar lexer y parser
         val lexer = Lexer(sourceCode)
-        val parser = Parser(lexer, mapOf(
-            TokenType.PRINT to PrintStatementCommand(),
-            TokenType.LET to VariableDeclarationStatementCommand(),
-            TokenType.IDENTIFIER to AssignationCommand(),
-        ))
+        val parser = Parser(
+            lexer,
+            mapOf(
+                TokenType.PRINT to PrintStatementCommand(),
+                TokenType.LET to VariableDeclarationStatementCommand(),
+                TokenType.IDENTIFIER to AssignationCommand(),
+            ),
+        )
 
         // Crear instancia del linter
         val linter = Linter(rules, parser)

@@ -1,6 +1,5 @@
 package lexer
 
-
 class LexerFactory {
 
     fun createLexer1_0(code: String): Lexer {

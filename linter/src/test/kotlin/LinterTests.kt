@@ -1,7 +1,7 @@
-import org.junit.jupiter.api.Test
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
 import rules.CamelCaseIdentifierRule
 import rules.PrintSimpleExpressionRule
 import rules.SnakeCaseIdentifierRule
@@ -22,11 +22,11 @@ object LinterConfigLoader {
 data class LinterConfig(
     val printSimpleExpression: RuleConfig,
     val snakeCaseIdentifier: RuleConfig,
-    val camelCaseIdentifier: RuleConfig
+    val camelCaseIdentifier: RuleConfig,
 )
 
 data class RuleConfig(
-    val enabled: Boolean
+    val enabled: Boolean,
 )
 
 class LinterTests {
@@ -42,7 +42,7 @@ class LinterTests {
             val node = PrintStatementNode(
                 expression = StringLiteralNode("This is a simple print statement", 1, 1),
                 line = 1,
-                column = 1
+                column = 1,
             )
 
             // Aplica la regla sobre el nodo creado
@@ -65,7 +65,7 @@ class LinterTests {
                 identifier = IdentifierNode("snake_case_identifier", 1, 1),
                 value = NumberLiteralNode(42.0, 1, 1),
                 line = 1,
-                column = 1
+                column = 1,
             )
 
             // Aplica la regla sobre el nodo creado
@@ -88,7 +88,7 @@ class LinterTests {
                 identifier = IdentifierNode("camelCaseIdentifier", 1, 1),
                 value = NumberLiteralNode(42.0, 1, 1),
                 line = 1,
-                column = 1
+                column = 1,
             )
 
             // Aplica la regla sobre el nodo creado

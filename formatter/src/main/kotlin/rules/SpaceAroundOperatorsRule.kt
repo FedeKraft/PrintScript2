@@ -1,11 +1,6 @@
 package rules
 
 import StatementNode
-import ExpressionNode
-import BinaryExpressionNode
-import AssignationNode
-import VariableDeclarationNode
-import PrintStatementNode
 
 class SpaceAroundOperatorsRule : FormatterRule {
     override fun applyRule(node: StatementNode, variableTypes: Map<String, Any>, result: String): String {
@@ -31,4 +26,3 @@ class SpaceAroundOperatorsRule : FormatterRule {
         return modifiedResult.toString()
     }
 }
-

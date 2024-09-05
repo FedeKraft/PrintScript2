@@ -7,12 +7,13 @@ sealed class StatementNode {
 data class VariableDeclarationNode(
     val identifier: IdentifierNode,
     val value: ExpressionNode,
-    val line: Int, val column: Int
+    val line: Int,
+    val column: Int,
 ) : StatementNode() {
 
     override fun toFormattedString(variableTypes: MutableMap<String, Any>): String {
         val type = inferType(value, variableTypes)
-        variableTypes[identifier.name] = type  // Almacenar el tipo de la variable
+        variableTypes[identifier.name] = type
         return "let ${identifier.toFormattedString(variableTypes)}: $type = ${value.toFormattedString(variableTypes)};"
     }
 
@@ -30,7 +31,6 @@ data class VariableDeclarationNode(
                     "UnknownType"
                 }
             }
-            else -> "UnknownType"
         }
     }
 }
@@ -68,7 +68,6 @@ data class PrintStatementNode(
                     "UnknownType"
                 }
             }
-            else -> "UnknownType"
         }
     }
 }
@@ -112,10 +111,6 @@ data class BinaryExpressionNode(
         }
         return "${left.toFormattedString(variableTypes)} $operatorSymbol ${right.toFormattedString(variableTypes)}"
     }
-
-
-
-
 }
 fun inferType(node: ExpressionNode, variableTypes: Map<String, Any>): String {
     return when (node) {
@@ -133,4 +128,3 @@ fun inferType(node: ExpressionNode, variableTypes: Map<String, Any>): String {
         else -> "UnknownType"
     }
 }
-
