@@ -1,20 +1,24 @@
-package org.example.rules
+package rules
 
-import ASTNode
-import BinaryExpressionNode
-import PrintSimpleExpressionConfig
-import org.example.LinterError
+import LinterError
+import PrintStatementNode
+import StatementNode
 
-class PrintSimpleExpressionRule(private val config: PrintSimpleExpressionConfig) : LinterRule {
-
-    override fun check(node: ASTNode): List<LinterError> {
+class PrintSimpleExpressionRule(override var isActive: Boolean = true) : LinterRule {
+    override fun apply(node: StatementNode): List<LinterError> {
         val errors = mutableListOf<LinterError>()
-        if (!config.enabled) {
-            return errors
+
+        when (node) {
+            is PrintStatementNode -> {
+                if (node.expression.toFormattedString(emptyMap()).length > 40) {
+                    errors.add(LinterError("Print statement too complex", node.line, node.column))
+                }
+            }
+            else -> {
+                // No hacemos nada con otros tipos de StatementNode en esta regla
+            }
         }
-        if (node is BinaryExpressionNode) {
-            errors.add(LinterError("Binary expression should be simple", node.line, node.column))
-        }
+
         return errors
     }
 }
