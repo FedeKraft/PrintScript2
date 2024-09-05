@@ -15,8 +15,6 @@ jobs:
           java-version: 21
           distribution: 'temurin'
 
-      - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v2
       - name: Build with Gradle Wrapper
         run: ./gradlew build
 
