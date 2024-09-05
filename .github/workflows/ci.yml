@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
@@ -33,4 +34,4 @@ jobs:
       - name: Check formatter
         run: ./gradlew checkFormatter
 
-      # No ejecutar el formatter
+      # No

@@ -1,40 +1,38 @@
+import command.VariableDeclarationStatementCommand
 import formatter.Formatter
 import formatter.FormatterConfigLoader
-import java.io.File
 import lexer.Lexer
-import org.junit.jupiter.api.Test
 import org.example.command.AssignationCommand
-import org.example.command.PrintStatementCommand
-import org.example.command.VariableDeclarationStatementCommand
 import org.example.parser.Parser
-import rules.SpaceAroundEqualsRule
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
+import rules.*
 import token.TokenType
+import java.io.File
 
-class FormatterTest1 {
+class FormatterTest2 {
     private val config = FormatterConfigLoader.loadConfig("src/test/resources/formatter-config.json")
 
     private val rules = listOf(
-        SpaceAroundEqualsRule(config.spaceAroundEquals.enabled),
-    )
+    SpaceAroundEqualsRule(config.spaceAroundEquals.enabled),
+    SpaceBeforeColonRule(config.spaceBeforeColon.enabled),
+    SpaceAroundOperatorsRule(),
+    SpaceAfterColonRule(config.spaceAfterColon.enabled),
+)
 
     private fun readSourceCodeFromFile(filename: String): String {
         return File("src/test/resources/$filename").readText().replace("\r\n", "\n")
     }
-
     @Test
-    fun `test SpaceAroundEqualsRule with formatterTest1`() {
-        val sourceCode = readSourceCodeFromFile("formatterTest1.txt")
-        val expected = readSourceCodeFromFile("formatterTest1Expected.txt")
-
+    fun `test SpaceAroundEqualsRule with formatterTest2`() {
+        val sourceCode = readSourceCodeFromFile("formatterTest2.txt")
+        val expected = readSourceCodeFromFile("formatterTest2Expected.txt")
         val lexer = Lexer(sourceCode)
-        val parser = Parser(
-            lexer,
-            mapOf(
-                TokenType.PRINT to PrintStatementCommand(),
-                TokenType.LET to VariableDeclarationStatementCommand(),
-                TokenType.IDENTIFIER to AssignationCommand()
-            )
-        )
+        val parser = Parser(lexer, mapOf(
+            TokenType.PRINT to PrintStatementCommand(),
+            TokenType.LET to VariableDeclarationStatementCommand(),
+            TokenType.IDENTIFIER to AssignationCommand(),
+        ))
 
         val formatter = Formatter(rules, parser)
         var result = ""
@@ -53,4 +51,6 @@ class FormatterTest1 {
         println("Expected output:\n$expected")
         assertEquals(expected, result)
     }
+
+
 }

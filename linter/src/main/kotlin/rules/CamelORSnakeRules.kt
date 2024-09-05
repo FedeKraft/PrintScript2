@@ -1,17 +1,22 @@
-package org.example.rules
+package rules
 
-import ASTNode
-import org.example.LinterError
+import LinterError
+import StatementNode
 
-class CamelORSnakeRules : LinterRule {
+class CamelORSnakeRules(
+    private val camelCaseRule: CamelCaseIdentifierRule,
+    private val snakeCaseRule: SnakeCaseIdentifierRule,
+    override var isActive: Boolean = true
+) : LinterRule {
 
-    private val camelCaseRule = CamelCaseIdentifierRule()
-    private val snakeCaseRule = SnakeCaseIdentifierRule()
-
-    override fun check(node: ASTNode): List<LinterError> {
+    override fun apply(node: StatementNode): List<LinterError> {
         val errors = mutableListOf<LinterError>()
-        errors.addAll(camelCaseRule.check(node))
-        errors.addAll(snakeCaseRule.check(node))
+        if (camelCaseRule.isActive) {
+            errors.addAll(camelCaseRule.apply(node))
+        }
+        if (snakeCaseRule.isActive) {
+            errors.addAll(snakeCaseRule.apply(node))
+        }
         return errors
     }
 }

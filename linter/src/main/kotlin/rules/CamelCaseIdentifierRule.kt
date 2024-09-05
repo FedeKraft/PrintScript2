@@ -1,17 +1,35 @@
-package org.example.rules
+package rules
 
-import ASTNode
+import AssignationNode
 import IdentifierNode
-import org.example.LinterError
+import LinterError
+import PrintStatementNode
+import StatementNode
+import VariableDeclarationNode
 
-class CamelCaseIdentifierRule : LinterRule {
-    override fun check(node: ASTNode): List<LinterError> {
+
+class CamelCaseIdentifierRule(override var isActive: Boolean = true) : LinterRule {
+    override fun apply(node: StatementNode): List<LinterError> {
         val errors = mutableListOf<LinterError>()
-        if (node is IdentifierNode) {
-            if (!node.name.matches(Regex("^[a-z]+([A-Z][a-z]*)*$"))) {
-                errors.add(LinterError("Identifier ${node.name} should be in camel case", node.line, node.column))
+
+        when (node) {
+            is VariableDeclarationNode -> {
+                checkIdentifier(node.identifier, errors)
+            }
+            is AssignationNode -> {
+                checkIdentifier(node.identifier, errors)
+            }
+            is PrintStatementNode -> {
+                // No hacemos nada con PrintStatementNode en esta regla
             }
         }
+
         return errors
+    }
+
+    private fun checkIdentifier(identifier: IdentifierNode, errors: MutableList<LinterError>) {
+        if (!identifier.name.matches(Regex("^[a-z]+([A-Z][a-z]*)*$"))) {
+            errors.add(LinterError("Identifier '${identifier.name}' should be in camelCase", identifier.line, identifier.column))
+        }
     }
 }
