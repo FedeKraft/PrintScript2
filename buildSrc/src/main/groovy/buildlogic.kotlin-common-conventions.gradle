@@ -79,6 +79,13 @@ subprojects { subproject ->
                     }
                 }
             }
+            // Generar reporte en XML y HTML
+            xmlReport {
+                onCheck = true
+            }
+            htmlReport {
+                onCheck = true
+            }
         }
     }
 }
