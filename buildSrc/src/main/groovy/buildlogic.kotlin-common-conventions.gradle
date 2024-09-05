@@ -34,13 +34,12 @@ tasks.named('test') {
 
 ktlint {
     version.set "0.49.1"
-    android.set(true)
-    outputToConsole.set(true)
-    coloredOutput.set(true)
-    ignoreFailures.set(false)
-
+    outputToConsole.set(true) // Muestra las violaciones en la consola
+    coloredOutput.set(true) // Salida colorida en la consola
+    ignoreFailures.set(false) // No ignores las fallas
     reporters {
         reporter org.jlleitschuh.gradle.ktlint.reporter.ReporterType.PLAIN
+        reporter org.jlleitschuh.gradle.ktlint.reporter.ReporterType.CHECKSTYLE // Agrega un reporte en formato XML si lo deseas
     }
 
     additionalEditorconfig.set([

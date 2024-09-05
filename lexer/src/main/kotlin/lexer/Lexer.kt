@@ -73,6 +73,7 @@ class Lexer(val code: String): TokenProvider {
         }
     }
 
+
     private fun getTokenValue(word: String, tokenType: TokenType): TokenValue {
         return when (tokenType) {
             TokenType.NUMBER -> TokenValue.NumberValue(word.toDouble())

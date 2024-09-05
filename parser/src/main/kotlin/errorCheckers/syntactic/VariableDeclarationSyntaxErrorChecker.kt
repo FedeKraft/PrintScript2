@@ -12,59 +12,54 @@ class VariableDeclarationSyntaxErrorChecker : ErrorChecker {
     }
 
     private fun checkNecessaryTokens(tokens: List<Token>) {
-        if (tokens.size < 6) { throw RuntimeException("Invalid number of tokens in variable declaration") }
-        val unknownToken = tokens.find { it.type == TokenType.UNKNOWN }
-        if (unknownToken != null) { throw RuntimeException(
-            "Unknown token in print statement, linea ${unknownToken.line}, columna ${unknownToken.column}",
-        ) }
-        val tokenTypes = tokens.map { it.type }
-        val requiredTokenTypes = listOf(TokenType.LET, TokenType.IDENTIFIER, TokenType.COLON, TokenType.ASSIGN)
-        for (tokenType in requiredTokenTypes) {
-            if (tokenType !in tokenTypes) { throw RuntimeException("Missing token $tokenType in variable declaration") }
+        val necessaryTokens = mutableListOf<TokenType>(TokenType.LET, TokenType.IDENTIFIER, TokenType.COLON, TokenType.ASSIGN)
+        if (tokens.size < 6 && !necessaryTokens.contains(TokenType.LET)) {
+            throw RuntimeException("Missing LET token in line: ${tokens.last().line}, column: ${tokens.last().column}")
+        }
+        if(tokens.size < 6 && !necessaryTokens.contains(TokenType.COLON)) {
+            throw RuntimeException("Missing COLON token after variable in line: ${tokens.last().line}, column: ${tokens[2].column}")
+        }
+        if(tokens.size < 6 && !necessaryTokens.contains(TokenType.ASSIGN)) {
+            throw RuntimeException("Missing ASSIGN token in line: ${tokens.last().line}, column: ${tokens.last().column -1}")
         }
 
-        if (TokenType.NUMBER_TYPE !in tokenTypes && TokenType.STRING_TYPE !in tokenTypes) { throw RuntimeException(
-            "Missing type token in variable declaration",
-        ) }
+        val unknownToken = tokens.find { it.type == TokenType.UNKNOWN }
+        if (unknownToken != null) {
+            throw RuntimeException("Unknown token in variable declaration, line: ${unknownToken.line}, column: ${unknownToken.column}")
+        }
     }
 
     private fun checkNecessaryTokensOrder(tokens: List<Token>) {
         val iterator = tokens.iterator()
         var token = iterator.next()
 
-        // Comprobar 'LET'
         if (token.type != TokenType.LET) {
-            throw RuntimeException("Expected 'LET', found ${token.type}")
+            throw RuntimeException("Expected 'LET', found ${token.type} line: ${token.line}, column: ${token.column}")
         }
         token = iterator.next()
 
-        // Comprobar IDENTIFIER
         if (token.type != TokenType.IDENTIFIER) {
-            throw RuntimeException("Expected 'IDENTIFIER', found ${token.type}")
+            throw RuntimeException("Expected 'IDENTIFIER', found ${token.type} line: ${token.line}, column: ${token.column}")
         }
         token = iterator.next()
 
-        // Comprobar 'COLON'
         if (token.type != TokenType.COLON) {
-            throw RuntimeException("Expected ':', found ${token.type}")
+            throw RuntimeException("Expected ':', found ${token.type} line: ${token.line}, column: ${token.column}")
         }
         token = iterator.next()
 
-        // Comprobar TYPE (STRING_TYPE o NUMBER_TYPE)
         if (token.type != TokenType.STRING_TYPE && token.type != TokenType.NUMBER_TYPE) {
-            throw RuntimeException("Expected type 'STRING_TYPE' or 'NUMBER_TYPE', found ${token.type}")
+            throw RuntimeException("Expected type 'STRING_TYPE' or 'NUMBER_TYPE', found ${token.type} line: ${token.line}, column: ${token.column}")
         }
         token = iterator.next()
 
-        // Comprobar 'ASSIGN'
         if (token.type != TokenType.ASSIGN) {
-            throw RuntimeException("Expected '=', found ${token.type}")
+            throw RuntimeException("Expected '=', found ${token.type} line: ${token.line}, column: ${token.column}")
         }
         token = iterator.next()
 
-        // Comprobar VALUE (STRING, NUMBER o IDENTIFIER)
         if (token.type != TokenType.STRING && token.type != TokenType.NUMBER && token.type != TokenType.IDENTIFIER) {
-            throw RuntimeException("Expected value token, found ${token.type}")
+            throw RuntimeException("Expected value token, found ${token.type} line: ${token.line}, column: ${token.column}")
         }
     }
 }
