@@ -3,25 +3,28 @@ package parser
 import ast.StatementNode
 import command.Parser
 import org.example.parser.ASTProvider
+import token.Token
 import token.TokenProvider
 import token.TokenType
 
 class ParserDirector(private val tokenProvider: TokenProvider, private val commands: Map<TokenType, Parser>) :
     ASTProvider {
-
+        private var currentToken = tokenProvider.nextToken()
     fun nextStatement(): StatementNode {
         val tokens = mutableListOf<token.Token>()
         while (tokenProvider.hasNextToken()) {
-            val token = tokenProvider.nextToken()
-            if (token.type == TokenType.SEMICOLON) {
-                break
-            }
-            if (token.type == TokenType.UNKNOWN) {
+            if (currentToken.type == TokenType.UNKNOWN) {
                 throw RuntimeException(
-                    "Unknown token in variable assignment at line: ${token.line}, column: ${token.column}",
-                )
+                    "Unknown token in variable assignment at line: " +
+                            "${currentToken.line}, column: ${currentToken.column}")
             }
-            tokens.add(token)
+            if(currentToken.type == TokenType.IF){
+                return processBlockNode()
+            }
+            if (currentToken.type == TokenType.SEMICOLON) {
+                return processStatement(tokens)
+            }
+            tokens.add(currentToken)
         }
         if (tokens.isEmpty()) {
             throw NoSuchElementException("No more tokens available")
@@ -41,5 +44,18 @@ class ParserDirector(private val tokenProvider: TokenProvider, private val comma
 
     override fun hasNextAST(): Boolean {
         return tokenProvider.hasNextToken()
+    }
+
+    private fun processBlockNode():StatementNode{
+        val blockTokens = mutableListOf<Token>()
+        blockTokens.add(currentToken)
+        while (currentToken.type != TokenType.CLOSE_BRACE){
+            currentToken = tokenProvider.nextToken()
+            blockTokens.add(currentToken)
+        }
+        return BlockParser().parse(blockTokens)
+    }
+    private fun processStatement(tokens: List<Token>):StatementNode{
+
     }
 }
