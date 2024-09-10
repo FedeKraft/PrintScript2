@@ -4,7 +4,7 @@ import PrintStatementCommand
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import command.VariableDeclarationStatementCommand
-import lexer.LexerFactory
+import factory.LexerFactory
 import org.example.command.AssignationCommand
 import org.example.parser.Parser
 import token.TokenType

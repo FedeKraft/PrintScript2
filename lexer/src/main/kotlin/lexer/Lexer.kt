@@ -1,70 +1,73 @@
 package lexer
 
+import reader.Reader
 import token.*
 
-class Lexer(val code: String): TokenProvider {
-    private var currentIndex = 0
+class Lexer(private val reader: Reader, private val patternsMap: Map<Regex, TokenType>): TokenProvider {
     private var currentLine = 1
     private var currentColumn = 1
-    private val patternsMap = mapOf(
-        TokenPatterns.NUMBER to TokenType.NUMBER,
-        TokenPatterns.STRING to TokenType.STRING,
-        TokenPatterns.LET to TokenType.LET,
-        TokenPatterns.PRINT to TokenType.PRINT,
-        TokenPatterns.STRING_TYPE to TokenType.STRING_TYPE,
-        TokenPatterns.NUMBER_TYPE to TokenType.NUMBER_TYPE,
-        TokenPatterns.IDENTIFIER to TokenType.IDENTIFIER,
-        TokenPatterns.ASSIGN to TokenType.ASSIGN,
-        TokenPatterns.SUM to TokenType.SUM,
-        TokenPatterns.SUBTRACT to TokenType.SUBTRACT,
-        TokenPatterns.MULTIPLY to TokenType.MULTIPLY,
-        TokenPatterns.DIVIDE to TokenType.DIVIDE,
-        TokenPatterns.SEMICOLON to TokenType.SEMICOLON,
-        TokenPatterns.COLON to TokenType.COLON,
-        TokenPatterns.LEFT_PARENTHESIS to TokenType.LEFT_PARENTHESIS,
-        TokenPatterns.RIGHT_PARENTHESIS to TokenType.RIGHT_PARENTHESIS
-    )
+    private var currentChar: Char? = reader.read() // Leer el primer carácter
 
     override fun hasNextToken(): Boolean {
-        skipWhitespace()
-        return currentIndex < code.length
+        return currentChar != null
     }
 
-    fun nextToken(): Token {
-        if (!hasNextToken()) {
-            return Token(TokenType.UNKNOWN, TokenValue.StringValue("unknown"), currentLine, currentColumn)
+    override fun nextToken(): Token {
+        if (currentChar == null) {
+            return Token(TokenType.UNKNOWN, TokenValue.NullValue, currentLine, currentColumn)
         }
 
-        val startingLine = currentLine
-        val startingColumn = currentColumn
-        val remainingCode = code.substring(currentIndex)
+        // Manejar espacios y saltos de línea
+        manageWhiteSpacesAndLineBreaks()
 
-        for ((pattern, tokenType) in patternsMap) {
-            val matchResult = pattern.find(remainingCode)
-            if (matchResult != null && matchResult.range.first == 0) { // Coincidencia al inicio
-                val matchedText = matchResult.value
-                updatePosition(matchedText)
-                currentIndex += matchedText.length
-                return Token(tokenType, getTokenValue(matchedText, tokenType), startingLine, startingColumn)
+        // Si llegamos al final después de saltar espacios
+        if (currentChar == null) {
+            return Token(TokenType.UNKNOWN, TokenValue.NullValue, currentLine, currentColumn)
+        }
+
+        val word = StringBuilder()
+
+        // Construir el token hasta un delimitador (espacio, símbolo, etc.)
+        tokenizeTillDelimiter(word)
+
+        val value = word.toString()
+
+        // Buscar coincidencias de patrones
+        val tokenType = searchInTokenPatterns(value)
+
+        if (tokenType != null) {
+            return when(tokenType) {
+                TokenType.STRING -> Token(tokenType, TokenValue.StringValue(value), currentLine, currentColumn)
+                TokenType.NUMBER -> Token(tokenType, TokenValue.NumberValue(value.toDouble()), currentLine, currentColumn)
+                else -> Token(tokenType, TokenValue.StringValue(value), currentLine, currentColumn)
             }
         }
 
-        // Si no se encuentra ningún token, avanzar en uno e indicar token desconocido
-        updatePosition(code[currentIndex].toString())
-        currentIndex++
-        return Token(TokenType.UNKNOWN, TokenValue.StringValue("unknown"), startingLine, startingColumn)
-    }
-
-    private fun skipWhitespace() {
-        while (currentIndex < code.length && code[currentIndex].isWhitespace()) {
-            updatePosition(code[currentIndex].toString())
-            currentIndex++
+        // Si es un delimitador (como un símbolo ";"), manejarlo por separado
+        if (isDelimiter(currentChar!!)) {
+            return makeDelimiterToken()
         }
+        return Token(TokenType.UNKNOWN, TokenValue.StringValue(value), currentLine, currentColumn)
     }
 
-    private fun updatePosition(text: String) {
-        for (char in text) {
-            if (char == '\n') {
+    private fun makeDelimiterToken(): Token {
+        val tokenType = searchInTokenPatterns(currentChar.toString())
+        if(tokenType == null) {
+            currentChar = reader.read() // Avanzar al siguiente carácter
+            return Token(TokenType.UNKNOWN, TokenValue.StringValue(currentChar.toString()), currentLine, currentColumn)
+        }
+        val delimiterToken = Token(tokenType, TokenValue.StringValue(currentChar.toString()), currentLine, currentColumn)
+        currentChar = reader.read() // Avanzar al siguiente carácter
+        return delimiterToken
+    }
+
+    private fun searchInTokenPatterns(value: String) = patternsMap.entries.find { it.key.matches(value) }?.value
+
+    private fun tokenizeTillDelimiter(word: StringBuilder) {
+        while (currentChar != null && !currentChar!!.isWhitespace() && !isDelimiter(currentChar!!)) {
+            word.append(currentChar)
+            currentChar = reader.read()
+            if (currentChar == '\n') {
                 currentLine++
                 currentColumn = 1
             } else {
@@ -73,31 +76,22 @@ class Lexer(val code: String): TokenProvider {
         }
     }
 
-
-    private fun getTokenValue(word: String, tokenType: TokenType): TokenValue {
-        return when (tokenType) {
-            TokenType.NUMBER -> TokenValue.NumberValue(word.toDouble())
-            TokenType.STRING -> TokenValue.StringValue(word)
-            TokenType.LET -> TokenValue.StringValue("let")
-            TokenType.PRINT -> TokenValue.StringValue("print")
-            TokenType.STRING_TYPE -> TokenValue.StringValue("String")
-            TokenType.NUMBER_TYPE -> TokenValue.StringValue("Number")
-            TokenType.IDENTIFIER -> TokenValue.StringValue(word)
-            TokenType.ASSIGN -> TokenValue.StringValue("=")
-            TokenType.SUM -> TokenValue.StringValue("+")
-            TokenType.SUBTRACT -> TokenValue.StringValue("-")
-            TokenType.MULTIPLY -> TokenValue.StringValue("*")
-            TokenType.DIVIDE -> TokenValue.StringValue("/")
-            TokenType.SEMICOLON -> TokenValue.StringValue(";")
-            TokenType.COLON -> TokenValue.StringValue(":")
-            TokenType.LEFT_PARENTHESIS -> TokenValue.StringValue("(")
-            TokenType.RIGHT_PARENTHESIS -> TokenValue.StringValue(")")
-            else -> TokenValue.StringValue("unknown")
+    private fun manageWhiteSpacesAndLineBreaks() {
+        while (currentChar != null && currentChar!!.isWhitespace()) {
+            if (currentChar == '\n') {
+                currentLine++
+                currentColumn = 1
+            } else {
+                currentColumn++
+            }
+            currentChar = reader.read()
         }
     }
 
-    override fun getNextToken(): Token {
-        return nextToken()
+    private fun isDelimiter(char: Char): Boolean {
+        val delimiters = ";:=+-*/(){}".toCharArray()
+        return delimiters.contains(char)
     }
+
 
 }

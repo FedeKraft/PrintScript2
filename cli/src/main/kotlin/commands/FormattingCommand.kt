@@ -30,7 +30,7 @@ class FormattingCommand : CliktCommand(help = "Format the file") {
 
     override fun run() {
         val sourceCode = readSourceCodeFromFile(file)
-        val lexer = Lexer(sourceCode)
+        val lexer = Lexer(sourceCode, patternsMap)
         val parser = Parser(lexer, mapOf(
             TokenType.PRINT to PrintStatementCommand(),
             TokenType.LET to VariableDeclarationStatementCommand(),

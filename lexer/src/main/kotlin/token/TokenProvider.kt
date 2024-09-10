@@ -1,6 +1,6 @@
 package token
 
 interface TokenProvider {
-    fun getNextToken(): Token
+    fun nextToken(): Token
     fun hasNextToken(): Boolean
 }

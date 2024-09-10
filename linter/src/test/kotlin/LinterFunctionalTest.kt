@@ -33,7 +33,7 @@ class LinterFunctionalTest {
         val sourceCode = readSourceCodeFromFile("linterFunctionalTest.txt")
 
         // Inicializar lexer y parser
-        val lexer = Lexer(sourceCode)
+        val lexer = Lexer(sourceCode, patternsMap)
         val parser = Parser(lexer, mapOf(
             TokenType.PRINT to PrintStatementCommand(),
             TokenType.LET to VariableDeclarationStatementCommand(),

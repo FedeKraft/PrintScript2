@@ -8,7 +8,8 @@ object TokenPatterns {
     // VAL TYPES
     val STRING_TYPE = Regex("\\bString\\b")
     val NUMBER_TYPE = Regex("\\bNumber\\b")
-    val IDENTIFIER = Regex("\\b[a-zA-Z_][a-zA-Z0-9_]*\\b")
+    val IDENTIFIER = Regex("\\b[a-zA-Z_][a-zA-Z0-9_]*")
+
     // LITERALS
     val NUMBER = Regex("\\b\\d+(\\.\\d+)?\\b")
     val STRING = Regex("\".*?\"|'.*?'")
