@@ -1,4 +1,4 @@
-package org.example.command
+package command
 
 import PrattParser
 import ast.IdentifierNode
@@ -6,7 +6,6 @@ import ast.NumberLiteralNode
 import ast.StatementNode
 import ast.StringLiteralNode
 import ast.VariableDeclarationNode
-import command.ParseCommand
 import org.example.errorCheckers.syntactic.VariableDeclarationSyntaxErrorChecker
 import token.Token
 import token.TokenType

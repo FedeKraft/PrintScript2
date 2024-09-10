@@ -1,9 +1,9 @@
 import formatter.Formatter
 import formatter.FormatterConfigLoader
 import lexer.Lexer
-import org.example.command.AssignationCommand
-import org.example.command.PrintStatementCommand
-import org.example.command.VariableDeclarationStatementCommand
+import command.AssignationCommand
+import command.PrintStatementCommand
+import command.VariableDeclarationStatementCommand
 import org.example.parser.Parser
 import org.junit.jupiter.api.Test
 import rules.SpaceAroundEqualsRule

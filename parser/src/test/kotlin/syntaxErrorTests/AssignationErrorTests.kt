@@ -1,5 +1,5 @@
 import factory.LexerFactory
-import org.example.command.AssignationCommand
+import command.AssignationCommand
 import org.example.parser.Parser
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test

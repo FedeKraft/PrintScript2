@@ -2,7 +2,7 @@ package factory
 
 import lexer.Lexer
 import reader.Reader
-import token.TokenPatterns
+import patterns.TokenPatterns
 import token.TokenType
 
 class LexerFactory {
