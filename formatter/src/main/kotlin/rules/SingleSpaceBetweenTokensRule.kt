@@ -1,6 +1,6 @@
 package rules
 
-import StatementNode
+import ast.StatementNode
 
 class SingleSpaceBetweenTokensRule : FormatterRule {
     override fun applyRule(node: StatementNode, variableTypes: Map<String, Any>, result: String): String {

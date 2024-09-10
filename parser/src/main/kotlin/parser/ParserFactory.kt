@@ -1,8 +1,8 @@
 package parser
 
+import org.example.command.AssignationCommand
 import org.example.command.PrintStatementCommand
 import org.example.command.VariableDeclarationStatementCommand
-import org.example.command.AssignationCommand
 import org.example.parser.Parser
 import token.TokenProvider
 import token.TokenType

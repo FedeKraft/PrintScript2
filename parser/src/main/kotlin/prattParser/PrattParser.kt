@@ -1,3 +1,7 @@
+import ast.ExpressionNode
+import ast.IdentifierNode
+import ast.NumberLiteralNode
+import ast.StringLiteralNode
 import token.Token
 import token.TokenType
 import token.TokenValue

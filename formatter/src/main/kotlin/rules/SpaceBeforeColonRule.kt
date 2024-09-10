@@ -1,7 +1,7 @@
 package rules
 
-import StatementNode
-import VariableDeclarationNode
+import ast.StatementNode
+import ast.VariableDeclarationNode
 
 class SpaceBeforeColonRule(private val enabled: Boolean) : FormatterRule {
     override fun applyRule(node: StatementNode, variableTypes: Map<String, Any>, result: String): String {
@@ -19,6 +19,6 @@ class SpaceBeforeColonRule(private val enabled: Boolean) : FormatterRule {
             }
             return modifiedResult.toString()
         }
-        return result  // Devuelve el nodo original si no aplica
+        return result // Devuelve el nodo original si no aplica
     }
 }

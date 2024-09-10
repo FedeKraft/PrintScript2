@@ -1,12 +1,12 @@
 package rules
 
-import LinterError
-import StatementNode
+import ast.StatementNode
+import linter.LinterError
 
 class CamelORSnakeRules(
     private val camelCaseRule: CamelCaseIdentifierRule,
     private val snakeCaseRule: SnakeCaseIdentifierRule,
-    override var isActive: Boolean = true
+    override var isActive: Boolean = true,
 ) : LinterRule {
 
     override fun apply(node: StatementNode): List<LinterError> {

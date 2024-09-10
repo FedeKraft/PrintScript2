@@ -1,9 +1,12 @@
+package linter
+
+import ast.StatementNode
 import org.example.parser.ASTProvider
 import rules.LinterRule
 
 class Linter(
     private val rules: List<LinterRule>,
-    private val astProvider: ASTProvider
+    private val astProvider: ASTProvider,
 ) {
     fun lint(): Sequence<LinterError> = sequence {
         while (astProvider.hasNextAST()) {

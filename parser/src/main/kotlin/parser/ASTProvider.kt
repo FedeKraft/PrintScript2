@@ -1,6 +1,6 @@
 package org.example.parser
 
-import StatementNode
+import ast.StatementNode
 
 interface ASTProvider {
     fun getNextAST(): StatementNode

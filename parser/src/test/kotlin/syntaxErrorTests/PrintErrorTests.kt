@@ -1,10 +1,10 @@
+import lexer.Lexer
+import org.example.command.PrintStatementCommand
 import org.example.parser.Parser
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import token.TokenType
-import lexer.Lexer
-import org.example.command.PrintStatementCommand
 import java.io.File
 
 class PrintErrorTests {

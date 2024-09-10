@@ -1,10 +1,10 @@
 package org.example.command
 
-import IdentifierNode
 import PrattParser
-import PrintStatementNode
-import StatementNode
-import StringLiteralNode
+import ast.IdentifierNode
+import ast.PrintStatementNode
+import ast.StatementNode
+import ast.StringLiteralNode
 import command.ParseCommand
 import org.example.errorCheckers.syntactic.PrintSyntaxErrorChecker
 import token.Token

@@ -1,7 +1,7 @@
 package reader
 
-import java.io.File
 import java.io.BufferedReader
+import java.io.File
 
 class Reader(private val filePath: String) {
 
@@ -13,8 +13,7 @@ class Reader(private val filePath: String) {
             val char = nextChar.toChar()
             nextChar = reader.read()
             char
-        }
-        else {
+        } else {
             reader.close()
             null
         }

@@ -5,6 +5,7 @@ object TokenPatterns {
     // KEYWORDS
     val LET = Regex("\\blet\\b")
     val PRINT = Regex("\\bprint\\b")
+
     // VAL TYPES
     val STRING_TYPE = Regex("\\bString\\b")
     val NUMBER_TYPE = Regex("\\bNumber\\b")
@@ -19,11 +20,11 @@ object TokenPatterns {
     val SUBTRACT = Regex("-")
     val MULTIPLY = Regex("\\*")
     val DIVIDE = Regex("/")
+
     // SYMBOLS
     val ASSIGN = Regex("=")
     val SEMICOLON = Regex(";")
     val COLON = Regex(":")
     val LEFT_PARENTHESIS = Regex("\\(")
     val RIGHT_PARENTHESIS = Regex("\\)")
-
 }
