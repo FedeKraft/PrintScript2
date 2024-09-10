@@ -45,9 +45,7 @@ class LinterTests {
 
             // Crea un StatementNode (en este caso, un PrintStatementNode)
             val node = PrintStatementNode(
-                expression = StringLiteralNode("This is a simple print statement", 1, 1),
-                line = 1,
-                column = 1,
+                expression = StringLiteralNode("This is a simple print statement"),
             )
 
             // Aplica la regla sobre el nodo creado
@@ -67,10 +65,8 @@ class LinterTests {
         // Crea un StatementNode con un identificador en snake_case
         val node =
             VariableDeclarationNode1(
-                identifier = IdentifierNode("snake_case_identifier", 1, 1),
-                value = NumberLiteralNode(42.0, 1, 1),
-                line = 1,
-                column = 1,
+                identifier = IdentifierNode("snake_case_identifier"),
+                value = NumberLiteralNode(42.0),
             )
 
         // Aplica la regla sobre el nodo creado
@@ -89,10 +85,8 @@ class LinterTests {
 
             // Crea un StatementNode con un identificador en camelCase
             val node = VariableDeclarationNode1(
-                identifier = IdentifierNode("camelCaseIdentifier", 1, 1),
-                value = NumberLiteralNode(42.0, 1, 1),
-                line = 1,
-                column = 1,
+                identifier = IdentifierNode("camelCaseIdentifier"),
+                value = NumberLiteralNode(42.0),
             )
 
             // Aplica la regla sobre el nodo creado

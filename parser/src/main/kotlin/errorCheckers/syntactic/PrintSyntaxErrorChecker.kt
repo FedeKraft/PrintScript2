@@ -30,7 +30,6 @@ class PrintSyntaxErrorChecker : ErrorChecker {
             )
         }
 
-        val tokenTypes = tokens.map { it.type }
         val requiredTokenTypes = listOf(TokenType.PRINT, TokenType.LEFT_PARENTHESIS, TokenType.RIGHT_PARENTHESIS)
 
         for (tokenType in requiredTokenTypes) {

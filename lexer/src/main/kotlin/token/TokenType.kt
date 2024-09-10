@@ -36,7 +36,6 @@ enum class TokenType {
     // MISC
     UNKNOWN,
 
-    //1.1
+    // 1.1
     IF, ELSE, CONST, OPEN_BRACE, CLOSE_BRACE, BOOLEAN
-
 }

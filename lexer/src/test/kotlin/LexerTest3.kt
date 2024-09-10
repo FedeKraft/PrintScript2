@@ -1,6 +1,5 @@
 import factory.LexerFactory
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import reader.Reader
 import token.Token
@@ -42,7 +41,7 @@ class LexerTest3 {
             Token(TokenType.IDENTIFIER, TokenValue.StringValue("age"), 4, 4),
             Token(TokenType.ASSIGN, TokenValue.StringValue("="), 4, 5),
             Token(TokenType.NUMBER, TokenValue.NumberValue(22.0), 4, 8),
-            Token(TokenType.SEMICOLON, TokenValue.StringValue(";"), 4, 8)
+            Token(TokenType.SEMICOLON, TokenValue.StringValue(";"), 4, 8),
         )
         // Comparar cada token en orden
         assertEquals(expectedTokens.size, actualTokens.size, "Number of tokens do not match")
@@ -135,7 +134,7 @@ class LexerTest3 {
             Token(TokenType.PRINT, TokenValue.StringValue("print"), 4, 6),
             Token(TokenType.LEFT_PARENTHESIS, TokenValue.StringValue("("), 4, 6),
             Token(TokenType.IDENTIFIER, TokenValue.StringValue("age"), 4, 9),
-            Token(TokenType.UNKNOWN, TokenValue.StringValue("]"), 4, 9)
+            Token(TokenType.UNKNOWN, TokenValue.StringValue("]"), 4, 9),
         )
 
         val minSize = minOf(expectedTokens.size, actualTokens.size)
@@ -153,7 +152,7 @@ class LexerTest3 {
                 assertEquals(
                     (expected.value as TokenValue.StringValue).value,
                     (actual.value as TokenValue.StringValue).value,
-                    "Token value at index $i does not match"
+                    "Token value at index $i does not match",
                 )
             } else {
                 assertEquals(expected.value, actual.value, "Token value at index $i does not match")
@@ -173,5 +172,4 @@ class LexerTest3 {
             }
         }
     }
-
 }
