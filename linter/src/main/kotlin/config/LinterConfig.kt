@@ -1,3 +1,5 @@
+package config
+
 import rules.LinterRule
 
 object LinterConfig {

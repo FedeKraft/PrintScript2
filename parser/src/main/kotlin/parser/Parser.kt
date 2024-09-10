@@ -1,11 +1,11 @@
 package org.example.parser
 
-import StatementNode
+import ast.StatementNode
 import command.ParseCommand
 import token.TokenProvider
 import token.TokenType
 
-class Parser(private val tokenProvider: TokenProvider, private val commands: Map<TokenType, ParseCommand>): ASTProvider {
+class Parser(private val tokenProvider: TokenProvider, private val commands: Map<TokenType, ParseCommand>) : ASTProvider {
 
     fun nextStatement(): StatementNode {
         val tokens = mutableListOf<token.Token>()
@@ -15,7 +15,9 @@ class Parser(private val tokenProvider: TokenProvider, private val commands: Map
                 break
             }
             if (token.type == TokenType.UNKNOWN) {
-                throw RuntimeException("Unknown token in variable assignment at line: ${token.line}, column: ${token.column}")
+                throw RuntimeException(
+                    "Unknown token in variable assignment at line: ${token.line}, column: ${token.column}",
+                )
             }
             tokens.add(token)
         }
@@ -26,7 +28,9 @@ class Parser(private val tokenProvider: TokenProvider, private val commands: Map
         if (command != null) {
             return command.execute(tokens)
         }
-        throw RuntimeException("Syntax error, cannot initialize a statement with token: ${tokens[0].value}, line: ${tokens[0].line}, column: ${tokens[0].column}")
+        throw RuntimeException(
+            "Syntax error, cannot initialize a statement with token: ${tokens[0].value}, line: ${tokens[0].line}, column: ${tokens[0].column}",
+        )
     }
 
     override fun getNextAST(): StatementNode {
@@ -36,5 +40,4 @@ class Parser(private val tokenProvider: TokenProvider, private val commands: Map
     override fun hasNextAST(): Boolean {
         return tokenProvider.hasNextToken()
     }
-
 }

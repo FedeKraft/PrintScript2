@@ -1,7 +1,6 @@
 package command
 
-
-import StatementNode
+import ast.StatementNode
 import token.Token
 
 interface ParseCommand {

@@ -1,8 +1,8 @@
 package rules
 
-import PrintStatementNode
-import StatementNode
-import formatter.NewlineBeforePrintlnConfig
+import ast.PrintStatementNode
+import ast.StatementNode
+import formatter.config.NewlineBeforePrintlnConfig
 
 class NewlineBeforePrintlnRule(private val config: NewlineBeforePrintlnConfig) : FormatterRule {
 
@@ -17,6 +17,6 @@ class NewlineBeforePrintlnRule(private val config: NewlineBeforePrintlnConfig) :
             formattedStatement.append(result)
             return formattedStatement.toString()
         }
-        return result  // Devuelve el nodo original si no es un PrintStatementNode
+        return result // Devuelve el nodo original si no es un PrintStatementNode
     }
 }

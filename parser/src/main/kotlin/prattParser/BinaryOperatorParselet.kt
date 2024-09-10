@@ -1,3 +1,5 @@
+import ast.BinaryExpressionNode
+import ast.ExpressionNode
 import token.Token
 import token.TokenType
 

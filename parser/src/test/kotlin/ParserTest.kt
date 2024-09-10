@@ -1,3 +1,7 @@
+import ast.AssignationNode
+import ast.PrintStatementNode
+import ast.StatementNode
+import ast.VariableDeclarationNode
 import factory.LexerFactory
 import org.junit.jupiter.api.Test
 import parser.ParserFactory

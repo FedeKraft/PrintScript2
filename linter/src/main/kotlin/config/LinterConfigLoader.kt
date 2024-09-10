@@ -1,3 +1,6 @@
+package config
+
+import linter.Linter
 import org.example.parser.ASTProvider
 import rules.*
 

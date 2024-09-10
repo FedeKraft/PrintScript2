@@ -1,11 +1,10 @@
 package rules
 
-import AssignationNode
-import IdentifierNode
-import LinterError
-import StatementNode
-import VariableDeclarationNode
-
+import ast.AssignationNode
+import ast.IdentifierNode
+import ast.StatementNode
+import ast.VariableDeclarationNode
+import linter.LinterError
 
 class SnakeCaseIdentifierRule(override var isActive: Boolean = true) : LinterRule {
     override fun apply(node: StatementNode): List<LinterError> {
@@ -28,7 +27,13 @@ class SnakeCaseIdentifierRule(override var isActive: Boolean = true) : LinterRul
 
     private fun checkIdentifier(identifier: IdentifierNode, errors: MutableList<LinterError>) {
         if (!identifier.name.matches(Regex("^[a-z]+(_[a-z]+)*$"))) {
-            errors.add(LinterError("Identifier '${identifier.name}' should be in snake_case", identifier.line, identifier.column))
+            errors.add(
+                LinterError(
+                    "Identifier '${identifier.name}' should be in snake_case",
+                    identifier.line,
+                    identifier.column,
+                ),
+            )
         }
     }
 }

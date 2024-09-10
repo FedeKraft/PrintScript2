@@ -1,9 +1,12 @@
 package lexer
 
 import reader.Reader
-import token.*
+import token.Token
+import token.TokenProvider
+import token.TokenType
+import token.TokenValue
 
-class Lexer(private val reader: Reader, private val patternsMap: Map<Regex, TokenType>): TokenProvider {
+class Lexer(private val reader: Reader, private val patternsMap: Map<Regex, TokenType>) : TokenProvider {
     private var currentLine = 1
     private var currentColumn = 1
     private var currentChar: Char? = reader.read() // Leer el primer carácter
@@ -36,9 +39,19 @@ class Lexer(private val reader: Reader, private val patternsMap: Map<Regex, Toke
         val tokenType = searchInTokenPatterns(value)
 
         if (tokenType != null) {
-            return when(tokenType) {
-                TokenType.STRING -> Token(tokenType, TokenValue.StringValue(value), currentLine, currentColumn)
-                TokenType.NUMBER -> Token(tokenType, TokenValue.NumberValue(value.toDouble()), currentLine, currentColumn)
+            return when (tokenType) {
+                TokenType.STRING -> Token(
+                    tokenType,
+                    TokenValue.StringValue(value),
+                    currentLine,
+                    currentColumn,
+                )
+                TokenType.NUMBER -> Token(
+                    tokenType,
+                    TokenValue.NumberValue(value.toDouble()),
+                    currentLine,
+                    currentColumn,
+                )
                 else -> Token(tokenType, TokenValue.StringValue(value), currentLine, currentColumn)
             }
         }
@@ -52,11 +65,17 @@ class Lexer(private val reader: Reader, private val patternsMap: Map<Regex, Toke
 
     private fun makeDelimiterToken(): Token {
         val tokenType = searchInTokenPatterns(currentChar.toString())
-        if(tokenType == null) {
+        if (tokenType == null) {
             currentChar = reader.read() // Avanzar al siguiente carácter
-            return Token(TokenType.UNKNOWN, TokenValue.StringValue(currentChar.toString()), currentLine, currentColumn)
+            return Token(
+                TokenType.UNKNOWN,
+                TokenValue.StringValue(currentChar.toString()),
+                currentLine,
+                currentColumn,
+            )
         }
-        val delimiterToken = Token(tokenType, TokenValue.StringValue(currentChar.toString()), currentLine, currentColumn)
+        val delimiterToken =
+            Token(tokenType, TokenValue.StringValue(currentChar.toString()), currentLine, currentColumn)
         currentChar = reader.read() // Avanzar al siguiente carácter
         return delimiterToken
     }
@@ -92,6 +111,4 @@ class Lexer(private val reader: Reader, private val patternsMap: Map<Regex, Toke
         val delimiters = ";:=+-*/(){}".toCharArray()
         return delimiters.contains(char)
     }
-
-
 }

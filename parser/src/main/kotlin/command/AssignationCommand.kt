@@ -1,11 +1,11 @@
 package org.example.command
 
-import AssignationNode
-import IdentifierNode
-import NumberLiteralNode
 import PrattParser
-import StatementNode
-import StringLiteralNode
+import ast.AssignationNode
+import ast.IdentifierNode
+import ast.NumberLiteralNode
+import ast.StatementNode
+import ast.StringLiteralNode
 import command.ParseCommand
 import org.example.errorCheckers.syntactic.AssignationSyntaxErrorChecker
 import token.Token

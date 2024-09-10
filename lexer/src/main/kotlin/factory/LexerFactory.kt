@@ -5,7 +5,6 @@ import reader.Reader
 import token.TokenPatterns
 import token.TokenType
 
-
 class LexerFactory {
 
     fun createLexer1_0(reader: Reader): Lexer {
@@ -28,11 +27,10 @@ class LexerFactory {
             TokenPatterns.DIVIDE to TokenType.DIVIDE,
             TokenPatterns.COLON to TokenType.COLON,
             TokenPatterns.LEFT_PARENTHESIS to TokenType.LEFT_PARENTHESIS,
-            TokenPatterns.RIGHT_PARENTHESIS to TokenType.RIGHT_PARENTHESIS
+            TokenPatterns.RIGHT_PARENTHESIS to TokenType.RIGHT_PARENTHESIS,
         )
         return Lexer(reader, patternsMap)
     }
-
 
     fun createLexer1_1(reader: Reader): Lexer {
         val patternsMap = mapOf(
@@ -51,9 +49,8 @@ class LexerFactory {
             TokenPatterns.SEMICOLON to TokenType.SEMICOLON,
             TokenPatterns.COLON to TokenType.COLON,
             TokenPatterns.LEFT_PARENTHESIS to TokenType.LEFT_PARENTHESIS,
-            TokenPatterns.RIGHT_PARENTHESIS to TokenType.RIGHT_PARENTHESIS
+            TokenPatterns.RIGHT_PARENTHESIS to TokenType.RIGHT_PARENTHESIS,
         )
         return Lexer(reader, patternsMap)
     }
-
 }

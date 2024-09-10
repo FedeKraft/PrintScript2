@@ -1,16 +1,16 @@
 import factory.LexerFactory
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import reader.Reader
 import token.Token
 import token.TokenType
-import java.io.File
 
 class LexerTest3 {
 
     @Test
-    fun `testing new  lexer`(){
+    fun `testing new  lexer`() {
         val reader = Reader("src/test/resources/AllKnownTokens.txt")
         val lexer = LexerFactory().createLexer1_0(reader)
         val actualTokens = mutableListOf<Token>()
@@ -58,7 +58,7 @@ class LexerTest3 {
         val tokensFirstTwoLines = lexLines(3)
 
         println("Tokens from the first three lines: $tokensFirstTwoLines")
-        println("Total tokens lexed: ${tokensFirstTwoLines.size}")  // Imprime el total de tokens
+        println("Total tokens lexed: ${tokensFirstTwoLines.size}") // Imprime el total de tokens
 
         assertEquals(19, tokensFirstTwoLines.size) // Ajusta el número esperado según tu archivo
     }
@@ -107,16 +107,12 @@ class LexerTest3 {
         println("Tokens before error: $tokensBeforeError")
     }
 
-
     @Test
-    fun `testeando el reader` (){
-
+    fun `testeando el reader`() {
         val filePath = "src/test/resources/AllKnownTokens.txt"
         val reader = Reader(filePath)
-        while (reader.hasNextChar()){
+        while (reader.hasNextChar()) {
             println(reader.read())
         }
-
-
     }
 }

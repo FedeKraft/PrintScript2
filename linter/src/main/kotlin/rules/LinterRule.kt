@@ -1,7 +1,7 @@
 package rules
 
-import LinterError
-import StatementNode
+import ast.StatementNode
+import linter.LinterError
 
 interface LinterRule {
     var isActive: Boolean

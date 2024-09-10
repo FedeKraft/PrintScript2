@@ -1,11 +1,16 @@
-import org.junit.jupiter.api.Test
+import ast.IdentifierNode
+import ast.NumberLiteralNode
+import ast.PrintStatementNode
+import ast.StringLiteralNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
 import rules.CamelCaseIdentifierRule
 import rules.PrintSimpleExpressionRule
 import rules.SnakeCaseIdentifierRule
 import java.nio.file.Paths
+import ast.VariableDeclarationNode as VariableDeclarationNode1
 
 // Cargar la configuración desde el archivo JSON
 object LinterConfigLoader {
@@ -22,11 +27,11 @@ object LinterConfigLoader {
 data class LinterConfig(
     val printSimpleExpression: RuleConfig,
     val snakeCaseIdentifier: RuleConfig,
-    val camelCaseIdentifier: RuleConfig
+    val camelCaseIdentifier: RuleConfig,
 )
 
 data class RuleConfig(
-    val enabled: Boolean
+    val enabled: Boolean,
 )
 
 class LinterTests {
@@ -42,7 +47,7 @@ class LinterTests {
             val node = PrintStatementNode(
                 expression = StringLiteralNode("This is a simple print statement", 1, 1),
                 line = 1,
-                column = 1
+                column = 1,
             )
 
             // Aplica la regla sobre el nodo creado
@@ -56,26 +61,25 @@ class LinterTests {
     }
 
     @Test
-    fun testSnakeCaseIdentifierRule() {
-        if (config.snakeCaseIdentifier.enabled) {
-            val rule = SnakeCaseIdentifierRule()
+    fun testSnakeCaseIdentifierRule() = if (config.snakeCaseIdentifier.enabled) {
+        val rule = SnakeCaseIdentifierRule()
 
-            // Crea un StatementNode con un identificador en snake_case
-            val node = VariableDeclarationNode(
+        // Crea un StatementNode con un identificador en snake_case
+        val node =
+            VariableDeclarationNode1(
                 identifier = IdentifierNode("snake_case_identifier", 1, 1),
                 value = NumberLiteralNode(42.0, 1, 1),
                 line = 1,
-                column = 1
+                column = 1,
             )
 
-            // Aplica la regla sobre el nodo creado
-            val errors = rule.apply(node)
+        // Aplica la regla sobre el nodo creado
+        val errors = rule.apply(node)
 
-            // Verifica que no haya errores (o ajusta si debe haber)
-            assertTrue(errors.isEmpty())
-        } else {
-            println("SnakeCaseIdentifierRule está deshabilitado.")
-        }
+        // Verifica que no haya errores (o ajusta si debe haber)
+        assertTrue(errors.isEmpty())
+    } else {
+        println("SnakeCaseIdentifierRule está deshabilitado.")
     }
 
     @Test
@@ -84,11 +88,11 @@ class LinterTests {
             val rule = CamelCaseIdentifierRule()
 
             // Crea un StatementNode con un identificador en camelCase
-            val node = VariableDeclarationNode(
+            val node = VariableDeclarationNode1(
                 identifier = IdentifierNode("camelCaseIdentifier", 1, 1),
                 value = NumberLiteralNode(42.0, 1, 1),
                 line = 1,
-                column = 1
+                column = 1,
             )
 
             // Aplica la regla sobre el nodo creado
