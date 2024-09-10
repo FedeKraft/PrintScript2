@@ -1,10 +1,10 @@
 import formatter.Formatter
 import formatter.FormatterConfigLoader
 import lexer.Lexer
-import command.AssignationCommand
-import command.PrintStatementCommand
-import command.VariableDeclarationStatementCommand
-import org.example.parser.Parser
+import command.AssignationParser
+import command.PrintParser
+import command.VariableDeclarationParser
+import parser.ParserDirector
 import org.junit.jupiter.api.Test
 import rules.SpaceAroundEqualsRule
 import token.TokenType
@@ -27,19 +27,19 @@ class FormatterTest1 {
         val expected = readSourceCodeFromFile("formatterTest1Expected.txt")
 
         val lexer = Lexer(sourceCode)
-        val parser = Parser(
+        val parserDirector = ParserDirector(
             lexer,
             mapOf(
-                TokenType.PRINT to PrintStatementCommand(),
-                TokenType.LET to VariableDeclarationStatementCommand(),
-                TokenType.IDENTIFIER to AssignationCommand(),
+                TokenType.PRINT to PrintParser(),
+                TokenType.LET to VariableDeclarationParser(),
+                TokenType.IDENTIFIER to AssignationParser(),
             ),
         )
 
-        val formatter = Formatter(rules, parser)
+        val formatter = Formatter(rules, parserDirector)
         var result = ""
         for (formattedString in formatter.format()) {
-            if (parser.hasNextAST()) {
+            if (parserDirector.hasNextAST()) {
                 result += formattedString.plus("\n")
             } else {
                 result += formattedString

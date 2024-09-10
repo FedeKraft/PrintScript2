@@ -1,11 +1,13 @@
-package org.example.parser
+package parser
 
 import ast.StatementNode
-import command.ParseCommand
+import command.Parser
+import org.example.parser.ASTProvider
 import token.TokenProvider
 import token.TokenType
 
-class Parser(private val tokenProvider: TokenProvider, private val commands: Map<TokenType, ParseCommand>) : ASTProvider {
+class ParserDirector(private val tokenProvider: TokenProvider, private val commands: Map<TokenType, Parser>) :
+    ASTProvider {
 
     fun nextStatement(): StatementNode {
         val tokens = mutableListOf<token.Token>()
@@ -26,7 +28,7 @@ class Parser(private val tokenProvider: TokenProvider, private val commands: Map
         }
         val command = commands[tokens[0].type]
         if (command != null) {
-            return command.execute(tokens)
+            return command.parse(tokens)
         }
         throw RuntimeException(
             "Syntax error, cannot initialize a statement with token: ${tokens[0].value}, line: ${tokens[0].line}, column: ${tokens[0].column}",

@@ -1,10 +1,10 @@
-import command.VariableDeclarationStatementCommand
+import command.VariableDeclarationParser
 import config.LinterConfigLoader
 import lexer.Lexer
 import linter.Linter
 import linter.LinterError
-import command.AssignationCommand
-import org.example.parser.Parser
+import command.AssignationParser
+import parser.ParserDirector
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import rules.CamelCaseIdentifierRule
@@ -36,17 +36,17 @@ class LinterFunctionalTest {
 
         // Inicializar lexer y parser
         val lexer = Lexer(sourceCode, patternsMap)
-        val parser = Parser(
+        val parserDirector = ParserDirector(
             lexer,
             mapOf(
                 TokenType.PRINT to PrintStatementCommand(),
-                TokenType.LET to VariableDeclarationStatementCommand(),
-                TokenType.IDENTIFIER to AssignationCommand(),
+                TokenType.LET to VariableDeclarationParser(),
+                TokenType.IDENTIFIER to AssignationParser(),
             ),
         )
 
         // Crear instancia del linter
-        val linter = Linter(rules, parser)
+        val linter = Linter(rules, parserDirector)
 
         // Ejecutar el linter y recoger los errores
         var errors = emptyList<LinterError>()

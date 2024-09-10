@@ -20,10 +20,7 @@ class PrattParser(private val tokens: List<Token>) {
                 override fun parse(parser: PrattParser, token: Token): ExpressionNode {
                     return when (token.value) {
                         is TokenValue.NumberValue -> NumberLiteralNode(
-                            (token.value as TokenValue.NumberValue).value,
-                            token.line,
-                            token.column,
-                        )
+                            (token.value as TokenValue.NumberValue).value)
                         else -> throw RuntimeException("Expected a NumberValue for NUMBER")
                     }
                 }
@@ -35,10 +32,7 @@ class PrattParser(private val tokens: List<Token>) {
                 override fun parse(parser: PrattParser, token: Token): ExpressionNode {
                     return when (token.value) {
                         is TokenValue.StringValue -> IdentifierNode(
-                            (token.value as TokenValue.StringValue).value,
-                            token.line,
-                            token.column,
-                        )
+                            (token.value as TokenValue.StringValue).value)
                         else -> throw RuntimeException("Expected a StringValue for IDENTIFIER")
                     }
                 }
@@ -50,10 +44,7 @@ class PrattParser(private val tokens: List<Token>) {
                 override fun parse(parser: PrattParser, token: Token): ExpressionNode {
                     return when (token.value) {
                         is TokenValue.StringValue -> StringLiteralNode(
-                            (token.value as TokenValue.StringValue).value,
-                            token.line,
-                            token.column,
-                        )
+                            (token.value as TokenValue.StringValue).value)
                         else -> throw RuntimeException("Expected a StringValue for STRING")
                     }
                 }

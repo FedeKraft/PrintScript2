@@ -3,10 +3,10 @@ package commands
 import PrintStatementCommand
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
-import command.VariableDeclarationStatementCommand
+import command.VariableDeclarationParser
 import factory.LexerFactory
-import command.AssignationCommand
-import org.example.parser.Parser
+import command.AssignationParser
+import parser.ParserDirector
 import token.TokenType
 import java.io.File
 
@@ -15,18 +15,18 @@ class ValidationCommand : CliktCommand(help = "Validate the syntax and semantics
     override fun run() {
         var code = File(file).readText()
         val lexer = LexerFactory().createLexer1_0(code)
-        val parser = Parser(
+        val parserDirector = ParserDirector(
             lexer,
             mapOf(
-                TokenType.LET to VariableDeclarationStatementCommand(),
+                TokenType.LET to VariableDeclarationParser(),
                 TokenType.PRINT to PrintStatementCommand(),
-                TokenType.IDENTIFIER to AssignationCommand(),
+                TokenType.IDENTIFIER to AssignationParser(),
             ),
         )
-        var statement = parser.nextStatement()
+        var statement = parserDirector.nextStatement()
         while (statement != null) {
             println(statement)
-            statement = parser.nextStatement()
+            statement = parserDirector.nextStatement()
         }
 
         println("file validated")
