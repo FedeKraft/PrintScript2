@@ -1,131 +1,113 @@
-package syntaxErrorTests
+import org.example.parser.Parser
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import token.TokenType
+import lexer.Lexer
+import org.example.command.PrintStatementCommand
+import java.io.File
 
 class PrintErrorTests {
-/*
-    @Test
-    fun `test print syntax error, unknown token in statement`() {
-        val tokens = listOf(
-            Token(TokenType.PRINT, TokenValue.StringValue("print"), 1, 1),
-            Token(TokenType.UNKNOWN, TokenValue.StringValue("/"), 1, 7),
-            Token(TokenType.LEFT_PARENTHESIS, TokenValue.StringValue("("), 1, 12),
-            Token(TokenType.STRING, TokenValue.StringValue("Olive"), 1, 13),
-            Token(TokenType.RIGHT_PARENTHESIS, TokenValue.StringValue(")"), 1, 19),
-            Token(TokenType.SEMICOLON, TokenValue.StringValue(";"), 1, 20),
-        )
 
-        val parser = Parser()
+    private fun readSourceCodeFromFile(filename: String): String {
+        return File("src/test/resources/$filename").readText()
+    }
+
+    @Test
+    fun `test print syntax error, invalid argument`() {
+        val code = readSourceCodeFromFile("PrintErrors.txt").lines()[0] // Línea con token desconocido
+        val lexer = Lexer(code)
+        val commands = mapOf(TokenType.PRINT to PrintStatementCommand())
+        val parser = Parser(lexer, commands)
+
         assertThrows<RuntimeException> {
-            parser.parse(tokens)
+            parser.nextStatement()
         }.apply {
-            assertEquals("Unknown token in print statement, line: 1, column: 7", message)
+            assertEquals("Invalid argument in print statement line: 1, column: 7", message)
         }
     }
 
     @Test
-    fun `test print syntax error, missing args in statement`() {
-        val tokens = listOf(
-            Token(TokenType.PRINT, TokenValue.StringValue("print"), 1, 1),
-            Token(TokenType.LEFT_PARENTHESIS, TokenValue.StringValue("("), 1, 6),
-            Token(TokenType.RIGHT_PARENTHESIS, TokenValue.StringValue(")"), 1, 13),
-            Token(TokenType.SEMICOLON, TokenValue.StringValue(";"), 1, 14),
-        )
+    fun `test print syntax error, missing args`() {
+        val code = readSourceCodeFromFile("PrintErrors.txt").lines()[1]
+        val lexer = Lexer(code)
+        val commands = mapOf(TokenType.PRINT to PrintStatementCommand())
+        val parser = Parser(lexer, commands)
 
-        val parser = Parser()
         assertThrows<RuntimeException> {
-            parser.parse(tokens)
+            parser.nextStatement()
         }.apply {
-            assertEquals("Missing args in print statement", message)
+            assertEquals("Missing args in print statement line: 1, column: 6", message)
         }
     }
 
     @Test
-    fun `test print syntax error, missing left parenthesis token in statement`() {
-        val tokens = listOf(
-            Token(TokenType.PRINT, TokenValue.StringValue("print"), 1, 6),
-            Token(TokenType.STRING, TokenValue.StringValue("Olive"), 1, 7),
-            Token(TokenType.RIGHT_PARENTHESIS, TokenValue.StringValue(")"), 1, 13),
-            Token(TokenType.SEMICOLON, TokenValue.StringValue(";"), 1, 14),
-        )
+    fun `test print syntax error, missing left parenthesis`() {
+        val code = readSourceCodeFromFile("PrintErrors.txt").lines()[2]
+        val lexer = Lexer(code)
+        val commands = mapOf(TokenType.PRINT to PrintStatementCommand())
+        val parser = Parser(lexer, commands)
 
-        val parser = Parser()
         assertThrows<RuntimeException> {
-            parser.parse(tokens)
+            parser.nextStatement()
         }.apply {
-            assertEquals("Missing token LEFT_PARENTHESIS in print statement", message)
+            assertEquals("Print statement is missing a LEFT_PARENTHESIS token line: 1, column: 1", message)
         }
     }
 
     @Test
-    fun `test print syntax error, missing right parenthesis token in statement`() {
-        val tokens = listOf(
-            Token(TokenType.PRINT, TokenValue.StringValue("print"), 1, 6),
-            Token(TokenType.LEFT_PARENTHESIS, TokenValue.StringValue("("), 1, 7),
-            Token(TokenType.STRING, TokenValue.StringValue("Olive"), 1, 13),
-            Token(TokenType.SEMICOLON, TokenValue.StringValue(";"), 1, 14),
-        )
+    fun `test print syntax error, missing right parenthesis`() {
+        val code = readSourceCodeFromFile("PrintErrors.txt").lines()[3]
+        val lexer = Lexer(code)
+        val commands = mapOf(TokenType.PRINT to PrintStatementCommand())
+        val parser = Parser(lexer, commands)
 
-        val parser = Parser()
         assertThrows<RuntimeException> {
-            parser.parse(tokens)
+            parser.nextStatement()
         }.apply {
-            assertEquals("Missing token RIGHT_PARENTHESIS in print statement", message)
+            assertEquals("Print statement is missing a RIGHT_PARENTHESIS token line: 1, column: 1", message)
         }
     }
 
     @Test
     fun `test print syntax error, invalid token order`() {
-        val tokens = listOf(
-            Token(TokenType.PRINT, TokenValue.StringValue("print"), 1, 1),
-            Token(TokenType.RIGHT_PARENTHESIS, TokenValue.StringValue(")"), 1, 6),
-            Token(TokenType.LEFT_PARENTHESIS, TokenValue.StringValue("("), 1, 7),
-            Token(TokenType.STRING, TokenValue.StringValue("Olive"), 1, 8),
-            Token(TokenType.SEMICOLON, TokenValue.StringValue(";"), 1, 14),
-        )
+        val code = readSourceCodeFromFile("PrintErrors.txt").lines()[4]
+        val lexer = Lexer(code)
+        val commands = mapOf(TokenType.PRINT to PrintStatementCommand())
+        val parser = Parser(lexer, commands)
 
-        val parser = Parser()
         assertThrows<RuntimeException> {
-            parser.parse(tokens)
+            parser.nextStatement()
         }.apply {
-            assertEquals("Unexpected token order in print statement", message)
+            assertEquals("Unexpected token order in print statement line: 1, column: 6", message)
         }
     }
 
     @Test
     fun `test print syntax error, invalid number of arguments`() {
-        val tokens = listOf(
-            Token(TokenType.PRINT, TokenValue.StringValue("print"), 1, 1),
-            Token(TokenType.LEFT_PARENTHESIS, TokenValue.StringValue("("), 1, 6),
-            Token(TokenType.STRING, TokenValue.StringValue("Olive"), 1, 7),
-            Token(TokenType.SUM, TokenValue.StringValue("+"), 1, 13),
-            Token(TokenType.RIGHT_PARENTHESIS, TokenValue.StringValue(")"), 1, 14),
-            Token(TokenType.SEMICOLON, TokenValue.StringValue(";"), 1, 15),
-        )
+        val code = readSourceCodeFromFile("PrintErrors.txt").lines()[5]
+        val lexer = Lexer(code)
+        val commands = mapOf(TokenType.PRINT to PrintStatementCommand())
+        val parser = Parser(lexer, commands)
 
-        val parser = Parser()
         assertThrows<RuntimeException> {
-            parser.parse(tokens)
+            parser.nextStatement()
         }.apply {
-            assertEquals("Invalid number of arguments in print statement", message)
+            assertEquals("Invalid number of arguments in print statement line: 1, column: 12", message)
         }
     }
 
     @Test
     fun `test print syntax error, invalid argument type`() {
-        val tokens = listOf(
-            Token(TokenType.PRINT, TokenValue.StringValue("print"), 1, 1),
-            Token(TokenType.LEFT_PARENTHESIS, TokenValue.StringValue("("), 1, 6),
-            Token(TokenType.ASSIGN, TokenValue.StringValue("="), 1, 7),
-            Token(TokenType.RIGHT_PARENTHESIS, TokenValue.StringValue(")"), 1, 8),
-            Token(TokenType.SEMICOLON, TokenValue.StringValue(";"), 1, 9),
-        )
+        val code = readSourceCodeFromFile("PrintErrors.txt").lines()[6]
+        val lexer = Lexer(code)
+        val commands = mapOf(TokenType.PRINT to PrintStatementCommand())
+        val parser = Parser(lexer, commands)
 
-        val parser = Parser()
         assertThrows<RuntimeException> {
-            parser.parse(tokens)
+            parser.nextStatement()
         }.apply {
-            assertEquals("Invalid argument in print statement", message)
+            assertEquals("Invalid argument in print statement line: 1, column: 7", message)
         }
     }
-
- */
 }
