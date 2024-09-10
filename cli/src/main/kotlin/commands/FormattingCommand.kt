@@ -4,12 +4,12 @@ import PrintStatementCommand
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.options.option
-import command.VariableDeclarationStatementCommand
+import command.VariableDeclarationParser
 import formatter.Formatter
 import formatter.FormatterConfigLoader
 import lexer.Lexer
-import command.AssignationCommand
-import org.example.parser.Parser
+import command.AssignationParser
+import parser.ParserDirector
 import rules.SpaceAroundEqualsRule
 import token.TokenType
 import java.io.File
@@ -31,19 +31,19 @@ class FormattingCommand : CliktCommand(help = "Format the file") {
     override fun run() {
         val sourceCode = readSourceCodeFromFile(file)
         val lexer = Lexer(sourceCode, patternsMap)
-        val parser = Parser(
+        val parserDirector = ParserDirector(
             lexer,
             mapOf(
                 TokenType.PRINT to PrintStatementCommand(),
-                TokenType.LET to VariableDeclarationStatementCommand(),
-                TokenType.IDENTIFIER to AssignationCommand(),
+                TokenType.LET to VariableDeclarationParser(),
+                TokenType.IDENTIFIER to AssignationParser(),
             ),
         )
 
-        val formatter = Formatter(rules, parser)
+        val formatter = Formatter(rules, parserDirector)
         var result = ""
         for (formattedString in formatter.format()) {
-            if (parser.hasNextAST()) {
+            if (parserDirector.hasNextAST()) {
                 result += formattedString.plus("\n")
             } else {
                 result += formattedString

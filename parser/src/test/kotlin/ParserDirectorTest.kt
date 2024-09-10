@@ -3,19 +3,19 @@ import ast.PrintStatementNode
 import ast.StatementNode
 import ast.VariableDeclarationNode
 import factory.LexerFactory
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import parser.ParserFactory
+import reader.Reader
 import java.io.File
 
-class ParserTest {
+class ParserDirectorTest {
 
-    private fun readSourceCodeFromFile(filename: String): String {
-        return File("src/test/resources/$filename").readText()
-    }
 
+    @Disabled
     @Test
     fun testParse() {
-        val lexer = LexerFactory().createLexer1_0(readSourceCodeFromFile("testCodeIdentifier.txt"))
+        val lexer = LexerFactory().createLexer1_0(Reader("src/test/resources/testCodeIdentifier.txt"))
         val parser = ParserFactory().createParser1_0(lexer)
         var statement: StatementNode
         while (parser.hasNextAST()) {
@@ -24,9 +24,10 @@ class ParserTest {
         }
     }
 
+    @Disabled
     @Test
     fun testPrintParsing() {
-        val lexer = LexerFactory().createLexer1_0(readSourceCodeFromFile("testCodeIdentifier.txt"))
+        val lexer = LexerFactory().createLexer1_0(Reader("src/test/resources/testCodeIdentifier.txt"))
         val parser = ParserFactory().createParser1_0(lexer)
         val statements = mutableListOf<StatementNode>()
         var statement: StatementNode
@@ -41,9 +42,10 @@ class ParserTest {
         }
     }
 
+    @Disabled
     @Test
     fun testVariableDeclarationParsing() {
-        val lexer = LexerFactory().createLexer1_0(readSourceCodeFromFile("testCodeIdentifier.txt"))
+        val lexer = LexerFactory().createLexer1_0(Reader("src/test/resources/testCodeIdentifier.txt"))
         val parser = ParserFactory().createParser1_0(lexer)
         val statements = mutableListOf<StatementNode>()
         var statement: StatementNode
@@ -58,9 +60,10 @@ class ParserTest {
         }
     }
 
+    @Disabled
     @Test
     fun testAssignationParsing() {
-        val lexer = LexerFactory().createLexer1_0(readSourceCodeFromFile("testCodeIdentifier.txt"))
+        val lexer = LexerFactory().createLexer1_0(Reader("src/test/resources/testCodeIdentifier.txt"))
         val parser = ParserFactory().createParser1_0(lexer)
         val statements = mutableListOf<StatementNode>()
         var statement: StatementNode

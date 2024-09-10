@@ -3,11 +3,11 @@ package commands
 import PrintStatementCommand
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
-import command.VariableDeclarationStatementCommand
+import command.VariableDeclarationParser
 import interpreter.Interpreter
 import lexer.Lexer
-import command.AssignationCommand
-import org.example.parser.Parser
+import command.AssignationParser
+import parser.ParserDirector
 import token.TokenType
 import java.io.File
 
@@ -16,15 +16,15 @@ class ExecutionCommand : CliktCommand(help = "Execute the file") {
     override fun run() {
         val code = File(file).readText()
         val lexer = Lexer(code, patternsMap)
-        val parser = Parser(
+        val parserDirector = ParserDirector(
             lexer,
             mapOf(
-                TokenType.LET to VariableDeclarationStatementCommand(),
+                TokenType.LET to VariableDeclarationParser(),
                 TokenType.PRINT to PrintStatementCommand(),
-                TokenType.IDENTIFIER to AssignationCommand(),
+                TokenType.IDENTIFIER to AssignationParser(),
             ),
         )
-        val interpreter = Interpreter(parser)
+        val interpreter = Interpreter(parserDirector)
         interpreter.interpret()
         println("file executed")
     }

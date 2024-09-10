@@ -1,6 +1,6 @@
 import factory.LexerFactory
-import command.AssignationCommand
-import org.example.parser.Parser
+import command.AssignationParser
+import parser.ParserDirector
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -12,11 +12,11 @@ class AssignationErrorTests {
     @Test
     fun `test variable assignment syntax error, missing assign token`() {
         val lexer = LexerFactory().createLexer1_0(Reader("src/test/resources/AssignationErrors.txt"))
-        val commands = mapOf(TokenType.IDENTIFIER to AssignationCommand())
-        val parser = Parser(lexer, commands)
+        val commands = mapOf(TokenType.IDENTIFIER to AssignationParser())
+        val parserDirector = ParserDirector(lexer, commands)
 
         assertThrows<RuntimeException> {
-            parser.nextStatement()
+            parserDirector.nextStatement()
         }.apply {
             assertEquals("Missing ASSIGN token in variable assignment line: 1, column: 3", message)
         }
@@ -25,11 +25,11 @@ class AssignationErrorTests {
     @Test
     fun `test variable assignment syntax error, initialize statement with number`() {
         val lexer = LexerFactory().createLexer1_0(Reader("src/test/resources/AssignationErrors.txt"))
-        val commands = mapOf(TokenType.IDENTIFIER to AssignationCommand())
-        val parser = Parser(lexer, commands)
+        val commands = mapOf(TokenType.IDENTIFIER to AssignationParser())
+        val parserDirector = ParserDirector(lexer, commands)
 
         assertThrows<RuntimeException> {
-            parser.nextStatement()
+            parserDirector.nextStatement()
         }.apply {
             assertEquals("Syntax error, cannot initialize a statement with token: =, line: 1, column: 1", message)
         }
@@ -38,11 +38,11 @@ class AssignationErrorTests {
     @Test
     fun `test variable assignment syntax error, missing value`() {
         val lexer = LexerFactory().createLexer1_0(Reader("src/test/resources/AssignationErrors.txt"))
-        val commands = mapOf(TokenType.IDENTIFIER to AssignationCommand())
-        val parser = Parser(lexer, commands)
+        val commands = mapOf(TokenType.IDENTIFIER to AssignationParser())
+        val parserDirector = ParserDirector(lexer, commands)
 
         assertThrows<RuntimeException> {
-            parser.nextStatement()
+            parserDirector.nextStatement()
         }.apply {
             assertEquals("Missing value token after = in line: 1, column: 2", message)
         }
@@ -51,11 +51,11 @@ class AssignationErrorTests {
     @Test
     fun `test variable assignment syntax error, `() {
         val lexer = LexerFactory().createLexer1_0(Reader("src/test/resources/AssignationErrors.txt"))
-        val commands = mapOf(TokenType.IDENTIFIER to AssignationCommand())
-        val parser = Parser(lexer, commands)
+        val commands = mapOf(TokenType.IDENTIFIER to AssignationParser())
+        val parserDirector = ParserDirector(lexer, commands)
 
         assertThrows<RuntimeException> {
-            parser.nextStatement()
+            parserDirector.nextStatement()
         }.apply {
             assertEquals(
                 "Syntax error, cannot initialize " +
@@ -68,11 +68,11 @@ class AssignationErrorTests {
     @Test
     fun `test variable assignment syntax error, invalid value token`() {
         val lexer = LexerFactory().createLexer1_0(Reader("src/test/resources/AssignationErrors.txt"))
-        val commands = mapOf(TokenType.IDENTIFIER to AssignationCommand())
-        val parser = Parser(lexer, commands)
+        val commands = mapOf(TokenType.IDENTIFIER to AssignationParser())
+        val parserDirector = ParserDirector(lexer, commands)
 
         assertThrows<RuntimeException> {
-            parser.nextStatement()
+            parserDirector.nextStatement()
         }.apply {
             assertEquals("Invalid value token in variable assignment line: 1, column: 3", message)
         }
