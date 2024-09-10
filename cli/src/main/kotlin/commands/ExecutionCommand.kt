@@ -16,7 +16,7 @@ class ExecutionCommand : CliktCommand(help = "Execute the file") {
     private val file by argument(help = "Source file to execute")
     override fun run() {
         val code = File(file).readText()
-        val lexer = Lexer(code)
+        val lexer = Lexer(code, patternsMap)
         val parser = Parser(lexer, mapOf(
             TokenType.LET to VariableDeclarationStatementCommand(),
             TokenType.PRINT to PrintStatementCommand(),

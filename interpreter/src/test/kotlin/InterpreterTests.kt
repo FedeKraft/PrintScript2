@@ -1,5 +1,5 @@
 import interpreter.Interpreter
-import lexer.LexerFactory
+import factory.LexerFactory
 import org.junit.jupiter.api.Test
 import parser.ParserFactory
 import java.io.File

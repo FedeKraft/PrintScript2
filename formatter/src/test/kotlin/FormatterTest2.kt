@@ -27,7 +27,7 @@ class FormatterTest2 {
     fun `test SpaceAroundEqualsRule with formatterTest2`() {
         val sourceCode = readSourceCodeFromFile("formatterTest2.txt")
         val expected = readSourceCodeFromFile("formatterTest2Expected.txt")
-        val lexer = Lexer(sourceCode)
+        val lexer = Lexer(sourceCode, patternsMap)
         val parser = Parser(lexer, mapOf(
             TokenType.PRINT to PrintStatementCommand(),
             TokenType.LET to VariableDeclarationStatementCommand(),

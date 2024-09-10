@@ -10,7 +10,7 @@ class Parser(private val tokenProvider: TokenProvider, private val commands: Map
     fun nextStatement(): StatementNode {
         val tokens = mutableListOf<token.Token>()
         while (tokenProvider.hasNextToken()) {
-            val token = tokenProvider.getNextToken()
+            val token = tokenProvider.nextToken()
             if (token.type == TokenType.SEMICOLON) {
                 break
             }
