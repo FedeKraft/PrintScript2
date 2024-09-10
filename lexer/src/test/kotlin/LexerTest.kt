@@ -6,12 +6,12 @@ import token.Token
 import token.TokenType
 import token.TokenValue
 
-class LexerTest3 {
+class LexerTest {
 
     @Test
     fun `test lexer with errors`() {
         val reader = Reader("src/test/resources/StatementsWithErrors.txt")
-        val lexer = LexerFactory().createLexer1_0(reader)
+        val lexer = LexerFactory().createLexer1_1(reader)
         val actualTokens = mutableListOf<Token>()
 
         var errorFound = false
