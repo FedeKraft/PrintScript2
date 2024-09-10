@@ -1,15 +1,16 @@
 package commands
 
-import PrintStatementCommand
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.options.option
+import command.AssignationParser
+import command.PrintParser
 import command.VariableDeclarationParser
+import factory.LexerFactory
 import formatter.Formatter
 import formatter.FormatterConfigLoader
-import lexer.Lexer
-import command.AssignationParser
 import parser.ParserDirector
+import reader.Reader
 import rules.SpaceAroundEqualsRule
 import token.TokenType
 import java.io.File
@@ -30,11 +31,11 @@ class FormattingCommand : CliktCommand(help = "Format the file") {
 
     override fun run() {
         val sourceCode = readSourceCodeFromFile(file)
-        val lexer = Lexer(sourceCode, patternsMap)
+        val lexer = LexerFactory().createLexer1_0(Reader(sourceCode))
         val parserDirector = ParserDirector(
             lexer,
             mapOf(
-                TokenType.PRINT to PrintStatementCommand(),
+                TokenType.PRINT to PrintParser(),
                 TokenType.LET to VariableDeclarationParser(),
                 TokenType.IDENTIFIER to AssignationParser(),
             ),

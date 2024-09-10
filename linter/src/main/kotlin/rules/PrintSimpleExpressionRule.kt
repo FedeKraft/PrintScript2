@@ -11,7 +11,7 @@ class PrintSimpleExpressionRule(override var isActive: Boolean = true) : LinterR
         when (node) {
             is PrintStatementNode -> {
                 if (node.expression.toFormattedString(emptyMap()).length > 40) {
-                    errors.add(LinterError("Print statement too complex", node.line, node.column))
+                    errors.add(LinterError("Print statement too complex"))
                 }
             }
             else -> {

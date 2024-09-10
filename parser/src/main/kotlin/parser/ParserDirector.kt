@@ -34,7 +34,8 @@ class ParserDirector(private val tokenProvider: TokenProvider, private val comma
             return command.parse(tokens)
         }
         throw RuntimeException(
-            "Syntax error, cannot initialize a statement with token: ${tokens[0].value}, line: ${tokens[0].line}, column: ${tokens[0].column}",
+            "Syntax error, cannot initialize a statement with token: " +
+                "${tokens[0].value}, line: ${tokens[0].line}, column: ${tokens[0].column}",
         )
     }
 

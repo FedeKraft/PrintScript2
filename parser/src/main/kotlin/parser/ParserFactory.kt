@@ -1,10 +1,9 @@
 package parser
 
 import command.AssignationParser
+import command.ConstDeclarationParser
 import command.PrintParser
 import command.VariableDeclarationParser
-import command.ConstDeclarationParser
-import command.IfElseStatementCommand
 import token.TokenProvider
 import token.TokenType
 
@@ -30,7 +29,7 @@ class ParserFactory {
                 TokenType.LET to VariableDeclarationParser(),
                 TokenType.CONST to ConstDeclarationParser(), // Comando para const
                 TokenType.PRINT to PrintParser(),
-                TokenType.IDENTIFIER to AssignationParser()
+                TokenType.IDENTIFIER to AssignationParser(),
             ),
         )
     }

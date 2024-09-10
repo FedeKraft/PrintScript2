@@ -30,8 +30,6 @@ class SnakeCaseIdentifierRule(override var isActive: Boolean = true) : LinterRul
             errors.add(
                 LinterError(
                     "Identifier '${identifier.name}' should be in snake_case",
-                    identifier.line,
-                    identifier.column,
                 ),
             )
         }

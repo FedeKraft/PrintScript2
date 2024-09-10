@@ -1,8 +1,8 @@
 package factory
 
 import lexer.Lexer
-import reader.Reader
 import patterns.TokenPatterns
+import reader.Reader
 import token.TokenType
 
 class LexerFactory {

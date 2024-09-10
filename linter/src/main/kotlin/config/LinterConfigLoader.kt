@@ -2,7 +2,9 @@ package config
 
 import linter.Linter
 import org.example.parser.ASTProvider
-import rules.*
+import rules.CamelCaseIdentifierRule
+import rules.PrintSimpleExpressionRule
+import rules.SnakeCaseIdentifierRule
 
 class LinterConfigLoader(private val astProvider: ASTProvider) {
     fun load(): Linter {

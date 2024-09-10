@@ -1,7 +1,10 @@
 package rules
 
 import ast.AssignationNode
+import ast.BlockNode
+import ast.ConstDeclarationNode
 import ast.IdentifierNode
+import ast.IfElseNode
 import ast.PrintStatementNode
 import ast.StatementNode
 import ast.VariableDeclarationNode
@@ -21,6 +24,10 @@ class CamelCaseIdentifierRule(override var isActive: Boolean = true) : LinterRul
             is PrintStatementNode -> {
                 // No hacemos nada con PrintStatementNode en esta regla
             }
+
+            is BlockNode -> TODO()
+            is ConstDeclarationNode -> TODO()
+            is IfElseNode -> TODO()
         }
 
         return errors
@@ -31,8 +38,6 @@ class CamelCaseIdentifierRule(override var isActive: Boolean = true) : LinterRul
             errors.add(
                 LinterError(
                     "Identifier '${identifier.name}' should be in camelCase",
-                    identifier.line,
-                    identifier.column,
                 ),
             )
         }

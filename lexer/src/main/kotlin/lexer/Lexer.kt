@@ -47,7 +47,7 @@ class Lexer(private val reader: Reader, private val patternsMap: Map<Regex, Toke
             return when (tokenType) {
                 TokenType.STRING -> Token(
                     tokenType,
-                    TokenValue.StringValue(value),
+                    TokenValue.StringValue(value.removeSurrounding("\"")),
                     currentLine,
                     currentColumn,
                 )
@@ -114,7 +114,7 @@ class Lexer(private val reader: Reader, private val patternsMap: Map<Regex, Toke
 
     private fun isDelimiter(char: Char): Boolean {
         // Incluir llaves en los delimitadores
-        val delimiters = ";:=+-*/(){}".toCharArray()
+        val delimiters = ";:=+-*/(){}[]".toCharArray()
         return delimiters.contains(char)
     }
 }
