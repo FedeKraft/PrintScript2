@@ -1,9 +1,9 @@
 import factory.LexerFactory
 import formatter.Formatter
 import formatter.FormatterConfigLoader
-import org.example.command.AssignationCommand
-import org.example.command.PrintStatementCommand
-import org.example.command.VariableDeclarationStatementCommand
+import command.AssignationCommand
+import command.PrintStatementCommand
+import command.VariableDeclarationStatementCommand
 import org.example.parser.Parser
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test

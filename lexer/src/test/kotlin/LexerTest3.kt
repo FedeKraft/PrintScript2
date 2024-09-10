@@ -9,6 +9,7 @@ import token.TokenType
 
 class LexerTest3 {
 
+
     @Test
     fun `testing new  lexer`() {
         val reader = Reader("src/test/resources/AllKnownTokens.txt")
@@ -29,7 +30,7 @@ class LexerTest3 {
         while (lexer.hasNextToken()) {
             val token = lexer.nextToken()
             actualTokens.add(token)
-            println(token)
+            print(token)
         }
     }
 

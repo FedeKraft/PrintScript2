@@ -3,7 +3,7 @@ import config.LinterConfigLoader
 import lexer.Lexer
 import linter.Linter
 import linter.LinterError
-import org.example.command.AssignationCommand
+import command.AssignationCommand
 import org.example.parser.Parser
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test

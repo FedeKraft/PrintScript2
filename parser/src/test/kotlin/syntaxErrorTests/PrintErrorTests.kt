@@ -1,5 +1,5 @@
 import lexer.Lexer
-import org.example.command.PrintStatementCommand
+import command.PrintStatementCommand
 import org.example.parser.Parser
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test

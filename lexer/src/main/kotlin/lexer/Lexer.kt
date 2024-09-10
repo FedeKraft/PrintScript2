@@ -30,6 +30,11 @@ class Lexer(private val reader: Reader, private val patternsMap: Map<Regex, Toke
 
         val word = StringBuilder()
 
+        // Si es un delimitador (como un símbolo ";"), manejarlo por separado
+        if (isDelimiter(currentChar!!)) {
+            return makeDelimiterToken()
+        }
+
         // Construir el token hasta un delimitador (espacio, símbolo, etc.)
         tokenizeTillDelimiter(word)
 
@@ -52,27 +57,25 @@ class Lexer(private val reader: Reader, private val patternsMap: Map<Regex, Toke
                     currentLine,
                     currentColumn,
                 )
+                TokenType.BOOLEAN -> Token(
+                    tokenType,
+                    TokenValue.BooleanValue(value.toBoolean()),
+                    currentLine,
+                    currentColumn,
+                )
                 else -> Token(tokenType, TokenValue.StringValue(value), currentLine, currentColumn)
             }
         }
 
-        // Si es un delimitador (como un símbolo ";"), manejarlo por separado
-        if (isDelimiter(currentChar!!)) {
-            return makeDelimiterToken()
-        }
         return Token(TokenType.UNKNOWN, TokenValue.StringValue(value), currentLine, currentColumn)
     }
 
     private fun makeDelimiterToken(): Token {
         val tokenType = searchInTokenPatterns(currentChar.toString())
         if (tokenType == null) {
+            val unknownChar = currentChar.toString()
             currentChar = reader.read() // Avanzar al siguiente carácter
-            return Token(
-                TokenType.UNKNOWN,
-                TokenValue.StringValue(currentChar.toString()),
-                currentLine,
-                currentColumn,
-            )
+            return Token(TokenType.UNKNOWN, TokenValue.StringValue(unknownChar), currentLine, currentColumn)
         }
         val delimiterToken =
             Token(tokenType, TokenValue.StringValue(currentChar.toString()), currentLine, currentColumn)
@@ -80,7 +83,9 @@ class Lexer(private val reader: Reader, private val patternsMap: Map<Regex, Toke
         return delimiterToken
     }
 
-    private fun searchInTokenPatterns(value: String) = patternsMap.entries.find { it.key.matches(value) }?.value
+    private fun searchInTokenPatterns(value: String): TokenType? {
+        return patternsMap.entries.find { it.key.matches(value) }?.value
+    }
 
     private fun tokenizeTillDelimiter(word: StringBuilder) {
         while (currentChar != null && !currentChar!!.isWhitespace() && !isDelimiter(currentChar!!)) {
@@ -108,6 +113,7 @@ class Lexer(private val reader: Reader, private val patternsMap: Map<Regex, Toke
     }
 
     private fun isDelimiter(char: Char): Boolean {
+        // Incluir llaves en los delimitadores
         val delimiters = ";:=+-*/(){}".toCharArray()
         return delimiters.contains(char)
     }

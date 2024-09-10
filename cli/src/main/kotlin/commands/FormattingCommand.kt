@@ -8,7 +8,7 @@ import command.VariableDeclarationStatementCommand
 import formatter.Formatter
 import formatter.FormatterConfigLoader
 import lexer.Lexer
-import org.example.command.AssignationCommand
+import command.AssignationCommand
 import org.example.parser.Parser
 import rules.SpaceAroundEqualsRule
 import token.TokenType

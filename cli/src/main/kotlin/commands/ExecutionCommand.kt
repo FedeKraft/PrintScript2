@@ -6,7 +6,7 @@ import com.github.ajalt.clikt.parameters.arguments.argument
 import command.VariableDeclarationStatementCommand
 import interpreter.Interpreter
 import lexer.Lexer
-import org.example.command.AssignationCommand
+import command.AssignationCommand
 import org.example.parser.Parser
 import token.TokenType
 import java.io.File

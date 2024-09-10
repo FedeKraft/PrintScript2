@@ -1,4 +1,4 @@
-package org.example.command
+package command
 
 import PrattParser
 import ast.IdentifierNode
