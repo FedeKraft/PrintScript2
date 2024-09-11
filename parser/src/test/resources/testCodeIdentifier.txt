@@ -1,6 +1,9 @@
 let name: String = "Olive";
-let age: Number = 21;
-print(name);
-print("Hola");
-name = "Juan";
-age = 22;
+if (true) {
+    let fede: String = "Gordito";
+    print(Mirko);
+    if (true) {
+        let palia: String = "hdp";
+        print(deusMeLivre);
+    }
+}

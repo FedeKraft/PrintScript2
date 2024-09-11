@@ -34,6 +34,8 @@ class LexerFactory {
 
     fun createLexer1_1(reader: Reader): Lexer {
         val patternsMap = mapOf(
+            TokenPatterns.IF to TokenType.IF,
+            TokenPatterns.BOOLEAN to TokenType.BOOLEAN,
             TokenPatterns.NUMBER to TokenType.NUMBER,
             TokenPatterns.STRING to TokenType.STRING,
             TokenPatterns.LET to TokenType.LET,
@@ -50,7 +52,12 @@ class LexerFactory {
             TokenPatterns.COLON to TokenType.COLON,
             TokenPatterns.LEFT_PARENTHESIS to TokenType.LEFT_PARENTHESIS,
             TokenPatterns.RIGHT_PARENTHESIS to TokenType.RIGHT_PARENTHESIS,
-        )
+            TokenPatterns.LEFT_BRACE to TokenType.OPEN_BRACE ,
+            TokenPatterns.RIGHT_BRACE to TokenType.CLOSE_BRACE,
+            TokenPatterns.BOOLEAN_TYPE to TokenType.BOOLEAN_TYPE,
+            TokenPatterns.ELSE to TokenType.ELSE,
+            TokenPatterns.CONST to TokenType.CONST
+            )
         return Lexer(reader, patternsMap)
     }
 }

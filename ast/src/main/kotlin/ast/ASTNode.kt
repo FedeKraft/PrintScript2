@@ -114,8 +114,6 @@ data class ConstDeclarationNode(
                     "UnknownType"
                 }
             }
-
-            is ConditionNode -> TODO()
         }
     }
 }
@@ -150,10 +148,3 @@ data class BooleanLiteralNode(
     }
 }
 
-data class ConditionNode(
-    val condition: List<Token>,
-) : ExpressionNode() {
-    override fun toFormattedString(variableTypes: Map<String, Any>): String {
-        return condition.toString()
-    }
-}
