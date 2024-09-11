@@ -1,8 +1,16 @@
 package parser
 
-import ast.*
-import command.*
-import org.example.parser.ASTProvider
+import ast.BlockNode
+import ast.BooleanLiteralNode
+import ast.ExpressionNode
+import ast.IfElseNode
+import ast.StatementNode
+import ast.StringLiteralNode
+import command.AssignationParser
+import command.ConstDeclarationParser
+import command.Parser
+import command.PrintParser
+import command.VariableDeclarationParser
 import token.Token
 import token.TokenProvider
 import token.TokenType
@@ -10,7 +18,7 @@ import token.TokenValue
 
 class ParserDirector(private val tokenProvider: TokenProvider, private val commands: Map<TokenType, Parser>) :
     ASTProvider {
-        private var currentToken = tokenProvider.nextToken()
+    private var currentToken = tokenProvider.nextToken()
     fun nextStatement(): StatementNode {
         val tokens = mutableListOf<token.Token>()
         while (tokenProvider.hasNextToken()) {
@@ -42,7 +50,7 @@ class ParserDirector(private val tokenProvider: TokenProvider, private val comma
         }
         throw RuntimeException(
             "Syntax error, cannot initialize a statement with token: " +
-                "${tokens[0].value}, line: ${tokens[0].line}, column: ${tokens[0].column}",
+                    "${tokens[0].value}, line: ${tokens[0].line}, column: ${tokens[0].column}",
         )
     }
 
@@ -94,7 +102,7 @@ class ParserDirector(private val tokenProvider: TokenProvider, private val comma
         return parser.parse(tokens)
     }
 
-    private fun getIfCondition(): ExpressionNode{
+    private fun getIfCondition(): ExpressionNode {
         currentToken = tokenProvider.nextToken()
 
         return when (currentToken.type) {
