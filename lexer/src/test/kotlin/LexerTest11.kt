@@ -6,10 +6,10 @@ import token.Token
 import token.TokenType
 import token.TokenValue
 
-class Lexer1_1Test {
+class LexerTest11 {
 
     @Test
-    fun `variable declaration 1_1`(){
+    fun `variable declaration 1_1`() {
         val reader = Reader("src/test/resources/VariableDeclarationTokens/VariableDeclarationTokens.txt")
         val lexer = LexerFactory().createLexer1_1(reader)
         val actualTokens = mutableListOf<Token>()
@@ -32,13 +32,13 @@ class Lexer1_1Test {
             Token(TokenType.NUMBER_TYPE, TokenValue.StringValue("Number"), 2, 15),
             Token(TokenType.ASSIGN, TokenValue.StringValue("="), 2, 16),
             Token(TokenType.NUMBER, TokenValue.NumberValue(21.0), 2, 19),
-            Token(TokenType.SEMICOLON, TokenValue.StringValue(";"), 2, 19)
+            Token(TokenType.SEMICOLON, TokenValue.StringValue(";"), 2, 19),
         )
         assertEquals(expectedTokens, actualTokens, "Tokens do not match")
     }
 
     @Test
-    fun `print statement 1_1`(){
+    fun `print statement 1_1`() {
         val reader = Reader("src/test/resources/PrintTokens/PrintTokens.txt")
         val lexer = LexerFactory().createLexer1_1(reader)
         val actualTokens = mutableListOf<Token>()
@@ -57,13 +57,13 @@ class Lexer1_1Test {
             Token(TokenType.LEFT_PARENTHESIS, TokenValue.StringValue("("), 2, 6),
             Token(TokenType.IDENTIFIER, TokenValue.StringValue("name"), 2, 10),
             Token(TokenType.RIGHT_PARENTHESIS, TokenValue.StringValue(")"), 2, 10),
-            Token(TokenType.SEMICOLON, TokenValue.StringValue(";"), 2, 10)
+            Token(TokenType.SEMICOLON, TokenValue.StringValue(";"), 2, 10),
         )
         assertEquals(expectedTokens, actualTokens, "Tokens do not match")
     }
 
     @Test
-    fun `assignation 1_1`(){
+    fun `assignation 1_1`() {
         val reader = Reader("src/test/resources/AssignationTokens/AssignationTokens.txt")
         val lexer = LexerFactory().createLexer1_1(reader)
         val actualTokens = mutableListOf<Token>()
@@ -80,13 +80,13 @@ class Lexer1_1Test {
             Token(TokenType.IDENTIFIER, TokenValue.StringValue("name"), 2, 5),
             Token(TokenType.ASSIGN, TokenValue.StringValue("="), 2, 6),
             Token(TokenType.STRING, TokenValue.StringValue("Olive"), 2, 14),
-            Token(TokenType.SEMICOLON, TokenValue.StringValue(";"), 2, 14)
+            Token(TokenType.SEMICOLON, TokenValue.StringValue(";"), 2, 14),
         )
         assertEquals(expectedTokens, actualTokens, "Tokens do not match")
     }
 
     @Test
-    fun `operations 1_1`(){
+    fun `operations 1_1`() {
         val reader = Reader("src/test/resources/BinaryOperationTokens/BinaryOperationTokens.txt")
         val lexer = LexerFactory().createLexer1_1(reader)
         val actualTokens = mutableListOf<Token>()
@@ -167,13 +167,13 @@ class Lexer1_1Test {
             Token(TokenType.PRINT, TokenValue.StringValue("print"), 2, 6),
             Token(TokenType.LEFT_PARENTHESIS, TokenValue.StringValue("("), 2, 6),
             Token(TokenType.IDENTIFIER, TokenValue.StringValue("name"), 2, 10),
-            Token(TokenType.UNKNOWN, TokenValue.StringValue("]"), 2, 10)
+            Token(TokenType.UNKNOWN, TokenValue.StringValue("]"), 2, 10),
         )
         assertEquals(expectedTokens, actualTokens, "Tokens do not match")
     }
 
     @Test
-    fun `statement with braces`(){
+    fun `statement with braces`() {
         val reader = Reader("src/test/resources/BraceTokens/Braces.txt")
         val lexer = LexerFactory().createLexer1_1(reader)
         val actualTokens = mutableListOf<Token>()
@@ -189,13 +189,13 @@ class Lexer1_1Test {
             Token(TokenType.ASSIGN, TokenValue.StringValue("="), 1, 17),
             Token(TokenType.STRING, TokenValue.StringValue("Braces"), 1, 26),
             Token(TokenType.CLOSE_BRACE, TokenValue.StringValue("}"), 1, 26),
-            Token(TokenType.SEMICOLON, TokenValue.StringValue(";"), 1, 26)
+            Token(TokenType.SEMICOLON, TokenValue.StringValue(";"), 1, 26),
         )
         assertEquals(expectedTokens, actualTokens, "Tokens do not match")
     }
 
     @Test
-    fun `const statements`(){
+    fun `const statements`() {
         val reader = Reader("src/test/resources/ConstTokens/ConstTokens.txt")
         val lexer = LexerFactory().createLexer1_1(reader)
         val actualTokens = mutableListOf<Token>()
@@ -217,13 +217,13 @@ class Lexer1_1Test {
             Token(TokenType.NUMBER_TYPE, TokenValue.StringValue("Number"), 2, 17),
             Token(TokenType.ASSIGN, TokenValue.StringValue("="), 2, 18),
             Token(TokenType.NUMBER, TokenValue.NumberValue(14.0), 2, 21),
-            Token(TokenType.SEMICOLON, TokenValue.StringValue(";"), 2, 21)
+            Token(TokenType.SEMICOLON, TokenValue.StringValue(";"), 2, 21),
         )
         assertEquals(expectedTokens, actualTokens, "Tokens do not match")
     }
 
     @Test
-    fun `else statements`(){
+    fun `else statements`() {
         val reader = Reader("src/test/resources/ElseTokens/Elses.txt")
         val lexer = LexerFactory().createLexer1_1(reader)
         val actualTokens = mutableListOf<Token>()
@@ -239,12 +239,12 @@ class Lexer1_1Test {
             Token(TokenType.RIGHT_PARENTHESIS, TokenValue.StringValue(")"), 1, 21),
             Token(TokenType.RIGHT_PARENTHESIS, TokenValue.StringValue(")"), 1, 21),
             Token(TokenType.SEMICOLON, TokenValue.StringValue(";"), 1, 21),
-            )
+        )
         assertEquals(expectedTokens, actualTokens, "Tokens do not match")
     }
 
     @Test
-    fun `if statements 1_1`(){
+    fun `if statements 1_1`() {
         val reader = Reader("src/test/resources/IfTokens/Ifs.txt")
         val lexer = LexerFactory().createLexer1_1(reader)
         val actualTokens = mutableListOf<Token>()
@@ -272,8 +272,7 @@ class Lexer1_1Test {
             Token(TokenType.NUMBER, TokenValue.NumberValue(1.0), 3, 5),
             Token(TokenType.RIGHT_PARENTHESIS, TokenValue.StringValue(")"), 3, 5),
             Token(TokenType.SEMICOLON, TokenValue.StringValue(";"), 3, 5),
-            )
+        )
         assertEquals(expectedTokens, actualTokens, "Tokens do not match")
     }
-
 }

@@ -6,10 +6,10 @@ import token.Token
 import token.TokenType
 import token.TokenValue
 
-class Lexer1_0Test {
+class LexerTest10 {
 
     @Test
-    fun `variable declaration 1_0`(){
+    fun `variable declaration 1_0`() {
         val reader = Reader("src/test/resources/VariableDeclarationTokens/VariableDeclarationTokens.txt")
         val lexer = LexerFactory().createLexer1_0(reader)
         val actualTokens = mutableListOf<Token>()
@@ -32,13 +32,13 @@ class Lexer1_0Test {
             Token(TokenType.NUMBER_TYPE, TokenValue.StringValue("Number"), 2, 15),
             Token(TokenType.ASSIGN, TokenValue.StringValue("="), 2, 16),
             Token(TokenType.NUMBER, TokenValue.NumberValue(21.0), 2, 19),
-            Token(TokenType.SEMICOLON, TokenValue.StringValue(";"), 2, 19)
+            Token(TokenType.SEMICOLON, TokenValue.StringValue(";"), 2, 19),
         )
         assertEquals(expectedTokens, actualTokens, "Tokens do not match")
     }
 
     @Test
-    fun `print statement 1_0`(){
+    fun `print statement 1_0`() {
         val reader = Reader("src/test/resources/PrintTokens/PrintTokens.txt")
         val lexer = LexerFactory().createLexer1_0(reader)
         val actualTokens = mutableListOf<Token>()
@@ -57,13 +57,13 @@ class Lexer1_0Test {
             Token(TokenType.LEFT_PARENTHESIS, TokenValue.StringValue("("), 2, 6),
             Token(TokenType.IDENTIFIER, TokenValue.StringValue("name"), 2, 10),
             Token(TokenType.RIGHT_PARENTHESIS, TokenValue.StringValue(")"), 2, 10),
-            Token(TokenType.SEMICOLON, TokenValue.StringValue(";"), 2, 10)
+            Token(TokenType.SEMICOLON, TokenValue.StringValue(";"), 2, 10),
         )
         assertEquals(expectedTokens, actualTokens, "Tokens do not match")
     }
 
     @Test
-    fun `assignation 1_0`(){
+    fun `assignation 1_0`() {
         val reader = Reader("src/test/resources/AssignationTokens/AssignationTokens.txt")
         val lexer = LexerFactory().createLexer1_0(reader)
         val actualTokens = mutableListOf<Token>()
@@ -80,13 +80,13 @@ class Lexer1_0Test {
             Token(TokenType.IDENTIFIER, TokenValue.StringValue("name"), 2, 5),
             Token(TokenType.ASSIGN, TokenValue.StringValue("="), 2, 6),
             Token(TokenType.STRING, TokenValue.StringValue("Olive"), 2, 14),
-            Token(TokenType.SEMICOLON, TokenValue.StringValue(";"), 2, 14)
+            Token(TokenType.SEMICOLON, TokenValue.StringValue(";"), 2, 14),
         )
         assertEquals(expectedTokens, actualTokens, "Tokens do not match")
     }
 
     @Test
-    fun `operations 1_0`(){
+    fun `operations 1_0`() {
         val reader = Reader("src/test/resources/BinaryOperationTokens/BinaryOperationTokens.txt")
         val lexer = LexerFactory().createLexer1_0(reader)
         val actualTokens = mutableListOf<Token>()
@@ -140,7 +140,7 @@ class Lexer1_0Test {
 
     @Test
     fun `test lexer with errors 1_1`() {
-        val reader = Reader("src/test/resources/StatementsWithErrors.txt")
+        val reader = Reader("src/test/resources/StatementWithError/StatementsWithErrors.txt")
         val lexer = LexerFactory().createLexer1_0(reader)
         val actualTokens = mutableListOf<Token>()
 
@@ -167,7 +167,7 @@ class Lexer1_0Test {
             Token(TokenType.PRINT, TokenValue.StringValue("print"), 2, 6),
             Token(TokenType.LEFT_PARENTHESIS, TokenValue.StringValue("("), 2, 6),
             Token(TokenType.IDENTIFIER, TokenValue.StringValue("name"), 2, 10),
-            Token(TokenType.UNKNOWN, TokenValue.StringValue("]"), 2, 10)
+            Token(TokenType.UNKNOWN, TokenValue.StringValue("]"), 2, 10),
         )
         assertEquals(expectedTokens, actualTokens, "Tokens do not match")
     }
