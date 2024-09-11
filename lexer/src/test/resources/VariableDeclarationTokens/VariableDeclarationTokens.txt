@@ -1,2 +1,2 @@
-let name: String = "Olive";
-let age: Number = 21;
+let name: string = "Olive";
+let age: number = 21;
