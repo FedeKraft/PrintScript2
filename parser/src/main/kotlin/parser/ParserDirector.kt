@@ -18,6 +18,7 @@ class ParserDirector(private val tokenProvider: TokenProvider, private val comma
                     "Unknown token in variable assignment at line: " +
                             "${currentToken.line}, column: ${currentToken.column}")
             }
+
             if(currentToken.type == TokenType.IF){
                 return processBlockNode()
             }
