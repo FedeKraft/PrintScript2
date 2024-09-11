@@ -1,0 +1,2 @@
+const name: String = "Constantine";
+const age: Number = 14;

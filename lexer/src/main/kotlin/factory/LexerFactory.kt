@@ -1,8 +1,8 @@
 package factory
 
 import lexer.Lexer
-import patterns.TokenPatterns
 import reader.Reader
+import patterns.TokenPatterns
 import token.TokenType
 
 class LexerFactory {
@@ -34,14 +34,16 @@ class LexerFactory {
 
     fun createLexer1_1(reader: Reader): Lexer {
         val patternsMap = mapOf(
-            TokenPatterns.IF to TokenType.IF,
-            TokenPatterns.BOOLEAN to TokenType.BOOLEAN,
             TokenPatterns.NUMBER to TokenType.NUMBER,
             TokenPatterns.STRING to TokenType.STRING,
             TokenPatterns.LET to TokenType.LET,
             TokenPatterns.PRINT to TokenType.PRINT,
             TokenPatterns.STRING_TYPE to TokenType.STRING_TYPE,
             TokenPatterns.NUMBER_TYPE to TokenType.NUMBER_TYPE,
+            TokenPatterns.ELSE to TokenType.ELSE,
+            TokenPatterns.BOOLEAN to TokenType.BOOLEAN,
+            TokenPatterns.IF to TokenType.IF,
+            TokenPatterns.CONST to TokenType.CONST,
             TokenPatterns.IDENTIFIER to TokenType.IDENTIFIER,
             TokenPatterns.ASSIGN to TokenType.ASSIGN,
             TokenPatterns.SUM to TokenType.SUM,
@@ -55,8 +57,6 @@ class LexerFactory {
             TokenPatterns.LEFT_BRACE to TokenType.OPEN_BRACE,
             TokenPatterns.RIGHT_BRACE to TokenType.CLOSE_BRACE,
             TokenPatterns.BOOLEAN_TYPE to TokenType.BOOLEAN_TYPE,
-            TokenPatterns.ELSE to TokenType.ELSE,
-            TokenPatterns.CONST to TokenType.CONST,
         )
         return Lexer(reader, patternsMap)
     }
