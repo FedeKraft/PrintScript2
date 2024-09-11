@@ -1,6 +1,5 @@
 package ast
 
-import token.Token
 import token.TokenType
 
 sealed class StatementNode {
@@ -30,7 +29,6 @@ data class VariableDeclarationNode(val identifier: IdentifierNode, val value: Ex
                     "UnknownType"
                 }
             }
-            else -> "UnknownType"
         }
     }
 }
@@ -147,4 +145,3 @@ data class BooleanLiteralNode(
         return value.toString()
     }
 }
-
