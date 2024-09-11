@@ -40,6 +40,10 @@ class LexerFactory {
             TokenPatterns.PRINT to TokenType.PRINT,
             TokenPatterns.STRING_TYPE to TokenType.STRING_TYPE,
             TokenPatterns.NUMBER_TYPE to TokenType.NUMBER_TYPE,
+            TokenPatterns.ELSE to TokenType.ELSE,
+            TokenPatterns.BOOLEAN to TokenType.BOOLEAN,
+            TokenPatterns.IF to TokenType.IF,
+            TokenPatterns.CONST to TokenType.CONST,
             TokenPatterns.IDENTIFIER to TokenType.IDENTIFIER,
             TokenPatterns.ASSIGN to TokenType.ASSIGN,
             TokenPatterns.SUM to TokenType.SUM,
@@ -50,6 +54,8 @@ class LexerFactory {
             TokenPatterns.COLON to TokenType.COLON,
             TokenPatterns.LEFT_PARENTHESIS to TokenType.LEFT_PARENTHESIS,
             TokenPatterns.RIGHT_PARENTHESIS to TokenType.RIGHT_PARENTHESIS,
+            TokenPatterns.LEFT_BRACE to TokenType.OPEN_BRACE,
+            TokenPatterns.RIGHT_BRACE to TokenType.CLOSE_BRACE
         )
         return Lexer(reader, patternsMap)
     }

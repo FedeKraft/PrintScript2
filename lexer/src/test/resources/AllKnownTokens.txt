@@ -1,4 +1,0 @@
-let name: String = "Olive";
-let age: Number = 21;
-print(age);
-age = 22;
