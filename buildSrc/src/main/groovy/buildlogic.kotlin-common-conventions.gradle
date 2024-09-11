@@ -28,6 +28,8 @@ java {
         languageVersion = JavaLanguageVersion.of(11)
     }
 }
+group = "printScript"
+version = "1.0"
 
 tasks.named('test') {
     useJUnitPlatform()
