@@ -17,7 +17,6 @@ class ParserTest {
         // Initialize tokens
         val reader = Reader("src/test/resources/testCodeIdentifier.txt")
         val lexer = LexerFactory().createLexer1_1(reader)
-
         // Initialize parsers
         val commands = mapOf(
             TokenType.LET to VariableDeclarationParser(),

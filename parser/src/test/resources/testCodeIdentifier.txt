@@ -1,9 +1,22 @@
 let a1: string = "Olive";
+println(10);
+println(true);
 if (true) {
     let a2: string = "Gordito";
     if (true) {
-            let a3: string = "hdp";
+            let a3 : string = "hdp";
             println(a4);
     }
-    println(a5);
+    else {
+            let a5 : string = "hdp";
+            println(a6);
+    }
+    println(a7);
 }
+else {
+        let a5 : string = "hdp";
+        println(a6);
+}
+const a10 : number = 10;
+let a9 : number = 9;
+println("hola");

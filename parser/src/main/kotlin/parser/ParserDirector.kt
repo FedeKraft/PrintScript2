@@ -63,13 +63,14 @@ class ParserDirector(private val tokenProvider: TokenProvider, private val comma
     }
 
     private fun processBlockNode(): StatementNode {
+        val currentIfLine = currentToken.line
+        val currentIfColumn = currentToken.column
         currentToken = tokenProvider.nextToken()
         var condition = getIfCondition()
         var blockAst = mutableListOf<StatementNode>() // armo listita vacia para agregar los statements
         currentToken = tokenProvider.nextToken()
         currentToken = tokenProvider.nextToken()
         currentToken = tokenProvider.nextToken()
-
         while (currentToken.type != TokenType.CLOSE_BRACE) {
             var blockTokens = mutableListOf<Token>() // lista para los tokens antes de cada parseo de linea
             while (currentToken.type != TokenType.SEMICOLON) { // consigo todos los tokens de la linea
@@ -84,9 +85,15 @@ class ParserDirector(private val tokenProvider: TokenProvider, private val comma
             blockAst.add(currentAst) // la agrego a la list de statements y si no se cierra el if se corre la sig linea
         }
         currentToken = tokenProvider.nextToken()
+        if (currentToken.type == TokenType.ELSE){
+            var elseBlockNode = processElseBlockNode()
+            var blockStatements = BlockNode(blockAst, 0, 0)
+            return IfElseNode(condition, blockStatements, elseBlockNode, currentIfLine, currentIfColumn)
+        }
         var blockStatements = BlockNode(blockAst, 0, 0)
-        return IfElseNode(condition, blockStatements, null, 0, 0)
+        return IfElseNode(condition, blockStatements, null, currentIfLine, currentIfColumn)
     }
+
     private fun processStatement(tokens: List<Token>): StatementNode {
         val firstToken = tokens.firstOrNull() ?: throw RuntimeException("Empty token list")
         val parser = when (firstToken.type) {
@@ -116,5 +123,27 @@ class ParserDirector(private val tokenProvider: TokenProvider, private val comma
             )
             else -> throw RuntimeException("Unsupported token type: ${currentToken.type}")
         }
+    }
+
+    private fun processElseBlockNode(): BlockNode{
+        var blockAst = mutableListOf<StatementNode>() // armo listita vacia para agregar los statements
+        currentToken = tokenProvider.nextToken()
+        currentToken = tokenProvider.nextToken()
+
+        while (currentToken.type != TokenType.CLOSE_BRACE) {
+            var blockTokens = mutableListOf<Token>() // lista para los tokens antes de cada parseo de linea
+            while (currentToken.type != TokenType.SEMICOLON) { // consigo todos los tokens de la linea
+                if (currentToken.type == TokenType.IF) {
+                    blockAst.add(processBlockNode())
+                }
+                blockTokens.add(currentToken)
+                currentToken = tokenProvider.nextToken()
+            }
+            currentToken = tokenProvider.nextToken()
+            var currentAst = processStatement(blockTokens) // parseo la linea
+            blockAst.add(currentAst) // la agrego a la list de statements y si no se cierra el if se corre la sig linea
+        }
+        currentToken = tokenProvider.nextToken()
+        return BlockNode(blockAst,0,0)
     }
 }
