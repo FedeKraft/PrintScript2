@@ -29,7 +29,9 @@ class SnakeCaseIdentifierRule(override var isActive: Boolean = true) : LinterRul
         if (!identifier.name.matches(Regex("^[a-z]+(_[a-z]+)*$"))) {
             errors.add(
                 LinterError(
-                    "Identifier '${identifier.name}' should be in snake_case",
+                    message = "Identifier '${identifier.name}' should be in camelCase",
+                    line = identifier.line,
+                    column = identifier.column,
                 ),
             )
         }
