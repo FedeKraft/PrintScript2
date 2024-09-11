@@ -1,7 +1,7 @@
 package parser
 
-import ast.StatementNode
-import command.Parser
+import ast.*
+import command.*
 import org.example.parser.ASTProvider
 import token.Token
 import token.TokenProvider
@@ -19,6 +19,9 @@ class ParserDirector(private val tokenProvider: TokenProvider, private val comma
                             "${currentToken.line}, column: ${currentToken.column}")
             }
             if(currentToken.type == TokenType.IF){
+                return processBlockNode()
+            }
+            if(currentToken.type == TokenType.ELSE){
                 return processBlockNode()
             }
             if (currentToken.type == TokenType.SEMICOLON) {
@@ -48,15 +51,40 @@ class ParserDirector(private val tokenProvider: TokenProvider, private val comma
     }
 
     private fun processBlockNode():StatementNode{
-        val blockTokens = mutableListOf<Token>()
-        blockTokens.add(currentToken)
+        var condition = getIfCondition()
+        var blockAst = mutableListOf<StatementNode>() //armo listita vacia para agregar los statements
         while (currentToken.type != TokenType.CLOSE_BRACE){
-            currentToken = tokenProvider.nextToken()
-            blockTokens.add(currentToken)
-        }
-        return BlockParser().parse(blockTokens)
-    }
-    private fun processStatement(tokens: List<Token>):StatementNode{
+            var blockTokens = mutableListOf<Token>()  //lista para los tokens antes de cada parseo de linea
+            while (currentToken.type != TokenType.SEMICOLON){ // consigo todos los tokens de la linea
+                currentToken = tokenProvider.nextToken()
+                blockTokens.add(currentToken)
+            }
+            var currentAst = processStatement(blockTokens) // parseo la linea
+            blockAst.add(currentAst)// la agrego a la lista de statements y si no se cierra el if se corre la siguiente linea
 
+        }
+        var blockStatements = BlockNode(blockAst)
+        return IfElseNode(condition, blockStatements)
+    }
+    private fun processStatement(tokens: List<Token>): StatementNode {
+        val firstToken = tokens.firstOrNull() ?: throw RuntimeException("Empty token list")
+        val parser = when (firstToken.type) {
+            TokenType.ASSIGN -> AssignationParser()
+            TokenType.LET -> VariableDeclarationParser()
+            TokenType.PRINT -> PrintParser()
+            TokenType.CONST -> ConstDeclarationParser()
+            else -> throw RuntimeException("Unsupported token type: ${firstToken.type}")
+        }
+        return parser.parse(tokens)
+    }
+
+    private fun getIfCondition(): ExpressionNode{
+        var condition = mutableListOf<Token>()
+        while (currentToken.type != TokenType.LEFT_PARENTHESIS){
+            currentToken = tokenProvider.nextToken()
+            condition.add(currentToken)
+        }
+        condition.add(currentToken)
+        return ConditionNode(condition)
     }
 }
