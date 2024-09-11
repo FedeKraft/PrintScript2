@@ -51,8 +51,10 @@ class ParserDirector(private val tokenProvider: TokenProvider, private val comma
     }
 
     private fun processBlockNode():StatementNode{
+
         var condition = getIfCondition()
         var blockAst = mutableListOf<StatementNode>() //armo listita vacia para agregar los statements
+        currentToken = tokenProvider.nextToken()
         while (currentToken.type != TokenType.CLOSE_BRACE){
             var blockTokens = mutableListOf<Token>()  //lista para los tokens antes de cada parseo de linea
             while (currentToken.type != TokenType.SEMICOLON){ // consigo todos los tokens de la linea
@@ -80,11 +82,11 @@ class ParserDirector(private val tokenProvider: TokenProvider, private val comma
 
     private fun getIfCondition(): ExpressionNode{
         var condition = mutableListOf<Token>()
-        while (currentToken.type != TokenType.LEFT_PARENTHESIS){
+        currentToken = tokenProvider.nextToken()
+        while (currentToken.type != TokenType.RIGHT_PARENTHESIS){
             currentToken = tokenProvider.nextToken()
             condition.add(currentToken)
         }
-        condition.add(currentToken)
         return ConditionNode(condition)
     }
 }
