@@ -1,5 +1,5 @@
 import linter.LinterError
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class LinterErrorTests {
@@ -24,7 +24,7 @@ class LinterErrorTests {
     fun testMultipleLinterErrors() {
         val errors = listOf(
             LinterError("Error 1", line = 1, column = 1),
-            LinterError("Error 2", line = 2, column = 2)
+            LinterError("Error 2", line = 2, column = 2),
         )
 
         assertEquals(2, errors.size)

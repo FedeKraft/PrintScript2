@@ -2,7 +2,7 @@ import ast.IdentifierNode
 import ast.NumberLiteralNode
 import ast.VariableDeclarationNode
 import config.LinterConfigLoader
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import parser.ASTProvider
 import java.nio.file.Paths
@@ -19,7 +19,12 @@ class LinterConfigLoaderTests {
 
             override fun getNextAST(): VariableDeclarationNode {
                 hasMore = false
-                return VariableDeclarationNode(IdentifierNode("missingField", line = 2, column = 3), NumberLiteralNode(42.0, line = 2, column = 10), line = 2, column = 3)
+                return VariableDeclarationNode(
+                    IdentifierNode("missingField", line = 2, column = 3),
+                    NumberLiteralNode(42.0, line = 2, column = 10),
+                    line = 2,
+                    column = 3,
+                )
             }
         }
 
@@ -39,7 +44,12 @@ class LinterConfigLoaderTests {
             override fun hasNextAST() = hasMore
             override fun getNextAST(): VariableDeclarationNode {
                 hasMore = false
-                return VariableDeclarationNode(IdentifierNode("anythingGoes", line = 1, column = 1), NumberLiteralNode(42.0, line = 1, column = 5), line = 1, column = 1)
+                return VariableDeclarationNode(
+                    IdentifierNode("anythingGoes", line = 1, column = 1),
+                    NumberLiteralNode(42.0, line = 1, column = 5),
+                    line = 1,
+                    column = 1,
+                )
             }
         }
 
