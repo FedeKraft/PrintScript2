@@ -1,5 +1,6 @@
 package ast
 
+import token.Token
 import token.TokenType
 
 sealed class StatementNode {
@@ -146,3 +147,4 @@ data class BooleanLiteralNode(
         return value.toString()
     }
 }
+

@@ -66,7 +66,6 @@ class Lexer(private val reader: Reader, private val patternsMap: Map<Regex, Toke
                 else -> Token(tokenType, TokenValue.StringValue(value), currentLine, currentColumn)
             }
         }
-
         return Token(TokenType.UNKNOWN, TokenValue.StringValue(value), currentLine, currentColumn)
     }
 
