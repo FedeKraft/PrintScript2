@@ -85,11 +85,12 @@ ktlint {
     }
 }
 
-// Configuración para la publicación en GitHub Packages
 publishing {
     publications {
-        mavenJava(MavenPublication) {
-            from components.java
+        if (project == rootProject) {  // Publicar solo desde el proyecto raíz
+            mavenJava(MavenPublication) {
+                from components.java
+            }
         }
     }
     repositories {
