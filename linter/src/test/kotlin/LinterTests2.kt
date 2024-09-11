@@ -1,4 +1,3 @@
-
 import ast.IdentifierNode
 import ast.NumberLiteralNode
 import ast.VariableDeclarationNode
@@ -17,7 +16,12 @@ class LinterTests2 {
         // Crear un ASTProvider que devuelva un nodo válido
         val astProvider = object : ASTProvider {
             private val nodes = listOf(
-                VariableDeclarationNode(IdentifierNode("validCamelCase"), NumberLiteralNode(42.0)),
+                VariableDeclarationNode(
+                    IdentifierNode("validCamelCase", line = 1, column = 1),
+                    NumberLiteralNode(42.0, line = 1, column = 10),
+                    line = 1,
+                    column = 1,
+                ),
             )
             private var index = 0
 
@@ -44,7 +48,12 @@ class LinterTests2 {
         // Crear un ASTProvider que devuelva un nodo inválido
         val astProvider = object : ASTProvider {
             private val nodes = listOf(
-                VariableDeclarationNode(IdentifierNode("Invalid_snake_case"), NumberLiteralNode(42.0)),
+                VariableDeclarationNode(
+                    IdentifierNode("Invalid_snake_case", line = 2, column = 3),
+                    NumberLiteralNode(42.0, line = 2, column = 10),
+                    line = 2,
+                    column = 3,
+                ),
             )
             private var index = 0
 
@@ -65,6 +74,8 @@ class LinterTests2 {
         // Verificar que solo haya un error
         assertEquals(1, errors.size)
         assertEquals("Identifier 'Invalid_snake_case' should be in camelCase", errors[0].message)
+        assertEquals(2, errors[0].line)
+        assertEquals(3, errors[0].column)
     }
 
     @Test
@@ -76,7 +87,12 @@ class LinterTests2 {
 
             override fun getNextAST(): VariableDeclarationNode {
                 hasMore = false // Solo devolver un nodo, luego detener el ciclo
-                return VariableDeclarationNode(IdentifierNode("invalid_case"), NumberLiteralNode(42.0))
+                return VariableDeclarationNode(
+                    IdentifierNode("invalid_case", line = 3, column = 4),
+                    NumberLiteralNode(42.0, line = 3, column = 12),
+                    line = 3,
+                    column = 4,
+                )
             }
         }
 

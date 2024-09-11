@@ -2,57 +2,51 @@ import ast.IdentifierNode
 import ast.NumberLiteralNode
 import ast.VariableDeclarationNode
 import config.LinterConfigLoader
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import parser.ASTProvider
+import java.nio.file.Paths
 
 class LinterConfigLoaderTests {
-
     @Test
-    fun testLoadConfigWithValidPath() {
-        // Crear un ASTProvider que devuelva un solo nodo válido
+    fun testLoadConfigWithMissingFields() {
+        val missingFieldsConfigPath = Paths.get("src/test/resources/linterConfigWithMissingFields.json").toString()
+
         val astProvider = object : ASTProvider {
-            private var hasMore = true // Usar una bandera para simular que solo hay un nodo
+            private var hasMore = true
 
             override fun hasNextAST() = hasMore
 
             override fun getNextAST(): VariableDeclarationNode {
-                hasMore = false // Después de devolver el nodo, indica que no hay más nodos
-                return VariableDeclarationNode(IdentifierNode("validCamelCase"), NumberLiteralNode(42.0))
+                hasMore = false
+                return VariableDeclarationNode(IdentifierNode("missingField", line = 2, column = 3), NumberLiteralNode(42.0, line = 2, column = 10), line = 2, column = 3)
             }
         }
 
-        // Cargar el linter con una configuración válida
-        val linter = LinterConfigLoader(astProvider).load()
+        val linter = LinterConfigLoader(astProvider, missingFieldsConfigPath).load()
 
-        // Ejecutar el linter
         val errors = linter.lint().toList()
 
-        // Verificar que no haya errores para un identificador válido en camelCase
-        assertTrue(errors.isEmpty(), "No debería haber errores para un identificador válido")
+        assertTrue(errors.isEmpty(), "Debería manejarse sin errores a pesar de los campos faltantes")
     }
 
     @Test
-    fun testLoadConfigWithMissingFields() {
-        // Simular un ASTProvider que devuelva un solo nodo
+    fun testLoadConfigFromJsonWithAllRulesDisabled() {
+        val configFilePath = Paths.get("src/test/resources/linterConfigAllRulesDisabled.json").toString()
+
         val astProvider = object : ASTProvider {
-            private var hasMore = true // Flag para controlar la entrega de nodos
-
+            private var hasMore = true
             override fun hasNextAST() = hasMore
-
             override fun getNextAST(): VariableDeclarationNode {
-                hasMore = false // Después de devolver el nodo, cambiar hasMore a false para detener el ciclo
-                return VariableDeclarationNode(IdentifierNode("missingField"), NumberLiteralNode(42.0))
+                hasMore = false
+                return VariableDeclarationNode(IdentifierNode("anythingGoes", line = 1, column = 1), NumberLiteralNode(42.0, line = 1, column = 5), line = 1, column = 1)
             }
         }
 
-        // Simular la carga de un archivo de configuración con campos faltantes
-        val linter = LinterConfigLoader(astProvider).load()
+        val linter = LinterConfigLoader(astProvider, configFilePath).load()
 
-        // Ejecutar el linter
         val errors = linter.lint().toList()
 
-        // Verificar si se manejan correctamente las configuraciones con campos faltantes
-        assertTrue(errors.isEmpty(), "Debería manejarse sin errores a pesar de los campos faltantes")
+        assertTrue(errors.isEmpty(), "No debería haber errores cuando todas las reglas están desactivadas")
     }
 }
