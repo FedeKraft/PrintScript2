@@ -1,4 +1,4 @@
-package org.example.parser
+package parser
 
 import ast.StatementNode
 

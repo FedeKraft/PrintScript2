@@ -1,7 +1,7 @@
 package formatter
 
 import ast.StatementNode
-import org.example.parser.ASTProvider
+import parser.ASTProvider
 import rules.FormatterRule
 
 class Formatter(
