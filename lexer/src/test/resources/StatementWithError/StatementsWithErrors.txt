@@ -1,2 +1,2 @@
-let name: String = "Olive";
-print(name];
+let name: string = "Olive";
+println(name];

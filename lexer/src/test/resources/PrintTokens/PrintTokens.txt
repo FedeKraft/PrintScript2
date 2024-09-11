@@ -1,2 +1,2 @@
-print(age);
-print(name);
+println("Hello: " + 3);
+println(name);

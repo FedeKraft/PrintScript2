@@ -1,1 +1,1 @@
-else(print("Bielsiada"));
+else(println("Bielsiada"));

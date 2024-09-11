@@ -1,1 +1,1 @@
-{let name: String = "Braces"};
+{let name: string = "Braces"};

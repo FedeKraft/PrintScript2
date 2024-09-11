@@ -24,14 +24,14 @@ class ParserDirector(private val tokenProvider: TokenProvider, private val comma
         while (tokenProvider.hasNextToken()) {
             if (currentToken.type == TokenType.UNKNOWN) {
                 throw RuntimeException(
-                    "Unknown token in variable assignment at line: " +
-                            "${currentToken.line}, column: ${currentToken.column}")
+                    "unk token in variable assign at line: " + "${currentToken.line}, column: ${currentToken.column}",
+                )
             }
 
-            if(currentToken.type == TokenType.IF){
+            if (currentToken.type == TokenType.IF) {
                 return processBlockNode()
             }
-            if(currentToken.type == TokenType.ELSE){
+            if (currentToken.type == TokenType.ELSE) {
                 return processBlockNode()
             }
             if (currentToken.type == TokenType.SEMICOLON) {
@@ -50,7 +50,7 @@ class ParserDirector(private val tokenProvider: TokenProvider, private val comma
         }
         throw RuntimeException(
             "Syntax error, cannot initialize a statement with token: " +
-                    "${tokens[0].value}, line: ${tokens[0].line}, column: ${tokens[0].column}",
+                "${tokens[0].value}, line: ${tokens[0].line}, column: ${tokens[0].column}",
         )
     }
 
@@ -62,28 +62,26 @@ class ParserDirector(private val tokenProvider: TokenProvider, private val comma
         return tokenProvider.hasNextToken()
     }
 
-    private fun processBlockNode():StatementNode{
+    private fun processBlockNode(): StatementNode {
         currentToken = tokenProvider.nextToken()
         var condition = getIfCondition()
-        var blockAst = mutableListOf<StatementNode>() //armo listita vacia para agregar los statements
+        var blockAst = mutableListOf<StatementNode>() // armo listita vacia para agregar los statements
         currentToken = tokenProvider.nextToken()
         currentToken = tokenProvider.nextToken()
         currentToken = tokenProvider.nextToken()
 
-        while (currentToken.type != TokenType.CLOSE_BRACE){
-            var blockTokens = mutableListOf<Token>()  //lista para los tokens antes de cada parseo de linea
-            while (currentToken.type != TokenType.SEMICOLON){ // consigo todos los tokens de la linea
-                if(currentToken.type == TokenType.IF){
-                    blockAst.add( processBlockNode())
-
+        while (currentToken.type != TokenType.CLOSE_BRACE) {
+            var blockTokens = mutableListOf<Token>() // lista para los tokens antes de cada parseo de linea
+            while (currentToken.type != TokenType.SEMICOLON) { // consigo todos los tokens de la linea
+                if (currentToken.type == TokenType.IF) {
+                    blockAst.add(processBlockNode())
                 }
                 blockTokens.add(currentToken)
                 currentToken = tokenProvider.nextToken()
             }
             currentToken = tokenProvider.nextToken()
             var currentAst = processStatement(blockTokens) // parseo la linea
-            blockAst.add(currentAst)// la agrego a la lista de statements y si no se cierra el if se corre la siguiente linea
-
+            blockAst.add(currentAst) // la agrego a la list de statements y si no se cierra el if se corre la sig linea
         }
         currentToken = tokenProvider.nextToken()
         var blockStatements = BlockNode(blockAst)

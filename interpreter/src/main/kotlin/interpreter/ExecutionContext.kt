@@ -1,17 +1,40 @@
 package interpreter
 
-data class ExecutionContext(val variables: Map<String, Any?> = emptyMap()) {
+class ExecutionContext {
+    private val stack = mutableListOf<MutableMap<String, Any?>>()
 
-    fun addVariable(name: String, value: Any?): ExecutionContext {
-        val updatedVariables = variables + (name to value)
-        return ExecutionContext(updatedVariables)
+    init {
+        // Iniciar con un contexto global
+        stack.add(mutableMapOf())
     }
 
+    // Añadir una nueva variable en el contexto actual
+    fun addVariable(name: String, value: Any?) {
+        stack.last()[name] = value
+    }
+
+    // Obtener una variable del contexto más cercano
     fun getVariable(name: String): Any? {
-        return variables[name]
+        for (scope in stack.asReversed()) {
+            if (scope.containsKey(name)) {
+                return scope[name]
+            }
+        }
+        return null
     }
 
-    fun hasVariable(name: String): Boolean {
-        return variables.containsKey(name)
+    // Entrar a un nuevo contexto (cuando entras a un bloque)
+    fun enterBlock() {
+        stack.add(mutableMapOf())
+    }
+
+    // Salir del contexto actual (cuando sales de un bloque)
+    fun exitBlock() {
+        if (stack.size > 1) {
+            stack.removeAt(stack.size - 1)
+        }
+    }
+    override fun toString(): String {
+        return stack.toString()
     }
 }
