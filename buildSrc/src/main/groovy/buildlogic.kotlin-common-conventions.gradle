@@ -1,7 +1,9 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm'
-    id "org.jlleitschuh.gradle.ktlint"
+    id 'org.jlleitschuh.gradle.ktlint'
     id 'org.jetbrains.kotlinx.kover'
+    id 'jacoco'
+    id 'maven-publish'  // <-- Agregar el plugin maven-publish
 }
 
 repositories {
@@ -16,10 +18,9 @@ dependencies {
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    implementation("org.jlleitschuh.gradle:ktlint-gradle:12.1.1")
-    implementation("org.jetbrains.kotlinx:kover-gradle-plugin:0.8.3")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2")
-
+    implementation 'org.jlleitschuh.gradle:ktlint-gradle:12.1.1'
+    implementation 'org.jetbrains.kotlinx:kover-gradle-plugin:0.8.3'
+    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2'
 }
 
 java {
@@ -27,19 +28,48 @@ java {
         languageVersion = JavaLanguageVersion.of(11)
     }
 }
+group = "printScript"
+version = "1.0"
 
 tasks.named('test') {
     useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport) // El informe siempre se genera después de ejecutar las pruebas
+}
+
+jacoco {
+    toolVersion = '0.8.12'
+}
+
+jacocoTestReport {
+    dependsOn tasks.test // Las pruebas deben ejecutarse antes de generar el informe
+    reports {
+        xml.required.set(false)
+        csv.required.set(false)
+        html.required.set(true)
+        html.outputLocation.set(layout.buildDirectory.dir('jacocoHtml'))
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            element = 'BUNDLE' // Verifica a nivel de módulo
+            excludes = ['ast', 'cli', 'buildSrc'] // Excluye los módulos que no deseas verificar
+            limit {
+                minimum = 0.8 // Establece el coverage mínimo al 80%
+            }
+        }
+    }
 }
 
 ktlint {
-    version.set "0.49.1"
-    outputToConsole.set(true) // Muestra las violaciones en la consola
-    coloredOutput.set(true) // Salida colorida en la consola
-    ignoreFailures.set(false) // No ignores las fallas
+    version.set("0.49.1")
+    outputToConsole.set(true)
+    coloredOutput.set(true)
+    ignoreFailures.set(false)
     reporters {
         reporter org.jlleitschuh.gradle.ktlint.reporter.ReporterType.PLAIN
-        reporter org.jlleitschuh.gradle.ktlint.reporter.ReporterType.CHECKSTYLE // Agrega un reporte en formato XML si lo deseas
+        reporter org.jlleitschuh.gradle.ktlint.reporter.ReporterType.CHECKSTYLE
     }
 
     additionalEditorconfig.set([
@@ -55,53 +85,21 @@ ktlint {
     }
 }
 
-
-subprojects { subproject ->
-    // Aplica el plugin kover si está disponible
-    if (subproject.plugins.hasPlugin("org.jetbrains.kotlinx.kover")) {
-        subproject.kover {
-            filters {
-                classes {
-                    includes = [
-                            'lexer.*',
-                            'parser.*',
-                            'interpreter.*'
-                    ]
-                    excludes = ['ast.*']
-                }
-            }
-            verify {
-                rule {
-                    bound {
-                        minValue = 80  // Cobertura mínima del 80%
-                        valueType = kotlinx.kover.api.VerificationValueType.COVERED_LINES
-                    }
-                }
-            }
-            // Generar reporte en XML y HTML
-            xmlReport {
-                onCheck = true
-            }
-            htmlReport {
-                onCheck = true
-            }
-        }
-    }
-
-    publishing {
-        publications {
+publishing {
+    publications {
+        if (project == rootProject) {
             mavenJava(MavenPublication) {
                 from components.java
             }
         }
-        repositories {
-            maven {
-                name = "GitHubPackages"
-                url = uri("https://maven.pkg.github.com/FedeKraft/PrintScript2")
-                credentials {
-                    username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
-                    password = project.findProperty("gpr.token") ?: System.getenv("GITHUB_TOKEN")
-                }
+    }
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/FedeKraft/PrintScript2")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
+                password = project.findProperty("gpr.token") ?: System.getenv("GITHUB_TOKEN")
             }
         }
     }

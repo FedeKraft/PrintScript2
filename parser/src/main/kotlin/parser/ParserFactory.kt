@@ -1,33 +1,35 @@
 package parser
 
-import command.AssignationCommand
-import command.PrintStatementCommand
-import command.VariableDeclarationStatementCommand
-import org.example.parser.Parser
+import command.AssignationParser
+import command.ConstDeclarationParser
+import command.PrintParser
+import command.VariableDeclarationParser
 import token.TokenProvider
 import token.TokenType
 
 class ParserFactory {
 
-    fun createParser1_0(tokenProvider: TokenProvider): Parser {
-        return Parser(
+    // Parser para la versión 1.0
+    fun createParser1_0(tokenProvider: TokenProvider): ParserDirector {
+        return ParserDirector(
             tokenProvider,
             mapOf(
-                TokenType.LET to VariableDeclarationStatementCommand(),
-                TokenType.PRINT to PrintStatementCommand(),
-                TokenType.IDENTIFIER to AssignationCommand(),
+                TokenType.LET to VariableDeclarationParser(),
+                TokenType.PRINT to PrintParser(),
+                TokenType.IDENTIFIER to AssignationParser(),
             ),
         )
     }
 
-    fun createParser1_1(tokenProvider: TokenProvider): Parser {
-        return Parser(
+    // Parser para la versión 1.1 con nuevas funcionalidades
+    fun createParser1_1(tokenProvider: TokenProvider): ParserDirector {
+        return ParserDirector(
             tokenProvider,
             mapOf(
-                TokenType.LET to VariableDeclarationStatementCommand(),
-                TokenType.PRINT to PrintStatementCommand(),
-                TokenType.IDENTIFIER to AssignationCommand(),
-                // ....
+                TokenType.LET to VariableDeclarationParser(),
+                TokenType.CONST to ConstDeclarationParser(), // Comando para const
+                TokenType.PRINT to PrintParser(),
+                TokenType.IDENTIFIER to AssignationParser(),
             ),
         )
     }

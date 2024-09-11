@@ -1,77 +1,39 @@
-import ast.AssignationNode
-import ast.PrintStatementNode
-import ast.StatementNode
-import ast.VariableDeclarationNode
+// ParserTest.kt
+package parser
+
+import ast.*
+import command.*
 import factory.LexerFactory
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import parser.ParserFactory
-import java.io.File
+import reader.Reader
+import token.*
 
 class ParserTest {
 
-    private fun readSourceCodeFromFile(filename: String): String {
-        return File("src/test/resources/$filename").readText()
-    }
-
     @Test
-    fun testParse() {
-        val lexer = LexerFactory().createLexer1_0(readSourceCodeFromFile("testCodeIdentifier.txt"))
-        val parser = ParserFactory().createParser1_0(lexer)
-        var statement: StatementNode
-        while (parser.hasNextAST()) {
-            statement = parser.nextStatement()
-            println(statement)
-        }
-    }
+    fun testParser() {
+        // Initialize tokens
+        val reader = Reader("src/test/resources/testCodeIdentifier.txt")
+        val lexer = LexerFactory().createLexer1_1(reader)
 
-    @Test
-    fun testPrintParsing() {
-        val lexer = LexerFactory().createLexer1_0(readSourceCodeFromFile("testCodeIdentifier.txt"))
-        val parser = ParserFactory().createParser1_0(lexer)
-        val statements = mutableListOf<StatementNode>()
-        var statement: StatementNode
-        while (parser.hasNextAST()) {
-            statement = parser.nextStatement()
-            statements.add(statement)
-        }
-        for (s in statements) {
-            if (s is PrintStatementNode) {
-                println(s)
-            }
-        }
-    }
+        // Initialize parsers
+        val commands = mapOf(
+            TokenType.LET to VariableDeclarationParser(),
+            TokenType.ASSIGN to AssignationParser(),
+            TokenType.PRINT to PrintParser(),
+            TokenType.CONST to ConstDeclarationParser()
+        )
 
-    @Test
-    fun testVariableDeclarationParsing() {
-        val lexer = LexerFactory().createLexer1_0(readSourceCodeFromFile("testCodeIdentifier.txt"))
-        val parser = ParserFactory().createParser1_0(lexer)
-        val statements = mutableListOf<StatementNode>()
-        var statement: StatementNode
-        while (parser.hasNextAST()) {
-            statement = parser.nextStatement()
-            statements.add(statement)
-        }
-        for (s in statements) {
-            if (s is VariableDeclarationNode) {
-                println(s)
-            }
-        }
-    }
+        // Create ParserDirector
+        val parserDirector = ParserDirector(lexer, commands)
 
-    @Test
-    fun testAssignationParsing() {
-        val lexer = LexerFactory().createLexer1_0(readSourceCodeFromFile("testCodeIdentifier.txt"))
-        val parser = ParserFactory().createParser1_0(lexer)
-        val statements = mutableListOf<StatementNode>()
-        var statement: StatementNode
-        while (parser.hasNextAST()) {
-            statement = parser.nextStatement()
-            statements.add(statement)
+        var currentAst = parserDirector.getNextAST()
+        // Parse the tokens
+        while (parserDirector.hasNextAST()){
+            println(currentAst)
+            currentAst = parserDirector.getNextAST()
         }
-        for (s in statements) {
-            if (s is AssignationNode) {
-                println(s)
-            }
-        }
+        println(currentAst)
     }
 }

@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/parser/src/test/kotlin/kotlin.iml" filepath="$PROJECT_DIR$/parser/src/test/kotlin/kotlin.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/linter/printScript.linter.test.iml" filepath="$PROJECT_DIR$/.idea/modules/linter/printScript.linter.test.iml" />
     </modules>
   </component>

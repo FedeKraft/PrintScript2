@@ -1,30 +1,31 @@
 package commands
 
-import PrintStatementCommand
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
-import command.VariableDeclarationStatementCommand
+import command.AssignationParser
+import command.PrintParser
+import command.VariableDeclarationParser
+import factory.LexerFactory
 import interpreter.Interpreter
-import lexer.Lexer
-import command.AssignationCommand
-import org.example.parser.Parser
+import parser.ParserDirector
+import reader.Reader
 import token.TokenType
 import java.io.File
 
 class ExecutionCommand : CliktCommand(help = "Execute the file") {
     private val file by argument(help = "Source file to execute")
     override fun run() {
-        val code = File(file).readText()
-        val lexer = Lexer(code, patternsMap)
-        val parser = Parser(
+        val sourceCode = File(file).readText()
+        val lexer = LexerFactory().createLexer1_0(Reader(sourceCode))
+        val parserDirector = ParserDirector(
             lexer,
             mapOf(
-                TokenType.LET to VariableDeclarationStatementCommand(),
-                TokenType.PRINT to PrintStatementCommand(),
-                TokenType.IDENTIFIER to AssignationCommand(),
+                TokenType.LET to VariableDeclarationParser(),
+                TokenType.PRINT to PrintParser(),
+                TokenType.IDENTIFIER to AssignationParser(),
             ),
         )
-        val interpreter = Interpreter(parser)
+        val interpreter = Interpreter(parserDirector)
         interpreter.interpret()
         println("file executed")
     }

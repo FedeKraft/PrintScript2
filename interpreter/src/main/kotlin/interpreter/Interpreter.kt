@@ -9,7 +9,7 @@ import ast.PrintStatementNode
 import ast.StatementNode
 import ast.StringLiteralNode
 import ast.VariableDeclarationNode
-import org.example.parser.ASTProvider
+import parser.ASTProvider
 import token.TokenType
 
 class Interpreter(private val provider: ASTProvider) {

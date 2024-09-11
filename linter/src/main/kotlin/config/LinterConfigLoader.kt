@@ -1,8 +1,10 @@
 package config
 
 import linter.Linter
-import org.example.parser.ASTProvider
-import rules.*
+import parser.ASTProvider
+import rules.CamelCaseIdentifierRule
+import rules.PrintSimpleExpressionRule
+import rules.SnakeCaseIdentifierRule
 
 class LinterConfigLoader(private val astProvider: ASTProvider) {
     fun load(): Linter {
@@ -10,9 +12,7 @@ class LinterConfigLoader(private val astProvider: ASTProvider) {
         val camelCaseRule = CamelCaseIdentifierRule(isActive = true)
         val snakeCaseRule = SnakeCaseIdentifierRule(isActive = false)
         val printRule = PrintSimpleExpressionRule(isActive = true)
-
         val rules = listOf(camelCaseRule, snakeCaseRule, printRule)
-
         return Linter(rules, astProvider)
     }
 }
