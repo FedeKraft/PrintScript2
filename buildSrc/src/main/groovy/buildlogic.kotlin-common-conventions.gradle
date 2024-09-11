@@ -87,7 +87,7 @@ ktlint {
 
 publishing {
     publications {
-        if (project == rootProject) {  // Publicar solo desde el proyecto raíz
+        if (project == rootProject) {
             mavenJava(MavenPublication) {
                 from components.java
             }
