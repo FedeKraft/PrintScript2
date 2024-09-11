@@ -42,8 +42,7 @@ class AssignationSyntaxErrorChecker : ErrorChecker {
                 )
             }
         }
-
-        if (TokenType.NUMBER !in tokenTypes &&
+        if (TokenType.BOOLEAN !in tokenTypes && TokenType.NUMBER !in tokenTypes &&
             TokenType.STRING !in tokenTypes && TokenType.IDENTIFIER !in tokenTypes
         ) {
             throw RuntimeException(

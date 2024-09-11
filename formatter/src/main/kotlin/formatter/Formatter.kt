@@ -22,7 +22,7 @@ class Formatter(
 
     private fun applyRules(node: StatementNode): String {
         var result = node.toFormattedString(variableTypes)
-        println(result) // Pasar el registro de variables
+        println(result)
         for (rule in rules) {
             result = rule.applyRule(node, variableTypes, result)
         }

@@ -18,7 +18,6 @@ class VariableDeclarationParser : Parser {
         if (!errorChecker.check(parser)) {
             throw RuntimeException("Syntax error in variable declaration statement")
         }
-
         val identifierToken = parser[1]
         val identifierNode =
             IdentifierNode(identifierToken.value.toString(), identifierToken.line, identifierToken.column)
