@@ -84,7 +84,13 @@ class PrintSyntaxErrorChecker : ErrorChecker {
             }
         }
         for (i in args.indices step 2) {
-            if (argsTokenTypes[i] !in listOf(TokenType.IDENTIFIER, TokenType.NUMBER, TokenType.STRING)) {
+            if (argsTokenTypes[i] !in listOf(
+                    TokenType.IDENTIFIER,
+                    TokenType.NUMBER,
+                    TokenType.STRING,
+                    TokenType.BOOLEAN,
+                )
+            ) {
                 throw RuntimeException(
                     "Invalid argument in print statement line: ${args[i].line}, column: ${args[i].column}",
                 )
