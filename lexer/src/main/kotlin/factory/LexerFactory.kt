@@ -31,7 +31,7 @@ class LexerFactory {
 
             TokenPatterns.IDENTIFIER to TokenType.IDENTIFIER,
 
-            )
+        )
         return Lexer(reader, patternsMap)
     }
 
@@ -50,7 +50,6 @@ class LexerFactory {
             TokenPatterns.RIGHT_BRACE to TokenType.CLOSE_BRACE,
             TokenPatterns.SEMICOLON to TokenType.SEMICOLON,
             TokenPatterns.COLON to TokenType.COLON,
-
 
             TokenPatterns.STRING_TYPE to TokenType.STRING_TYPE,
             TokenPatterns.NUMBER_TYPE to TokenType.NUMBER_TYPE,

@@ -1,8 +1,8 @@
 import factory.LexerFactory
 import interpreter.Interpreter
-import parser.ASTProvider
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import parser.ASTProvider
 import parser.ParserFactory
 import reader.Reader
 import java.io.ByteArrayOutputStream
@@ -15,7 +15,7 @@ class InterpreterTest {
         // Leer el archivo de prueba
 
         // Crear un ASTProvider (deberás tener una implementación para esto)
-        val astProvider = createASTProviderFromCode("src/test/resources/testCodeIdentifier.txt")  // Método hipotético para obtener el AST
+        val astProvider = createASTProviderFromCode("src/test/resources/testCodeIdentifier.txt")
 
         // Redirigir la salida estándar para capturar el output del println
         val outputStream = ByteArrayOutputStream()
@@ -53,21 +53,21 @@ class InterpreterTest {
         val lexer = LexerFactory().createLexer1_1(Reader(path))
 
         val parser = ParserFactory().createParser1_1(lexer)
-        while(lexer.hasNextToken()){
+        while (lexer.hasNextToken()) {
             print(lexer.nextToken())
         }
         return parser
     }
 
     @Test
-    fun `test interpreter with print statement2`(){
+    fun `test interpreter with print statement2`() {
         val astProvider = createASTProviderFromCode("src/test/resources/test2.txt")
-        //val outputStream = ByteArrayOutputStream()
-        //System.setOut(PrintStream(outputStream))
-        //val interpreter = Interpreter(astProvider)
-        //interpreter.interpret()
-        //val actualOutput = outputStream.toString().replace("\r\n", "\n").trim()
-        //val expectedOutput = "\"Result: \" + 3"
-        //assertEquals(expectedOutput, actualOutput)
+        // val outputStream = ByteArrayOutputStream()
+        // System.setOut(PrintStream(outputStream))
+        // val interpreter = Interpreter(astProvider)
+        // interpreter.interpret()
+        // val actualOutput = outputStream.toString().replace("\r\n", "\n").trim()
+        // val expectedOutput = "\"Result: \" + 3"
+        // assertEquals(expectedOutput, actualOutput)
     }
 }

@@ -90,13 +90,17 @@ class Interpreter(private val provider: ASTProvider) {
                 val leftAsDouble = when (leftValue) {
                     is Int -> leftValue.toDouble()
                     is Double -> leftValue
-                    else -> throw IllegalArgumentException("Operación no soportada para tipo: ${leftValue.javaClass.name}")
+                    else -> throw IllegalArgumentException(
+                        "Operación no soportada para tipo: ${leftValue.javaClass.name}",
+                    )
                 }
 
                 val rightAsDouble = when (rightValue) {
                     is Int -> rightValue.toDouble()
                     is Double -> rightValue
-                    else -> throw IllegalArgumentException("Operación no soportada para tipo: ${rightValue.javaClass.name}")
+                    else -> throw IllegalArgumentException(
+                        "Operación no soportada para tipo: ${rightValue.javaClass.name}",
+                    )
                 }
 
                 when (expression.operator) {
@@ -110,7 +114,9 @@ class Interpreter(private val provider: ASTProvider) {
                     else -> throw IllegalArgumentException("Operador binario inesperado: ${expression.operator}")
                 }
             }
-            else -> throw IllegalArgumentException("Tipo de expresión no soportada: ${expression::class.java.simpleName}")
+            else -> throw IllegalArgumentException(
+                "Tipo de expresión no soportada: ${expression::class.java.simpleName}",
+            )
         }
     }
     fun getContext(): ExecutionContext {
