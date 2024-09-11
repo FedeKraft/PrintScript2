@@ -84,8 +84,8 @@ class ParserDirector(private val tokenProvider: TokenProvider, private val comma
             blockAst.add(currentAst) // la agrego a la list de statements y si no se cierra el if se corre la sig linea
         }
         currentToken = tokenProvider.nextToken()
-        var blockStatements = BlockNode(blockAst)
-        return IfElseNode(condition, blockStatements)
+        var blockStatements = BlockNode(blockAst, 0, 0)
+        return IfElseNode(condition, blockStatements, null, 0, 0)
     }
     private fun processStatement(tokens: List<Token>): StatementNode {
         val firstToken = tokens.firstOrNull() ?: throw RuntimeException("Empty token list")
@@ -104,8 +104,16 @@ class ParserDirector(private val tokenProvider: TokenProvider, private val comma
         currentToken = tokenProvider.nextToken()
 
         return when (currentToken.type) {
-            TokenType.STRING -> StringLiteralNode((currentToken.value as TokenValue.StringValue).value)
-            TokenType.BOOLEAN -> BooleanLiteralNode((currentToken.value as TokenValue.BooleanValue).value)
+            TokenType.STRING -> StringLiteralNode(
+                (currentToken.value as TokenValue.StringValue).value,
+                currentToken.line,
+                currentToken.column,
+            )
+            TokenType.BOOLEAN -> BooleanLiteralNode(
+                (currentToken.value as TokenValue.BooleanValue).value,
+                currentToken.line,
+                currentToken.column,
+            )
             else -> throw RuntimeException("Unsupported token type: ${currentToken.type}")
         }
     }
