@@ -1,13 +1,14 @@
 // ParserTest.kt
 package parser
 
-import ast.*
-import command.*
+import command.AssignationParser
+import command.ConstDeclarationParser
+import command.PrintParser
+import command.VariableDeclarationParser
 import factory.LexerFactory
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import reader.Reader
-import token.*
+import token.TokenType
 
 class ParserTest {
 
@@ -22,7 +23,7 @@ class ParserTest {
             TokenType.LET to VariableDeclarationParser(),
             TokenType.ASSIGN to AssignationParser(),
             TokenType.PRINT to PrintParser(),
-            TokenType.CONST to ConstDeclarationParser()
+            TokenType.CONST to ConstDeclarationParser(),
         )
 
         // Create ParserDirector
@@ -30,7 +31,7 @@ class ParserTest {
 
         var currentAst = parserDirector.getNextAST()
         // Parse the tokens
-        while (parserDirector.hasNextAST()){
+        while (parserDirector.hasNextAST()) {
             println(currentAst)
             currentAst = parserDirector.getNextAST()
         }
