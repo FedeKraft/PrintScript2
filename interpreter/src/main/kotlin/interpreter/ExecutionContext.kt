@@ -9,12 +9,11 @@ class ExecutionContext {
     }
 
     // Añadir una nueva variable en el contexto actual
-    fun addVariable(name: String, value: Any?) {
+    fun add(name: String, value: Any?) {
         stack.last()[name] = value
     }
 
-    // Obtener una variable del contexto más cercano
-    fun getVariable(name: String): Any? {
+    fun get(name: String): Any? {
         for (scope in stack.asReversed()) {
             if (scope.containsKey(name)) {
                 return scope[name]

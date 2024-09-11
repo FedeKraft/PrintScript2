@@ -1,6 +1,7 @@
 package command
 
 import PrattParser
+import ast.BooleanLiteralNode
 import ast.IdentifierNode
 import ast.NumberLiteralNode
 import ast.StatementNode
@@ -61,6 +62,13 @@ class VariableDeclarationParser : Parser {
                     else -> throw RuntimeException("Expected a NumberValue for NUMBER")
                 }
                 NumberLiteralNode(value, expressionToken.line, expressionToken.column)
+            }
+            TokenType.BOOLEAN -> {
+                val value = when (val tokenValue = expressionToken.value) {
+                    is TokenValue.BooleanValue -> tokenValue.value
+                    else -> throw RuntimeException("Expected a BooleanValue for BOOLEAN")
+                }
+                BooleanLiteralNode(value, expressionToken.line, expressionToken.column)
             }
             else -> throw RuntimeException("Unexpected token type in print statement")
         }
