@@ -1,7 +1,7 @@
 package linter
 
 import ast.StatementNode
-import org.example.parser.ASTProvider
+import parser.ASTProvider
 import rules.LinterRule
 
 class Linter(
