@@ -26,7 +26,9 @@ class CamelCaseIdentifierRule(override var isActive: Boolean = true) : LinterRul
             }
 
             is BlockNode -> TODO()
-            is ConstDeclarationNode -> TODO()
+            is ConstDeclarationNode ->{
+                checkIdentifier(node.identifier, errors)
+            }
             is IfElseNode -> TODO()
         }
 

@@ -140,7 +140,7 @@ class Lexer1_0Test {
 
     @Test
     fun `test lexer with errors 1_1`() {
-        val reader = Reader("src/test/resources/StatementsWithErrors.txt")
+        val reader = Reader("src/test/resources/StatementWithError/StatementsWithErrors.txt")
         val lexer = LexerFactory().createLexer1_0(reader)
         val actualTokens = mutableListOf<Token>()
 
