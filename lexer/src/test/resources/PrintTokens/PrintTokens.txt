@@ -1,2 +1,2 @@
-print(age);
+print("Hello: " + 3);
 print(name);

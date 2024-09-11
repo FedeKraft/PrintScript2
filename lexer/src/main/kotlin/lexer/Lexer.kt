@@ -9,7 +9,7 @@ import token.TokenValue
 class Lexer(private val reader: Reader, private val patternsMap: Map<Regex, TokenType>) : TokenProvider {
     private var currentLine = 1
     private var currentColumn = 1
-    private var currentChar: Char? = reader.read() // Leer el primer carácter
+    private var currentChar: Char? = reader.read()
 
     override fun hasNextToken(): Boolean {
         return currentChar != null

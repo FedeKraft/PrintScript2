@@ -16,7 +16,7 @@ object TokenPatterns {
 
     // LITERALS
     val NUMBER = Regex("\\b\\d+(\\.\\d+)?\\b")
-    val STRING = Regex("\"([^\"]*)\"|\'([^\']*)\'")  // Captura literales entre comillas dobles o simples
+    val STRING = Regex("\"([^\"]*)\"|\'([^\']*)\'")
     val BOOLEAN = Regex("\\b(true|false)\\b")
 
     // OPERATORS
