@@ -15,39 +15,53 @@ class DummyASTProvider : ASTProvider {
 
         astNodes.push(
             IfElseNode(
-                BooleanLiteralNode(true),
+                BooleanLiteralNode(true, 5, 8),
                 BlockNode(
                     listOf(
                         PrintStatementNode(
-                            StringLiteralNode("Hola, mundo!"),
+                            StringLiteralNode("Hola, mundo!", 6, 10),
+                            6,
+                            9,
                         ),
                     ),
+                    6,
+                    8,
                 ),
                 null,
+                5,
+                8,
             ),
         )
         astNodes.push(
             IfElseNode(
-                condition = BooleanLiteralNode(false),
+                condition = BooleanLiteralNode(true, 10, 12),
                 ifBlock = BlockNode(
                     statements = listOf(
                         PrintStatementNode(
-                            expression = StringLiteralNode("Este mensaje no se imprimirá"),
+                            expression = StringLiteralNode("Este mensaje no se imprimirá", 11, 14),
+                            11,
+                            13,
                         ),
                     ),
+                    11,
+                    12,
                 ),
                 elseBlock = BlockNode(
                     statements = listOf(
                         PrintStatementNode(
-                            expression =
-                            StringLiteralNode("Este mensaje se imprimirá"),
+                            expression = StringLiteralNode("Este mensaje se imprimirá", 12, 15),
+                            12,
+                            14,
                         ),
                     ),
+                    12,
+                    13,
                 ),
+                10,
+                12,
             ),
         )
     }
-
     override fun getNextAST(): StatementNode {
         return astNodes.pop()
     }
