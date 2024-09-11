@@ -66,8 +66,8 @@ class ParserDirector(private val tokenProvider: TokenProvider, private val comma
             var blockTokens = mutableListOf<Token>()  //lista para los tokens antes de cada parseo de linea
             while (currentToken.type != TokenType.SEMICOLON){ // consigo todos los tokens de la linea
                 if(currentToken.type == TokenType.IF){
-                    processBlockNode()
-                    currentToken = tokenProvider.nextToken()
+                    blockAst.add( processBlockNode())
+
                 }
                 blockTokens.add(currentToken)
                 currentToken = tokenProvider.nextToken()

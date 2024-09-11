@@ -1,9 +1,9 @@
-let name: String = "Olive";
+let a1: String = "Olive";
 if (true) {
-    let fede: String = "Gordito";
-    print(Mirko);
+    let a2: String = "Gordito";
     if (true) {
-        let palia: String = "hdp";
-        print(deusMeLivre);
+            let a3: String = "hdp";
+            print(a4);
     }
+    print(a5);
 }
