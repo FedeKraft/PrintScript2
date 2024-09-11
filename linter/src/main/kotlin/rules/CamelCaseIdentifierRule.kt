@@ -39,7 +39,9 @@ class CamelCaseIdentifierRule(override var isActive: Boolean = true) : LinterRul
         if (!identifier.name.matches(Regex("^[a-z]+([A-Z][a-z]*)*$"))) {
             errors.add(
                 LinterError(
-                    "Identifier '${identifier.name}' should be in camelCase",
+                    message = "Identifier '${identifier.name}' should be in camelCase",
+                    line = identifier.line,
+                    column = identifier.column,
                 ),
             )
         }
