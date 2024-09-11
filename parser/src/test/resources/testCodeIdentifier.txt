@@ -1,9 +1,9 @@
-let a1: String = "Olive";
+let a1: string = "Olive";
 if (true) {
-    let a2: String = "Gordito";
+    let a2: string = "Gordito";
     if (true) {
-            let a3: String = "hdp";
-            print(a4);
+            let a3: string = "hdp";
+            println(a4);
     }
-    print(a5);
+    println(a5);
 }
