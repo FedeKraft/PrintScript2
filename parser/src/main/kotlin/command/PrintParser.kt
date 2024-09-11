@@ -21,7 +21,7 @@ class PrintParser : Parser {
 
         if (args.size > 3) {
             val expressionNode = PrattParser(args).parseExpression()
-            return PrintStatementNode(expressionNode)
+            return PrintStatementNode(expressionNode, parser[0].line, parser[0].column)
         }
 
         val expressionToken = parser[2]
@@ -32,20 +32,20 @@ class PrintParser : Parser {
                     is TokenValue.StringValue -> tokenValue.value
                     else -> throw RuntimeException("Expected a StringValue for IDENTIFIER")
                 }
-                IdentifierNode(value)
+                IdentifierNode(value, expressionToken.line, expressionToken.column)
             }
             TokenType.STRING -> {
                 val value = when (val tokenValue = expressionToken.value) {
                     is TokenValue.StringValue -> tokenValue.value
                     else -> throw RuntimeException("Expected a StringValue for STRING")
                 }
-                StringLiteralNode(value)
+                StringLiteralNode(value, expressionToken.line, expressionToken.column)
             }
             else -> throw RuntimeException("Unexpected token type in print statement")
         }
 
         // Create PrintStatementNode and return
-        val printNode = PrintStatementNode(expressionNode)
+        val printNode = PrintStatementNode(expressionNode, expressionToken.line, expressionToken.column)
         return printNode
     }
 }

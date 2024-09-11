@@ -19,7 +19,7 @@ class AssignationParser : Parser {
         }
         val identifierToken = parser[0]
         val identifierNode =
-            IdentifierNode(identifierToken.value.toString())
+            IdentifierNode(identifierToken.value.toString(), identifierToken.line, identifierToken.column)
         val args = parser.subList(2, parser.size)
         // a = "a"
         if (args.size > 1) {
@@ -27,7 +27,7 @@ class AssignationParser : Parser {
                 Token(TokenType.RIGHT_PARENTHESIS, TokenValue.StringValue(")"), 0, 0),
             )
             val expressionNode = PrattParser(newArgs).parseExpression()
-            return AssignationNode(identifierNode, expressionNode)
+            return AssignationNode(identifierNode, expressionNode, parser[0].line, parser[0].column)
         }
         val expressionToken = parser[2]
 
@@ -37,26 +37,26 @@ class AssignationParser : Parser {
                     is TokenValue.StringValue -> tokenValue.value
                     else -> throw RuntimeException("Expected a StringValue for IDENTIFIER")
                 }
-                IdentifierNode(value)
+                IdentifierNode(value, expressionToken.line, expressionToken.column)
             }
             TokenType.STRING -> {
                 val value = when (val tokenValue = expressionToken.value) {
                     is TokenValue.StringValue -> tokenValue.value
                     else -> throw RuntimeException("Expected a StringValue for STRING")
                 }
-                StringLiteralNode(value)
+                StringLiteralNode(value, expressionToken.line, expressionToken.column)
             }
             TokenType.NUMBER -> {
                 val value = when (val tokenValue = expressionToken.value) {
                     is TokenValue.NumberValue -> tokenValue.value
                     else -> throw RuntimeException("Expected a NumberValue for NUMBER")
                 }
-                NumberLiteralNode(value)
+                NumberLiteralNode(value, expressionToken.line, expressionToken.column)
             }
             else -> throw RuntimeException("Unexpected token type in print statement")
         }
         val assignationNode =
-            AssignationNode(identifierNode, expressionNode)
+            AssignationNode(identifierNode, expressionNode, identifierToken.line, identifierToken.column)
 
         return assignationNode
     }
