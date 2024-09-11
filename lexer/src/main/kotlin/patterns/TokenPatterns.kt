@@ -3,14 +3,14 @@ package patterns
 object TokenPatterns {
     // KEYWORDS
     val LET = Regex("\\blet\\b")
-    val PRINT = Regex("\\bprint\\b")
+    val PRINT = Regex("\\bprintln\\b")
     val IF = Regex("\\bif\\b")
     val ELSE = Regex("\\belse\\b")
     val CONST = Regex("\\bconst\\b")
 
     // VAL TYPES
-    val STRING_TYPE = Regex("\\bString\\b")
-    val NUMBER_TYPE = Regex("\\bNumber\\b")
+    val STRING_TYPE = Regex("\\bstring\\b")
+    val NUMBER_TYPE = Regex("\\bnumber\\b")
     val BOOLEAN_TYPE = Regex("\\bboolean\\b")
     val IDENTIFIER = Regex("\\b[a-zA-Z_][a-zA-Z0-9_]*")
 

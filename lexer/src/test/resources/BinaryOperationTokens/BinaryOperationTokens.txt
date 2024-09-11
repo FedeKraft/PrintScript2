@@ -1,4 +1,4 @@
-let sum: Number = 5 + 3;
-let product: Number = 7 * 6;
-let difference: Number = 10 - 4;
-let quotient: Number = 8 / 2;
+let sum: number = 5 + 3;
+let product: number = 7 * 6;
+let difference: number = 10 - 4;
+let quotient: number = 8 / 2;

@@ -16,7 +16,6 @@ class InterpreterTest {
 
         // Crear un ASTProvider (deberás tener una implementación para esto)
         val astProvider = createASTProviderFromCode("src/test/resources/testCodeIdentifier.txt")
-
         // Redirigir la salida estándar para capturar el output del println
         val outputStream = ByteArrayOutputStream()
         System.setOut(PrintStream(outputStream))

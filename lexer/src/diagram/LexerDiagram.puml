@@ -1,0 +1,75 @@
+@startuml
+class Lexer {
+    - reader: Reader
+    - patternsMap: Map<Regex, TokenType>
+    - currentLine: Int
+    - currentColumn: Int
+    - currentChar: Char?
+    + hasNextToken(): Boolean
+    + nextToken(): Token
+    + manageWhiteSpacesAndLineBreaks(): void
+    + tokenizeTillDelimiter(word: StringBuilder): void
+    + makeDelimiterToken(): Token
+    + searchInTokenPatterns(value: String): TokenType?
+    + isDelimiter(char: Char): Boolean
+}
+
+class LexerFactory {
+    + createLexer1_0(reader: Reader): Lexer
+    + createLexer1_1(reader: Reader): Lexer
+}
+
+class Token {
+    - type: TokenType
+    - value: TokenValue
+    - line: Int
+    - column: Int
+    + Token(type: TokenType, value: TokenValue, line: Int, column: Int)
+}
+
+class TokenType {
+    + LET
+    + IDENTIFIER
+    + STRING
+    + NUMBER
+    + PRINT
+    + UNKNOWN
+    + SEMICOLON
+    + ASSIGN
+    // Otros tipos de tokens
+}
+
+class TokenValue {
+    <<abstract>>
+}
+
+class StringValue {
+    - value: String
+}
+
+class NumberValue {
+    - value: Double
+}
+
+class Reader {
+    - filePath: String
+    + read(): Char?
+    + hasNextChar(): Boolean
+}
+
+class TokenProvider {
+    + hasNextToken(): Boolean
+    + nextToken(): Token
+}
+
+TokenValue <|-- StringValue
+TokenValue <|-- NumberValue
+
+LexerFactory --> Lexer
+Lexer --> Token
+Token --> TokenType
+Token --> TokenValue
+Lexer --> Reader
+Lexer ..|> TokenProvider
+
+@enduml

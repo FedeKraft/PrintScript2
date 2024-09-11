@@ -1,2 +1,2 @@
-print("Hello: " + 3);
-print(name);
+println("Hello: " + 3);
+println(name);
