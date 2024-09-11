@@ -1,11 +1,11 @@
 package command
 
 import PrattParser
+import ast.ConstDeclarationNode
 import ast.IdentifierNode
 import ast.NumberLiteralNode
 import ast.StatementNode
 import ast.StringLiteralNode
-import ast.ConstDeclarationNode
 import token.Token
 import token.TokenType
 import token.TokenValue

@@ -1,7 +1,7 @@
 let x : / = 5.0;
-let : String = "hello";
-let x String = "hello";
-let x : String "hello";
-let x : String = ;
-x : String = "hello";
-let x : String;
+let : string = "hello";
+let x string = "hello";
+let x : string "hello";
+let x : string = ;
+x : string = "hello";
+let x : string;

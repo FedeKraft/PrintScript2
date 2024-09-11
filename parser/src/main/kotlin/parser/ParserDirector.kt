@@ -44,14 +44,7 @@ class ParserDirector(private val tokenProvider: TokenProvider, private val comma
         if (tokens.isEmpty()) {
             throw NoSuchElementException("No more tokens available")
         }
-        val command = commands[tokens[0].type]
-        if (command != null) {
-            return command.parse(tokens)
-        }
-        throw RuntimeException(
-            "Syntax error, cannot initialize a statement with token: " +
-                "${tokens[0].value}, line: ${tokens[0].line}, column: ${tokens[0].column}",
-        )
+        return processStatement(tokens)
     }
 
     override fun getNextAST(): StatementNode {
@@ -85,7 +78,7 @@ class ParserDirector(private val tokenProvider: TokenProvider, private val comma
             blockAst.add(currentAst) // la agrego a la list de statements y si no se cierra el if se corre la sig linea
         }
         currentToken = tokenProvider.nextToken()
-        if (currentToken.type == TokenType.ELSE){
+        if (currentToken.type == TokenType.ELSE) {
             var elseBlockNode = processElseBlockNode()
             var blockStatements = BlockNode(blockAst, 0, 0)
             return IfElseNode(condition, blockStatements, elseBlockNode, currentIfLine, currentIfColumn)
@@ -125,7 +118,7 @@ class ParserDirector(private val tokenProvider: TokenProvider, private val comma
         }
     }
 
-    private fun processElseBlockNode(): BlockNode{
+    private fun processElseBlockNode(): BlockNode {
         var blockAst = mutableListOf<StatementNode>() // armo listita vacia para agregar los statements
         currentToken = tokenProvider.nextToken()
         currentToken = tokenProvider.nextToken()
@@ -144,6 +137,6 @@ class ParserDirector(private val tokenProvider: TokenProvider, private val comma
             blockAst.add(currentAst) // la agrego a la list de statements y si no se cierra el if se corre la sig linea
         }
         currentToken = tokenProvider.nextToken()
-        return BlockNode(blockAst,0,0)
+        return BlockNode(blockAst, 0, 0)
     }
 }
