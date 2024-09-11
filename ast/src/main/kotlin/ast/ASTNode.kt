@@ -6,7 +6,12 @@ sealed class StatementNode {
     abstract fun toFormattedString(variableTypes: MutableMap<String, Any>): String
 }
 
-data class VariableDeclarationNode(val identifier: IdentifierNode, val value: ExpressionNode) : StatementNode() {
+data class VariableDeclarationNode(
+    val identifier: IdentifierNode,
+    val value: ExpressionNode,
+    val line: Int,
+    val column: Int,
+) : StatementNode() {
 
     override fun toFormattedString(variableTypes: MutableMap<String, Any>): String {
         val type = inferType(value, variableTypes)
@@ -36,13 +41,15 @@ data class VariableDeclarationNode(val identifier: IdentifierNode, val value: Ex
 data class AssignationNode(
     val identifier: IdentifierNode,
     val value: ExpressionNode,
+    val line: Int,
+    val column: Int,
 ) : StatementNode() {
     override fun toFormattedString(variableTypes: MutableMap<String, Any>): String {
         return "${identifier.toFormattedString(variableTypes)} = ${value.toFormattedString(variableTypes)};"
     }
 }
 
-data class PrintStatementNode(val expression: ExpressionNode) : StatementNode() {
+data class PrintStatementNode(val expression: ExpressionNode, val line: Int, val column: Int) : StatementNode() {
     override fun toFormattedString(variableTypes: MutableMap<String, Any>): String {
         return "print(${expression.toFormattedString(variableTypes)});"
     } }
@@ -51,19 +58,19 @@ sealed class ExpressionNode {
     abstract fun toFormattedString(variableTypes: Map<String, Any>): String
 }
 
-data class IdentifierNode(val name: String) : ExpressionNode() {
+data class IdentifierNode(val name: String, val line: Int, val column: Int) : ExpressionNode() {
     override fun toFormattedString(variableTypes: Map<String, Any>): String {
         return name
     }
 }
 
-data class NumberLiteralNode(val value: Double) : ExpressionNode() {
+data class NumberLiteralNode(val value: Double, val line: Int, val column: Int) : ExpressionNode() {
     override fun toFormattedString(variableTypes: Map<String, Any>): String {
         return value.toString()
     }
 }
 
-data class StringLiteralNode(val value: String) : ExpressionNode() {
+data class StringLiteralNode(val value: String, val line: Int, val column: Int) : ExpressionNode() {
     override fun toFormattedString(variableTypes: Map<String, Any>): String {
         return value
     }
@@ -73,6 +80,8 @@ data class BinaryExpressionNode(
     val left: ExpressionNode,
     val operator: TokenType,
     val right: ExpressionNode,
+    val line: Int,
+    val column: Int,
 ) : ExpressionNode() {
     override fun toFormattedString(variableTypes: Map<String, Any>): String {
         val operatorSymbol = when (operator) {
@@ -89,6 +98,8 @@ data class BinaryExpressionNode(
 data class ConstDeclarationNode(
     val identifier: IdentifierNode,
     val value: ExpressionNode,
+    val line: Int,
+    val column: Int,
 ) : StatementNode() {
     override fun toFormattedString(variableTypes: MutableMap<String, Any>): String {
         val type = inferType(value, variableTypes)
@@ -120,6 +131,8 @@ data class IfElseNode(
     val condition: ExpressionNode,
     val ifBlock: BlockNode,
     val elseBlock: BlockNode? = null,
+    val line: Int,
+    val column: Int,
 ) : StatementNode() {
     override fun toFormattedString(variableTypes: MutableMap<String, Any>): String {
         val elseBlockString = if (elseBlock != null) {
@@ -132,7 +145,7 @@ data class IfElseNode(
     }
 }
 
-data class BlockNode(val statements: List<StatementNode>) : StatementNode() {
+data class BlockNode(val statements: List<StatementNode>, val line: Int, val column: Int) : StatementNode() {
     override fun toFormattedString(variableTypes: MutableMap<String, Any>): String {
         return statements.joinToString(separator = "\n") { it.toFormattedString(variableTypes) }
     }
@@ -140,6 +153,8 @@ data class BlockNode(val statements: List<StatementNode>) : StatementNode() {
 
 data class BooleanLiteralNode(
     val value: Boolean,
+    val line: Int,
+    val column: Int,
 ) : ExpressionNode() {
     override fun toFormattedString(variableTypes: Map<String, Any>): String {
         return value.toString()
