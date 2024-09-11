@@ -27,7 +27,6 @@ class PrintParser : Parser {
         }
 
         val expressionToken = parser[2]
-
         val expressionNode = when (expressionToken.type) {
             TokenType.IDENTIFIER -> {
                 val value = when (val tokenValue = expressionToken.value) {

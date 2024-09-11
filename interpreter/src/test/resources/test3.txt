@@ -1,0 +1,33 @@
+let var1: number = 2 - 3;
+let var2: string = "Hola : hola";
+let var3: boolean = true;
+println(var3);
+
+const c1: number = 2 + 3;
+const c2: string = "Hola" + "Mundo";
+const c3: boolean = true;
+
+println(c1);
+println(c2);
+println(c3);
+
+if(true) {
+    let var4: number = 2 * 3;
+    let var5: string = "Hola" + "Mundo";
+    let var6: boolean = true;
+
+    println(var4);
+    println(var5);
+    println(var6);
+}
+else{
+    let var4: number = 2 * 3;
+    let var5: string = "Hola" + "Mundo";
+    let var6: boolean = true;
+
+    println(var4);
+    println(var5);
+    println(var6);
+}
+
+
