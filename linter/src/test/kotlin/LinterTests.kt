@@ -3,11 +3,13 @@ import ast.NumberLiteralNode
 import ast.PrintStatementNode
 import ast.StringLiteralNode
 import ast.VariableDeclarationNode
+import factory.LinterFactory
 import linter.Linter
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import parser.ASTProvider
+import parser.DummyASTProvider
 import rules.CamelCaseIdentifierRule
 import rules.CamelORSnakeRules
 import rules.PrintSimpleExpressionRule
@@ -181,5 +183,7 @@ class LinterTests {
             )
         val errors = camelOrSnakeRules.apply(node)
         assertEquals(0, errors.size)
+        val linter = LinterFactory().createLinter1_0(DummyASTProvider())
+        linter.lint()
     }
 }
