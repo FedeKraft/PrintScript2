@@ -10,7 +10,9 @@ import ast.StatementNode
 import ast.VariableDeclarationNode
 import linter.LinterError
 
-class CamelCaseIdentifierRule(override var isActive: Boolean = true) : LinterRule {
+class CamelCaseIdentifierRule(
+    override var isActive: Boolean = true,
+) : LinterRule {
     override fun apply(node: StatementNode): List<LinterError> {
         val errors = mutableListOf<LinterError>()
 
@@ -24,18 +26,32 @@ class CamelCaseIdentifierRule(override var isActive: Boolean = true) : LinterRul
             is PrintStatementNode -> {
                 // No hacemos nada con PrintStatementNode en esta regla
             }
-
-            is BlockNode -> TODO()
+            is BlockNode -> {
+                node.statements.forEach { statement ->
+                    errors.addAll(apply(statement)) // Aplicamos la regla a todas las sentencias dentro del bloque
+                }
+            }
             is ConstDeclarationNode -> {
                 checkIdentifier(node.identifier, errors)
             }
-            is IfElseNode -> TODO()
+            is IfElseNode -> {
+                // Aplicar la regla al bloque if
+                errors.addAll(apply(node.ifBlock))
+
+                // Si hay un bloque else, aplicar la regla también
+                node.elseBlock?.let { elseBlock ->
+                    errors.addAll(apply(elseBlock))
+                }
+            }
         }
 
         return errors
     }
 
-    private fun checkIdentifier(identifier: IdentifierNode, errors: MutableList<LinterError>) {
+    private fun checkIdentifier(
+        identifier: IdentifierNode,
+        errors: MutableList<LinterError>,
+    ) {
         if (!identifier.name.matches(Regex("^[a-z]+([A-Z][a-z]*)*$"))) {
             errors.add(
                 LinterError(

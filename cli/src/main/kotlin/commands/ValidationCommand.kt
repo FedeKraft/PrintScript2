@@ -13,17 +13,19 @@ import java.io.File
 
 class ValidationCommand : CliktCommand(help = "Validate the syntax and semantics of the file") {
     private val file by argument(help = "Source file to validate")
+
     override fun run() {
         var sourceCode = File(file).readText()
         val lexer = LexerFactory().createLexer1_0(Reader(File(sourceCode).inputStream()))
-        val parserDirector = ParserDirector(
-            lexer,
-            mapOf(
-                TokenType.LET to VariableDeclarationParser(),
-                TokenType.PRINT to PrintParser(),
-                TokenType.IDENTIFIER to AssignationParser(),
-            ),
-        )
+        val parserDirector =
+            ParserDirector(
+                lexer,
+                mapOf(
+                    TokenType.LET to VariableDeclarationParser(),
+                    TokenType.PRINT to PrintParser(),
+                    TokenType.IDENTIFIER to AssignationParser(),
+                ),
+            )
         var statement = parserDirector.nextStatement()
         while (statement != null) {
             println(statement)

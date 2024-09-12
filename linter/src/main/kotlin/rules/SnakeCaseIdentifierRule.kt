@@ -6,7 +6,9 @@ import ast.StatementNode
 import ast.VariableDeclarationNode
 import linter.LinterError
 
-class SnakeCaseIdentifierRule(override var isActive: Boolean = true) : LinterRule {
+class SnakeCaseIdentifierRule(
+    override var isActive: Boolean = true,
+) : LinterRule {
     override fun apply(node: StatementNode): List<LinterError> {
         val errors = mutableListOf<LinterError>()
 
@@ -25,7 +27,10 @@ class SnakeCaseIdentifierRule(override var isActive: Boolean = true) : LinterRul
         return errors
     }
 
-    private fun checkIdentifier(identifier: IdentifierNode, errors: MutableList<LinterError>) {
+    private fun checkIdentifier(
+        identifier: IdentifierNode,
+        errors: MutableList<LinterError>,
+    ) {
         if (!identifier.name.matches(Regex("^[a-z]+(_[a-z]+)*$"))) {
             errors.add(
                 LinterError(

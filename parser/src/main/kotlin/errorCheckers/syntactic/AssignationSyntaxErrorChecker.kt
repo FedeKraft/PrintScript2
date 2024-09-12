@@ -42,8 +42,10 @@ class AssignationSyntaxErrorChecker : ErrorChecker {
                 )
             }
         }
-        if (TokenType.BOOLEAN !in tokenTypes && TokenType.NUMBER !in tokenTypes &&
-            TokenType.STRING !in tokenTypes && TokenType.IDENTIFIER !in tokenTypes
+        if (TokenType.BOOLEAN !in tokenTypes &&
+            TokenType.NUMBER !in tokenTypes &&
+            TokenType.STRING !in tokenTypes &&
+            TokenType.IDENTIFIER !in tokenTypes
         ) {
             throw RuntimeException(
                 "Missing value token in variable " +
@@ -68,7 +70,9 @@ class AssignationSyntaxErrorChecker : ErrorChecker {
             index++
         }
 
-        if (index >= tokens.size || tokens[index].type !in listOf(
+        if (index >= tokens.size ||
+            tokens[index].type !in
+            listOf(
                 TokenType.STRING,
                 TokenType.NUMBER,
                 TokenType.IDENTIFIER,

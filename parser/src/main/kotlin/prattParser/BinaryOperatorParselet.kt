@@ -3,8 +3,14 @@ import ast.ExpressionNode
 import token.Token
 import token.TokenType
 
-class BinaryOperatorParselet(private val precedence: Int) : InfixParselet {
-    override fun parse(parser: PrattParser, left: ExpressionNode, token: Token): ExpressionNode {
+class BinaryOperatorParselet(
+    private val precedence: Int,
+) : InfixParselet {
+    override fun parse(
+        parser: PrattParser,
+        left: ExpressionNode,
+        token: Token,
+    ): ExpressionNode {
         val right = parser.parseExpression(precedence)
         return when (token.type) {
             TokenType.SUM -> BinaryExpressionNode(left, TokenType.SUM, right, token.line, token.column)

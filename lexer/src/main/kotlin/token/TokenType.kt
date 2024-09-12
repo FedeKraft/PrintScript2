@@ -1,7 +1,6 @@
 package token
 
 enum class TokenType {
-
     // LITERAL TYPES
     NUMBER,
     STRING, // Renombrado de STRING_LITERAL a STRING para consistencia
@@ -37,5 +36,13 @@ enum class TokenType {
     UNKNOWN,
 
     // 1.1
-    IF, ELSE, CONST, OPEN_BRACE, CLOSE_BRACE, BOOLEAN, BOOLEAN_TYPE, READ_INPUT, READ_ENV
+    IF,
+    ELSE,
+    CONST,
+    OPEN_BRACE,
+    CLOSE_BRACE,
+    BOOLEAN,
+    BOOLEAN_TYPE,
+    READ_INPUT,
+    READ_ENV,
 }

@@ -1,0 +1,7 @@
+let pi : number ;
+let pi : string ;
+let pi : boolean ;
+const pi : number ;
+const pi : string ;
+const pi : boolean ;
+

@@ -3,7 +3,11 @@ package rules
 import ast.StatementNode
 
 class SingleSpaceBetweenTokensRule : FormatterRule {
-    override fun applyRule(node: StatementNode, variableTypes: Map<String, Any>, result: String): String {
+    override fun applyRule(
+        node: StatementNode,
+        variableTypes: Map<String, Any>,
+        result: String,
+    ): String {
         val modifiedResult = StringBuilder()
         var i = 0
 

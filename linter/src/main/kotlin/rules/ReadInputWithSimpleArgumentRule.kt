@@ -10,8 +10,9 @@ import ast.StringLiteralNode
 import ast.VariableDeclarationNode
 import linter.LinterError
 
-class ReadInputWithSimpleArgumentRule(override var isActive: Boolean = true) : LinterRule {
-
+class ReadInputWithSimpleArgumentRule(
+    override var isActive: Boolean = true,
+) : LinterRule {
     override fun apply(node: StatementNode): List<LinterError> {
         val errors = mutableListOf<LinterError>()
 
@@ -34,10 +35,9 @@ class ReadInputWithSimpleArgumentRule(override var isActive: Boolean = true) : L
     }
 
     // Verificar si el argumento es simple (identificador o literal)
-    private fun isSimpleArgument(argument: ExpressionNode): Boolean {
-        return argument is IdentifierNode ||
+    private fun isSimpleArgument(argument: ExpressionNode): Boolean =
+        argument is IdentifierNode ||
             argument is StringLiteralNode ||
             argument is NumberLiteralNode ||
             argument is BooleanLiteralNode
-    }
 }

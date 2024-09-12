@@ -6,6 +6,9 @@ import token.TokenType
 
 class VariableDeclarationSyntaxErrorChecker : ErrorChecker {
     override fun check(tokens: List<Token>): Boolean {
+        if (tokens.size < 5) {
+            return checkNecessaryTokensOrderForNullDeclaration(tokens)
+        }
         checkNecessaryTokens(tokens)
         checkNecessaryTokensOrder(tokens)
         return true
@@ -34,6 +37,40 @@ class VariableDeclarationSyntaxErrorChecker : ErrorChecker {
         }
     }
 
+    private fun checkNecessaryTokensOrderForNullDeclaration(tokens: List<Token>): Boolean {
+        val iterator = tokens.iterator()
+        var token = iterator.next()
+
+        if (token.type != TokenType.LET) {
+            throw RuntimeException("Expected 'LET', found ${token.type} line: ${token.line}, column: ${token.column}")
+        }
+        token = iterator.next()
+
+        if (token.type != TokenType.IDENTIFIER) {
+            throw RuntimeException(
+                "Expected 'IDENTIFIER', found ${token.type} line: ${token.line}, column: ${token.column}",
+            )
+        }
+        token = iterator.next()
+
+        if (token.type != TokenType.COLON) {
+            throw RuntimeException("Expected ':', found ${token.type} line: ${token.line}, column: ${token.column}")
+        }
+        token = iterator.next()
+
+        if (token.type != TokenType.STRING_TYPE &&
+            token.type != TokenType.NUMBER_TYPE &&
+            token.type
+            != TokenType.BOOLEAN_TYPE
+        ) {
+            throw RuntimeException(
+                "Expected type 'STRING_TYPE' or 'NUMBER_TYPE' or 'BOOLEAN_TYPE', found " +
+                    "${token.type} line: ${token.line}, column: ${token.column}",
+            )
+        }
+        return true
+    }
+
     private fun checkNecessaryTokensOrder(tokens: List<Token>) {
         val iterator = tokens.iterator()
         var token = iterator.next()
@@ -55,7 +92,9 @@ class VariableDeclarationSyntaxErrorChecker : ErrorChecker {
         }
         token = iterator.next()
 
-        if (token.type != TokenType.STRING_TYPE && token.type != TokenType.NUMBER_TYPE && token.type
+        if (token.type != TokenType.STRING_TYPE &&
+            token.type != TokenType.NUMBER_TYPE &&
+            token.type
             != TokenType.BOOLEAN_TYPE
         ) {
             throw RuntimeException(
@@ -70,8 +109,12 @@ class VariableDeclarationSyntaxErrorChecker : ErrorChecker {
         }
         token = iterator.next()
 
-        if (token.type != TokenType.STRING && token.type != TokenType.NUMBER && token.type != TokenType.IDENTIFIER &&
-            token.type != TokenType.BOOLEAN && token.type != TokenType.READ_ENV && token.type != TokenType.READ_INPUT
+        if (token.type != TokenType.STRING &&
+            token.type != TokenType.NUMBER &&
+            token.type != TokenType.IDENTIFIER &&
+            token.type != TokenType.BOOLEAN &&
+            token.type != TokenType.READ_ENV &&
+            token.type != TokenType.READ_INPUT
         ) {
             throw RuntimeException(
                 "Expected value token, found ${token.type} line: ${token.line}, column: ${token.column}",

@@ -8,13 +8,14 @@ class Linter(
     private val rules: List<LinterRule>,
     private val astProvider: ASTProvider,
 ) {
-    fun lint(): Sequence<LinterError> = sequence {
-        while (astProvider.hasNextAST()) {
-            val node = astProvider.getNextAST()
-            val errors = applyRules(node)
-            errors.forEach { yield(it) }
+    fun lint(): Sequence<LinterError> =
+        sequence {
+            while (astProvider.hasNextAST()) {
+                val node = astProvider.getNextAST()
+                val errors = applyRules(node)
+                errors.forEach { yield(it) }
+            }
         }
-    }
 
     private fun applyRules(node: StatementNode): List<LinterError> {
         val errors = mutableListOf<LinterError>()
