@@ -1,11 +1,3 @@
-let a   : number = 10;
-let b: number    = 20;
-let c  : number =   a + b + a;
-let name: string = "Alice";
-c=a+b;
-println(greeting);
-let    x    :  number = 3.14;
-let    y   :   number = 2.71;
-let z    : number = x*y;
-let isTrue: string = "true";
-let isFalse: string = "false";
+if (true) {
+    let a : string = "Bielsa";
+}

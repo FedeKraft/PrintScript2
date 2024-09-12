@@ -34,9 +34,6 @@ class ParserDirector(
             if (currentToken.type == TokenType.IF) {
                 return processBlockNode()
             }
-            if (currentToken.type == TokenType.ELSE) {
-                return processBlockNode()
-            }
             if (currentToken.type == TokenType.SEMICOLON) {
                 currentToken = tokenProvider.nextToken()
                 return processStatement(tokens)

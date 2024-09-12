@@ -3,7 +3,7 @@ let b : number = 20 . 0 ;
 let c : number = a + b + a ;
 let name : string = " Alice ";
 c = a + b ;
-print ( greeting );
+println(greeting );
 let x : number = 3 . 14 ;
 let y : number = 2 . 71 ;
 let z : number = x * y ;
