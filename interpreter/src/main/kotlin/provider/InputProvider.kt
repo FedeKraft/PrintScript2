@@ -1,4 +1,5 @@
 package provider
+
 interface InputProvider {
     fun readInput(prompt: Any): Any
 }
@@ -9,7 +10,10 @@ class ConsoleInputProvider : InputProvider {
         return readlnOrNull() ?: throw IllegalArgumentException("Error al leer la entrada del usuario")
     }
 }
-class TestInputProvider(private val mockInput: Any) : InputProvider {
+
+class TestInputProvider(
+    private val mockInput: Any,
+) : InputProvider {
     override fun readInput(prompt: Any): Any {
         println("Simulated input for test: $mockInput")
         return mockInput

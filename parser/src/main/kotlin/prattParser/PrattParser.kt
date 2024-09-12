@@ -6,7 +6,9 @@ import token.Token
 import token.TokenType
 import token.TokenValue
 
-class PrattParser(private val tokens: List<Token>) {
+class PrattParser(
+    private val tokens: List<Token>,
+) {
     private var currentPosition = 0
 
     private val prefixParselets = mutableMapOf<TokenType, PrefixParselet>()
@@ -17,31 +19,37 @@ class PrattParser(private val tokens: List<Token>) {
         registerPrefix(
             TokenType.NUMBER,
             object : PrefixParselet {
-                override fun parse(parser: PrattParser, token: Token): ExpressionNode {
-                    return parseNumber(token)
-                }
+                override fun parse(
+                    parser: PrattParser,
+                    token: Token,
+                ): ExpressionNode = parseNumber(token)
             },
         )
         registerPrefix(
             TokenType.IDENTIFIER,
             object : PrefixParselet {
-                override fun parse(parser: PrattParser, token: Token): ExpressionNode {
-                    return parseIdentifier(token)
-                }
+                override fun parse(
+                    parser: PrattParser,
+                    token: Token,
+                ): ExpressionNode = parseIdentifier(token)
             },
         )
         registerPrefix(
             TokenType.STRING,
             object : PrefixParselet {
-                override fun parse(parser: PrattParser, token: Token): ExpressionNode {
-                    return parseString(token)
-                }
+                override fun parse(
+                    parser: PrattParser,
+                    token: Token,
+                ): ExpressionNode = parseString(token)
             },
         )
         registerPrefix(
             TokenType.LEFT_PARENTHESIS,
             object : PrefixParselet {
-                override fun parse(parser: PrattParser, token: Token): ExpressionNode {
+                override fun parse(
+                    parser: PrattParser,
+                    token: Token,
+                ): ExpressionNode {
                     val expression = parser.parseExpression()
                     parser.consume(TokenType.RIGHT_PARENTHESIS)
                     return expression
@@ -56,26 +64,34 @@ class PrattParser(private val tokens: List<Token>) {
         registerInfix(TokenType.DIVIDE, BinaryOperatorParselet(Precedence.PRODUCT))
     }
 
-    fun registerPrefix(tokenType: TokenType, parselet: PrefixParselet) {
+    fun registerPrefix(
+        tokenType: TokenType,
+        parselet: PrefixParselet,
+    ) {
         prefixParselets[tokenType] = parselet
     }
 
-    fun registerInfix(tokenType: TokenType, parselet: InfixParselet) {
+    fun registerInfix(
+        tokenType: TokenType,
+        parselet: InfixParselet,
+    ) {
         infixParselets[tokenType] = parselet
     }
 
     fun parseExpression(precedence: Int = 0): ExpressionNode {
         val token = consume()
-        val prefix = prefixParselets[token.type] ?: throw IllegalArgumentException(
-            "No prefix parselet for ${token.type}",
-        )
+        val prefix =
+            prefixParselets[token.type] ?: throw IllegalArgumentException(
+                "No prefix parselet for ${token.type}",
+            )
         var left = prefix.parse(this, token)
 
         while (currentPosition < tokens.size && precedence < getPrecedence()) {
             val infixToken = consume()
-            val infix = infixParselets[infixToken.type] ?: throw IllegalArgumentException(
-                "No infix parselet for ${infixToken.type}",
-            )
+            val infix =
+                infixParselets[infixToken.type] ?: throw IllegalArgumentException(
+                    "No infix parselet for ${infixToken.type}",
+                )
             left = infix.parse(this, left, infixToken)
         }
 
@@ -110,26 +126,23 @@ class PrattParser(private val tokens: List<Token>) {
     }
 
     // Parse number tokens
-    private fun parseNumber(token: Token): ExpressionNode {
-        return when (val value = token.value) {
+    private fun parseNumber(token: Token): ExpressionNode =
+        when (val value = token.value) {
             is TokenValue.NumberValue -> NumberLiteralNode(value.value, token.line, token.column)
             else -> throw RuntimeException("Expected a NumberValue for NUMBER")
         }
-    }
 
     // Parse identifier tokens
-    private fun parseIdentifier(token: Token): ExpressionNode {
-        return when (val value = token.value) {
+    private fun parseIdentifier(token: Token): ExpressionNode =
+        when (val value = token.value) {
             is TokenValue.StringValue -> IdentifierNode(value.value, token.line, token.column)
             else -> throw RuntimeException("Expected a StringValue for IDENTIFIER")
         }
-    }
 
     // Parse string tokens
-    private fun parseString(token: Token): ExpressionNode {
-        return when (val value = token.value) {
+    private fun parseString(token: Token): ExpressionNode =
+        when (val value = token.value) {
             is TokenValue.StringValue -> StringLiteralNode(value.value, token.line, token.column)
             else -> throw RuntimeException("Expected a StringValue for STRING")
         }
-    }
 }

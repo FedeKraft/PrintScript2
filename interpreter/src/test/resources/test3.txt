@@ -29,5 +29,6 @@ else{
     println(var5);
     println(var6);
 }
-
+let pi : number ;
+println(pi);
 

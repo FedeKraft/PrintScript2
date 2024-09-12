@@ -11,6 +11,7 @@ import rules.SnakeCaseIdentifierRule
 import java.io.File
 import java.io.InputStream
 
+
 // This tells Jackson to ignore any fields in the config file that aren't declared here
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class RuleConfig(
@@ -34,6 +35,7 @@ class LinterConfigLoader(
 
     init {
         val mapper = jacksonObjectMapper()
+
         config = try {
             if (configInputStream != null) {
                 mapper.readValue(configInputStream)

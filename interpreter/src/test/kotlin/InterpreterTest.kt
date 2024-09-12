@@ -18,9 +18,10 @@ class InterpreterTest {
     @Test
     fun test2() {
         val consoleInputProvider = ConsoleInputProvider()
-        val exception = assertThrows<IllegalArgumentException> {
-            consoleInputProvider.readInput("TestName")
-        }
+        val exception =
+            assertThrows<IllegalArgumentException> {
+                consoleInputProvider.readInput("TestName")
+            }
         assertEquals(exception.message, "Error al leer la entrada del usuario")
     }
 }

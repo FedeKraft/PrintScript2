@@ -8,10 +8,9 @@ import token.TokenProvider
 import token.TokenType
 
 class ParserFactory {
-
     // Parser para la versión 1.0
-    fun createParser1_0(tokenProvider: TokenProvider): ParserDirector {
-        return ParserDirector(
+    fun createParser1_0(tokenProvider: TokenProvider): ParserDirector =
+        ParserDirector(
             tokenProvider,
             mapOf(
                 TokenType.LET to VariableDeclarationParser(),
@@ -19,11 +18,10 @@ class ParserFactory {
                 TokenType.IDENTIFIER to AssignationParser(),
             ),
         )
-    }
 
     // Parser para la versión 1.1 con nuevas funcionalidades
-    fun createParser1_1(tokenProvider: TokenProvider): ParserDirector {
-        return ParserDirector(
+    fun createParser1_1(tokenProvider: TokenProvider): ParserDirector =
+        ParserDirector(
             tokenProvider,
             mapOf(
                 TokenType.LET to VariableDeclarationParser(),
@@ -32,5 +30,4 @@ class ParserFactory {
                 TokenType.IDENTIFIER to AssignationParser(),
             ),
         )
-    }
 }

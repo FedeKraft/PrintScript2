@@ -4,7 +4,9 @@ import ast.PrintStatementNode
 import ast.StatementNode
 import linter.LinterError
 
-class PrintSimpleExpressionRule(override var isActive: Boolean = true) : LinterRule {
+class PrintSimpleExpressionRule(
+    override var isActive: Boolean = true,
+) : LinterRule {
     override fun apply(node: StatementNode): List<LinterError> {
         val errors = mutableListOf<LinterError>()
 

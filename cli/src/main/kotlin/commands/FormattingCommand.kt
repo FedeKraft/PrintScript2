@@ -21,25 +21,29 @@ class FormattingCommand : CliktCommand(help = "Format the file") {
 
     private val config = FormatterConfigLoader.loadConfig("src/test/resources/formatter-config.json")
 
-    private val rules = listOf(
-        SpaceAroundEqualsRule(config.spaceAroundEquals.enabled),
-    )
+    private val rules =
+        listOf(
+            SpaceAroundEqualsRule(config.spaceAroundEquals.enabled),
+        )
 
-    private fun readSourceCodeFromFile(filename: String): String {
-        return File("src/test/resources/$filename").readText().replace("\r\n", "\n")
-    }
+    private fun readSourceCodeFromFile(filename: String): String =
+        File("src/test/resources/$filename").readText().replace(
+            "\r\n",
+            "\n",
+        )
 
     override fun run() {
         val sourceCode = readSourceCodeFromFile(file)
         val lexer = LexerFactory().createLexer1_0(Reader(File(sourceCode).inputStream()))
-        val parserDirector = ParserDirector(
-            lexer,
-            mapOf(
-                TokenType.PRINT to PrintParser(),
-                TokenType.LET to VariableDeclarationParser(),
-                TokenType.IDENTIFIER to AssignationParser(),
-            ),
-        )
+        val parserDirector =
+            ParserDirector(
+                lexer,
+                mapOf(
+                    TokenType.PRINT to PrintParser(),
+                    TokenType.LET to VariableDeclarationParser(),
+                    TokenType.IDENTIFIER to AssignationParser(),
+                ),
+            )
 
         val formatter = Formatter(rules, parserDirector)
         var result = ""

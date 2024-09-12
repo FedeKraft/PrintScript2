@@ -9,7 +9,10 @@ class ExecutionContext {
     }
 
     // Añadir una nueva variable en el contexto actual
-    fun add(name: String, value: Any?) {
+    fun add(
+        name: String,
+        value: Any?,
+    ) {
         stack.last()[name] = value
     }
 
@@ -33,7 +36,6 @@ class ExecutionContext {
             stack.removeAt(stack.size - 1)
         }
     }
-    override fun toString(): String {
-        return stack.toString()
-    }
+
+    override fun toString(): String = stack.toString()
 }

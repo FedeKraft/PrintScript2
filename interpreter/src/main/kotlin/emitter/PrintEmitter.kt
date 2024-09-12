@@ -15,7 +15,5 @@ open class PrintEmitter {
         count++
     }
 
-    open fun getCount(): Int {
-        return count
-    }
+    open fun getCount(): Int = count
 }

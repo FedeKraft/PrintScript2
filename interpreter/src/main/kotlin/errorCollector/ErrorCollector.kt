@@ -7,13 +7,9 @@ open class ErrorCollector {
         errors.add(error)
     }
 
-    open fun getErrors(): List<String> {
-        return errors
-    }
+    open fun getErrors(): List<String> = errors
 
-    open fun hasErrors(): Boolean {
-        return errors.isNotEmpty()
-    }
+    open fun hasErrors(): Boolean = errors.isNotEmpty()
 
     open fun clearErrors() {
         errors.clear()

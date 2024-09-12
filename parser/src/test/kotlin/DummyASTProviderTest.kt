@@ -3,7 +3,6 @@ package parser
 import org.junit.jupiter.api.Test
 
 class DummyASTProviderTest {
-
     @Test
     fun `test DummyASTProvider printing AST nodes`() {
         // Inicializar el DummyASTProvider

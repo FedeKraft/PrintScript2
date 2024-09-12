@@ -3,8 +3,14 @@ package rules
 import ast.StatementNode
 import ast.VariableDeclarationNode
 
-class SpaceBeforeColonRule(private val enabled: Boolean) : FormatterRule {
-    override fun applyRule(node: StatementNode, variableTypes: Map<String, Any>, result: String): String {
+class SpaceBeforeColonRule(
+    private val enabled: Boolean,
+) : FormatterRule {
+    override fun applyRule(
+        node: StatementNode,
+        variableTypes: Map<String, Any>,
+        result: String,
+    ): String {
         if (node is VariableDeclarationNode) {
             val modifiedResult = StringBuilder()
             for (i in result.indices) {

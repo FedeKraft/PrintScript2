@@ -8,32 +8,33 @@ import parser.ASTProvider
 import token.TokenType
 
 class LinterConfigLoaderTests {
-
     @Test
     fun testLoadConfigWithMissingFields() {
         // Simulación de un archivo de configuración con campos faltantes
-        val missingFieldsConfig = """
+        val missingFieldsConfig =
+            """
             {
                 "camelCaseIdentifier": { "enabled": true }
             }
-        """.trimIndent().byteInputStream()
+            """.trimIndent().byteInputStream()
 
-        val astProvider = object : ASTProvider {
-            private var hasMore = true
+        val astProvider =
+            object : ASTProvider {
+                private var hasMore = true
 
-            override fun hasNextAST() = hasMore
+                override fun hasNextAST() = hasMore
 
-            override fun getNextAST(): VariableDeclarationNode {
-                hasMore = false
-                return VariableDeclarationNode(
-                    IdentifierNode("missingField", line = 2, column = 3),
-                    TokenType.NUMBER_TYPE,
-                    NumberLiteralNode(42.0, line = 2, column = 10),
-                    line = 2,
-                    column = 3,
-                )
+                override fun getNextAST(): VariableDeclarationNode {
+                    hasMore = false
+                    return VariableDeclarationNode(
+                        IdentifierNode("missingField", line = 2, column = 3),
+                        TokenType.NUMBER_TYPE,
+                        NumberLiteralNode(42.0, line = 2, column = 10),
+                        line = 2,
+                        column = 3,
+                    )
+                }
             }
-        }
 
         val linter = LinterConfigLoader(astProvider, missingFieldsConfig).load()
 
@@ -45,28 +46,32 @@ class LinterConfigLoaderTests {
     @Test
     fun testLoadConfigFromJsonWithAllRulesDisabled() {
         // Simulación de un archivo de configuración con todas las reglas desactivadas
-        val configFile = """
+        val configFile =
+            """
             {
                 "printSimpleExpression": { "enabled": false },
                 "snakeCaseIdentifier": { "enabled": false },
                 "camelCaseIdentifier": { "enabled": false }
             }
-        """.trimIndent().byteInputStream()
+            """.trimIndent().byteInputStream()
 
-        val astProvider = object : ASTProvider {
-            private var hasMore = true
-            override fun hasNextAST() = hasMore
-            override fun getNextAST(): VariableDeclarationNode {
-                hasMore = false
-                return VariableDeclarationNode(
-                    IdentifierNode("anythingGoes", line = 1, column = 1),
-                    TokenType.NUMBER_TYPE,
-                    NumberLiteralNode(42.0, line = 1, column = 5),
-                    line = 1,
-                    column = 1,
-                )
+        val astProvider =
+            object : ASTProvider {
+                private var hasMore = true
+
+                override fun hasNextAST() = hasMore
+
+                override fun getNextAST(): VariableDeclarationNode {
+                    hasMore = false
+                    return VariableDeclarationNode(
+                        IdentifierNode("anythingGoes", line = 1, column = 1),
+                        TokenType.NUMBER_TYPE,
+                        NumberLiteralNode(42.0, line = 1, column = 5),
+                        line = 1,
+                        column = 1,
+                    )
+                }
             }
-        }
 
         val linter = LinterConfigLoader(astProvider, configFile).load()
 

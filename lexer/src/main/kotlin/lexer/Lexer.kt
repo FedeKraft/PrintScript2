@@ -6,14 +6,15 @@ import token.TokenProvider
 import token.TokenType
 import token.TokenValue
 
-class Lexer(private val reader: Reader, private val patternsMap: Map<Regex, TokenType>) : TokenProvider {
+class Lexer(
+    private val reader: Reader,
+    private val patternsMap: Map<Regex, TokenType>,
+) : TokenProvider {
     private var currentLine = 1
     private var currentColumn = 1
     private var currentChar: Char? = reader.read()
 
-    override fun hasNextToken(): Boolean {
-        return currentChar != null
-    }
+    override fun hasNextToken(): Boolean = currentChar != null
 
     override fun nextToken(): Token {
         if (currentChar == null) {
@@ -52,24 +53,27 @@ class Lexer(private val reader: Reader, private val patternsMap: Map<Regex, Toke
 
         if (tokenType != null) {
             return when (tokenType) {
-                TokenType.STRING -> Token(
-                    tokenType,
-                    TokenValue.StringValue(value.removeSurrounding("\"")),
-                    startLine,
-                    startColumn,
-                )
-                TokenType.NUMBER -> Token(
-                    tokenType,
-                    TokenValue.NumberValue(value.toDouble()),
-                    startLine,
-                    startColumn,
-                )
-                TokenType.BOOLEAN -> Token(
-                    tokenType,
-                    TokenValue.BooleanValue(value.toBoolean()),
-                    startLine,
-                    startColumn,
-                )
+                TokenType.STRING ->
+                    Token(
+                        tokenType,
+                        TokenValue.StringValue(value.removeSurrounding("\"")),
+                        startLine,
+                        startColumn,
+                    )
+                TokenType.NUMBER ->
+                    Token(
+                        tokenType,
+                        TokenValue.NumberValue(value.toDouble()),
+                        startLine,
+                        startColumn,
+                    )
+                TokenType.BOOLEAN ->
+                    Token(
+                        tokenType,
+                        TokenValue.BooleanValue(value.toBoolean()),
+                        startLine,
+                        startColumn,
+                    )
                 else -> Token(tokenType, TokenValue.StringValue(value), startLine, startColumn)
             }
         }
@@ -78,7 +82,10 @@ class Lexer(private val reader: Reader, private val patternsMap: Map<Regex, Toke
         return Token(TokenType.IDENTIFIER, TokenValue.StringValue(value), startLine, startColumn)
     }
 
-    private fun handleStringLiteral(startLine: Int, startColumn: Int): Token {
+    private fun handleStringLiteral(
+        startLine: Int,
+        startColumn: Int,
+    ): Token {
         val stringLiteral = StringBuilder()
 
         // Avanzar el primer carácter de comillas
@@ -116,7 +123,10 @@ class Lexer(private val reader: Reader, private val patternsMap: Map<Regex, Toke
         return Token(TokenType.STRING, TokenValue.StringValue(stringLiteral.toString()), startLine, startColumn)
     }
 
-    private fun makeDelimiterToken(startLine: Int, startColumn: Int): Token {
+    private fun makeDelimiterToken(
+        startLine: Int,
+        startColumn: Int,
+    ): Token {
         val tokenType = searchInTokenPatterns(currentChar.toString())
         val delimiterChar = currentChar.toString()
         currentChar = reader.read() // Avanzar al siguiente carácter
@@ -129,9 +139,8 @@ class Lexer(private val reader: Reader, private val patternsMap: Map<Regex, Toke
         return Token(TokenType.UNKNOWN, TokenValue.StringValue(delimiterChar), startLine, startColumn)
     }
 
-    private fun searchInTokenPatterns(value: String): TokenType? {
-        return patternsMap.entries.find { it.key.matches(value) }?.value
-    }
+    private fun searchInTokenPatterns(value: String): TokenType? =
+        patternsMap.entries.find { it.key.matches(value) }?.value
 
     private fun tokenizeTillDelimiter(word: StringBuilder) {
         while (currentChar != null && !currentChar!!.isWhitespace() && !isDelimiter(currentChar!!)) {

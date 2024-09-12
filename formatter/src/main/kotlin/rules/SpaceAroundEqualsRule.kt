@@ -2,8 +2,14 @@ package rules
 
 import ast.StatementNode
 
-class SpaceAroundEqualsRule(private val enabled: Boolean) : FormatterRule {
-    override fun applyRule(node: StatementNode, variableTypes: Map<String, Any>, result: String): String {
+class SpaceAroundEqualsRule(
+    private val enabled: Boolean,
+) : FormatterRule {
+    override fun applyRule(
+        node: StatementNode,
+        variableTypes: Map<String, Any>,
+        result: String,
+    ): String {
         val modifiedResult = StringBuilder()
         var i = 0
 

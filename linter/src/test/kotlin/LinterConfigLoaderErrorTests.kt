@@ -5,12 +5,12 @@ import java.io.ByteArrayInputStream
 import java.io.IOException
 
 class LinterConfigLoaderErrorTests {
-
     @Test
     fun testLoadConfigWithInvalidStream() {
         val invalidConfigInputStream = ByteArrayInputStream(ByteArray(0))
 
         try {
+
             val invalidStreamLoader = LinterConfigLoader(
                 object : ASTProvider {
                     override fun hasNextAST() = false
