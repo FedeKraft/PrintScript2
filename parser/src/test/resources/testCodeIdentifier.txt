@@ -21,3 +21,6 @@ const a10 : number = 10;
 let a9 : number = 9;
 println("hola");
 alo = 10;
+
+let a : string = readInput("Ingrese un valor");
+let a : string = readEnv("Ingrese un valor");

@@ -8,7 +8,7 @@ class Formatter(
     private val rules: List<FormatterRule>,
     private val astProvider: ASTProvider,
 ) {
-    private val variableTypes = mutableMapOf<String, Any>()
+    private val variableTypes = mutableMapOf<String, String>()
 
     fun format(): Sequence<String> = sequence {
         while (astProvider.hasNextAST()) {

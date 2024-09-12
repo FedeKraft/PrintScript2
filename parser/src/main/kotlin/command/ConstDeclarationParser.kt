@@ -12,12 +12,12 @@ import token.TokenType
 import token.TokenValue
 
 class ConstDeclarationParser : Parser {
-    override fun parse(parser: List<Token>): StatementNode {
-        val identifierToken = parser[1]
+    override fun parse(tokens: List<Token>): StatementNode {
+        val identifierToken = tokens[1]
         val identifierNode =
             IdentifierNode(identifierToken.value.toString(), identifierToken.line, identifierToken.column)
 
-        val args = parser.subList(5, parser.size)
+        val args = tokens.subList(5, tokens.size)
         // const a : String = "a"
         if (args.size > 1) {
             val newArgs = listOf(
@@ -31,9 +31,9 @@ class ConstDeclarationParser : Parser {
                 Token(TokenType.RIGHT_PARENTHESIS, TokenValue.StringValue(")"), 0, 0),
             )
             val expressionNode = PrattParser(newArgs).parseExpression()
-            return ConstDeclarationNode(identifierNode, expressionNode, parser[0].line, parser[0].column)
+            return ConstDeclarationNode(identifierNode, expressionNode, tokens[0].line, tokens[0].column)
         }
-        val expressionToken = parser[5]
+        val expressionToken = tokens[5]
 
         val expressionNode = when (expressionToken.type) {
             TokenType.IDENTIFIER -> {

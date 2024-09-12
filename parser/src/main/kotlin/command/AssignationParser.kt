@@ -13,24 +13,24 @@ import token.TokenType
 import token.TokenValue
 
 class AssignationParser : Parser {
-    override fun parse(parser: List<Token>): StatementNode {
+    override fun parse(tokens: List<Token>): StatementNode {
         val errorChecker = AssignationSyntaxErrorChecker()
-        if (!errorChecker.check(parser)) {
+        if (!errorChecker.check(tokens)) {
             throw RuntimeException("Syntax error in assignation statement")
         }
-        val identifierToken = parser[0]
+        val identifierToken = tokens[0]
         val identifierNode =
             IdentifierNode(identifierToken.value.toString(), identifierToken.line, identifierToken.column)
-        val args = parser.subList(2, parser.size)
+        val args = tokens.subList(2, tokens.size)
         // a = "a"
         if (args.size > 1) {
             val newArgs = listOf(Token(TokenType.LEFT_PARENTHESIS, TokenValue.StringValue("("), 0, 0)) + args + listOf(
                 Token(TokenType.RIGHT_PARENTHESIS, TokenValue.StringValue(")"), 0, 0),
             )
             val expressionNode = PrattParser(newArgs).parseExpression()
-            return AssignationNode(identifierNode, expressionNode, parser[0].line, parser[0].column)
+            return AssignationNode(identifierNode, expressionNode, tokens[0].line, tokens[0].column)
         }
-        val expressionToken = parser[2]
+        val expressionToken = tokens[2]
 
         val expressionNode = when (expressionToken.type) {
             TokenType.IDENTIFIER -> {
