@@ -1,0 +1,6 @@
+let var1 : string = readInput("Hola: ");
+let var2 : number = readInput("Ingresa un numero: ");
+let var3 : boolean = readInput("Ingresa un boolean");
+var1 = readInput("Chau: ");
+var2 = readInput("Ingresa otro numero: ");
+var3 = readInput("Ingresa otro boolean");

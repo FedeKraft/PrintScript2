@@ -46,8 +46,8 @@ class AssignationSyntaxErrorChecker : ErrorChecker {
             TokenType.STRING !in tokenTypes && TokenType.IDENTIFIER !in tokenTypes
         ) {
             throw RuntimeException(
-                "Missing value token in variable a" +
-                    "ssignment line: ${tokens.last().line}, column: ${tokens.last().column}",
+                "Missing value token in variable " +
+                    "assignment line: ${tokens.last().line}, column: ${tokens.last().column}",
             )
         }
     }
@@ -72,6 +72,9 @@ class AssignationSyntaxErrorChecker : ErrorChecker {
                 TokenType.STRING,
                 TokenType.NUMBER,
                 TokenType.IDENTIFIER,
+                TokenType.BOOLEAN,
+                TokenType.READ_ENV,
+                TokenType.READ_INPUT,
             )
         ) {
             throw RuntimeException(

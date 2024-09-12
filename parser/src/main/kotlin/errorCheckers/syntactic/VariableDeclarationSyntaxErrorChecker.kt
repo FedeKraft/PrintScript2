@@ -14,9 +14,7 @@ class VariableDeclarationSyntaxErrorChecker : ErrorChecker {
     private fun checkNecessaryTokens(tokens: List<Token>) {
         val necessaryTokens =
             mutableListOf<TokenType>(TokenType.LET, TokenType.IDENTIFIER, TokenType.COLON, TokenType.ASSIGN)
-        if (tokens.size < 6 && !necessaryTokens.contains(TokenType.LET)) {
-            throw RuntimeException("Missing LET token in line: ${tokens.last().line}, column: ${tokens.last().column}")
-        }
+
         if (tokens.size < 6 && !necessaryTokens.contains(TokenType.COLON)) {
             throw RuntimeException(
                 "Missing COLON token after variable in line: ${tokens.last().line}, column: ${tokens[2].column}",
@@ -57,9 +55,11 @@ class VariableDeclarationSyntaxErrorChecker : ErrorChecker {
         }
         token = iterator.next()
 
-        if (token.type != TokenType.STRING_TYPE && token.type != TokenType.NUMBER_TYPE&& token.type != TokenType.BOOLEAN) {
+        if (token.type != TokenType.STRING_TYPE && token.type != TokenType.NUMBER_TYPE && token.type
+            != TokenType.BOOLEAN_TYPE
+        ) {
             throw RuntimeException(
-                "Expected type 'STRING_TYPE' or 'NUMBER_TYPE', found " +
+                "Expected type 'STRING_TYPE' or 'NUMBER_TYPE' or 'BOOLEAN_TYPE', found " +
                     "${token.type} line: ${token.line}, column: ${token.column}",
             )
         }
@@ -70,7 +70,9 @@ class VariableDeclarationSyntaxErrorChecker : ErrorChecker {
         }
         token = iterator.next()
 
-        if (token.type != TokenType.STRING && token.type != TokenType.NUMBER && token.type != TokenType.IDENTIFIER) {
+        if (token.type != TokenType.STRING && token.type != TokenType.NUMBER && token.type != TokenType.IDENTIFIER &&
+            token.type != TokenType.BOOLEAN && token.type != TokenType.READ_ENV && token.type != TokenType.READ_INPUT
+        ) {
             throw RuntimeException(
                 "Expected value token, found ${token.type} line: ${token.line}, column: ${token.column}",
             )

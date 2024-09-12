@@ -1,8 +1,12 @@
 package command
 
 import PrattParser
+import ast.BooleanLiteralNode
+import ast.ExpressionNode
 import ast.IdentifierNode
 import ast.NumberLiteralNode
+import ast.ReadEnvNode
+import ast.ReadInputNode
 import ast.StatementNode
 import ast.StringLiteralNode
 import ast.VariableDeclarationNode
@@ -12,33 +16,47 @@ import token.TokenType
 import token.TokenValue
 
 class VariableDeclarationParser : Parser {
-
-    override fun parse(parser: List<Token>): StatementNode {
+    private var tokenType: TokenType = TokenType.STRING
+    override fun parse(tokens: List<Token>): StatementNode {
         val errorChecker = VariableDeclarationSyntaxErrorChecker()
-        if (!errorChecker.check(parser)) {
+        if (!errorChecker.check(tokens)) {
             throw RuntimeException("Syntax error in variable declaration statement")
         }
-        val identifierToken = parser[1]
+        val identifierToken = tokens[1]
+        tokenType = tokens[3].type
         val identifierNode =
             IdentifierNode(identifierToken.value.toString(), identifierToken.line, identifierToken.column)
 
-        val args = parser.subList(5, parser.size)
+        val args = tokens.subList(5, tokens.size)
         // let a : String = "a"
         if (args.size > 1) {
-            val newArgs = listOf(
-                Token(
-                    TokenType.LEFT_PARENTHESIS,
-                    TokenValue.StringValue("("),
-                    0,
-                    0,
-                ),
-            ) + args + listOf(
-                Token(TokenType.RIGHT_PARENTHESIS, TokenValue.StringValue(")"), 0, 0),
-            )
-            val expressionNode = PrattParser(newArgs).parseExpression()
-            return VariableDeclarationNode(identifierNode, expressionNode, parser[0].line, parser[0].column)
+            if (args[0].type != TokenType.READ_INPUT) {
+                if (args[0].type != TokenType.READ_ENV) {
+                    val newArgs = listOf(
+                        Token(
+                            TokenType.LEFT_PARENTHESIS,
+                            TokenValue.StringValue("("),
+                            0,
+                            0,
+                        ),
+                    ) + args + listOf(
+                        Token(TokenType.RIGHT_PARENTHESIS, TokenValue.StringValue(")"), 0, 0),
+                    )
+                    val expressionNode = PrattParser(newArgs).parseExpression()
+                    return VariableDeclarationNode(
+                        identifierNode,
+                        tokenType,
+                        expressionNode,
+                        tokens[0].line,
+                        tokens[0].column,
+                    )
+                }
+            }
+
+            val node = lookForReadEnvOrReadInput(args)
+            return VariableDeclarationNode(identifierNode, tokens[3].type, node, tokens[0].line, tokens[0].column)
         }
-        val expressionToken = parser[5]
+        val expressionToken = tokens[5]
 
         val expressionNode = when (expressionToken.type) {
             TokenType.IDENTIFIER -> {
@@ -62,12 +80,37 @@ class VariableDeclarationParser : Parser {
                 }
                 NumberLiteralNode(value, expressionToken.line, expressionToken.column)
             }
+            TokenType.BOOLEAN -> {
+                val value = when (val tokenValue = expressionToken.value) {
+                    is TokenValue.BooleanValue -> tokenValue.value
+                    else -> throw RuntimeException("Expected a BooleanValue for BOOLEAN")
+                }
+                BooleanLiteralNode(value, expressionToken.line, expressionToken.column)
+            }
             else -> throw RuntimeException("Unexpected token type in print statement")
         }
 
         val variableNode =
-            VariableDeclarationNode(identifierNode, expressionNode, identifierToken.line, identifierToken.column)
+            VariableDeclarationNode(
+                identifierNode,
+                tokenType,
+                expressionNode,
+                identifierToken.line,
+                identifierToken.column,
+            )
 
         return variableNode
+    }
+
+    private fun lookForReadEnvOrReadInput(tokens: List<Token>): ExpressionNode {
+        if (tokens[0].type == TokenType.READ_ENV) {
+            val value = (tokens[2].value as TokenValue.StringValue).value
+            return ReadEnvNode(value, tokens[0].line, tokens[0].column)
+        }
+        if (tokens[0].type == TokenType.READ_INPUT) {
+            val value = (tokens[2].value as TokenValue.StringValue).value
+            return ReadInputNode(value, tokens[0].line, tokens[0].column)
+        }
+        return null!!
     }
 }

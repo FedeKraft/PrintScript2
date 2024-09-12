@@ -6,6 +6,7 @@ import command.AssignationParser
 import command.PrintParser
 import command.VariableDeclarationParser
 import factory.LexerFactory
+import inputProvider.TestInputProvider
 import interpreter.Interpreter
 import parser.ParserDirector
 import reader.Reader
@@ -25,7 +26,7 @@ class ExecutionCommand : CliktCommand(help = "Execute the file") {
                 TokenType.IDENTIFIER to AssignationParser(),
             ),
         )
-        val interpreter = Interpreter(parserDirector)
+        val interpreter = Interpreter(parserDirector, TestInputProvider("Hola"))
         interpreter.interpret()
         println("file executed")
     }

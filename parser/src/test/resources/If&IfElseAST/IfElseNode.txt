@@ -1,0 +1,6 @@
+if(true){
+    let a2: string = "Bielsa";
+    }
+    else{
+        let a3: string = "Bielseada";
+    }

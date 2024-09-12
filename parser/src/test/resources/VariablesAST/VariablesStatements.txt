@@ -1,0 +1,4 @@
+let name: string = "Olive";
+let age: number = 10 + 5;
+let age2: number = age + 5 - 1 * 2 / 3;
+let isAlive: boolean = true;

@@ -75,6 +75,11 @@ class PrintSyntaxErrorChecker : ErrorChecker {
                     TokenType.SUBTRACT,
                     TokenType.MULTIPLY,
                     TokenType.DIVIDE,
+                    TokenType.READ_ENV,
+                    TokenType.READ_INPUT,
+                    TokenType.STRING,
+                    TokenType.LEFT_PARENTHESIS,
+                    TokenType.RIGHT_PARENTHESIS,
                 )
             ) {
                 throw RuntimeException(
@@ -84,7 +89,15 @@ class PrintSyntaxErrorChecker : ErrorChecker {
             }
         }
         for (i in args.indices step 2) {
-            if (argsTokenTypes[i] !in listOf(TokenType.IDENTIFIER, TokenType.NUMBER, TokenType.STRING, TokenType.BOOLEAN)) {
+            if (argsTokenTypes[i] !in listOf(
+                    TokenType.IDENTIFIER,
+                    TokenType.NUMBER,
+                    TokenType.STRING,
+                    TokenType.BOOLEAN,
+                    TokenType.READ_ENV,
+                    TokenType.READ_INPUT,
+                )
+            ) {
                 throw RuntimeException(
                     "Invalid argument in print statement line: ${args[i].line}, column: ${args[i].column}",
                 )

@@ -1,0 +1,2 @@
+let var1 : string = readInput("Hola: ");
+var1 = readInput("Chau: ");

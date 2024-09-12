@@ -1,1 +1,2 @@
-print("Result: " + 3);
+println("Result: " + 3);
+let input: string = readInput("Enter a name: ");
