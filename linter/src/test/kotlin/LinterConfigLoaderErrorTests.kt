@@ -10,7 +10,6 @@ class LinterConfigLoaderErrorTests {
         val invalidConfigInputStream = ByteArrayInputStream(ByteArray(0))
 
         try {
-
             val invalidStreamLoader = LinterConfigLoader(
                 object : ASTProvider {
                     override fun hasNextAST() = false
