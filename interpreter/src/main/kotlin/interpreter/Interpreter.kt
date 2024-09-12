@@ -16,6 +16,7 @@ import ast.StatementNode
 import ast.StringLiteralNode
 import ast.VariableDeclarationNode
 import emitter.PrintEmitter
+import errorCollector.ErrorCollector
 import parser.ASTProvider
 import provider.InputProvider
 import token.TokenType
@@ -24,153 +25,165 @@ class Interpreter(
     private val provider: ASTProvider,
     private val inputProvider: InputProvider,
     private val printEmitter: PrintEmitter,
+    private val errorCollector: ErrorCollector,
 ) {
 
     private var variables = ExecutionContext()
     private var constants = ExecutionContext()
 
-    // Método principal para interpretar una declaración
     fun interpret() {
         while (provider.hasNextAST()) {
             val statement = provider.getNextAST()
-            interpretStatement(statement)
+            try {
+                interpretStatement(statement)
+            } catch (e: Exception) {
+                errorCollector.reportError("Error al interpretar la instrucción: ${e.message}")
+            }
         }
     }
 
-    // Método para interpretar cada tipo de declaración (statement)
     private fun interpretStatement(statement: StatementNode) {
-        when (statement) {
-            is VariableDeclarationNode -> {
-                val value = evaluateExpression(statement.value)
-                val inferredType = inferType(value)
+        try {
+            when (statement) {
+                is VariableDeclarationNode -> {
+                    val value = evaluateExpression(statement.value)
+                    val inferredType = inferType(value)
 
-                // Verificamos que el tipo de la expresión coincida con el tipo declarado
-                if (!isTypeCompatible(inferredType, statement.type)) {
-                    throw IllegalArgumentException(
-                        "Error de tipo: Se esperaba ${statement.type} pero se encontró $inferredType",
-                    )
+                    if (!isTypeCompatible(inferredType, statement.type)) {
+                        errorCollector.reportError(
+                            "Error de tipo en declaración de variable: Se esperaba " +
+                                "${statement.type} pero se encontró $inferredType",
+                        )
+                        return
+                    }
+
+                    variables.add(statement.identifier.name, value)
                 }
-
-                variables.add(statement.identifier.name, value)
-            }
-            is ConstDeclarationNode -> {
-                val value = evaluateExpression(statement.value)
-                constants.add(statement.identifier.name, value)
-            }
-            is AssignationNode -> {
-                if (constants.get(statement.identifier.name) != null) {
-                    throw IllegalArgumentException("No se puede reasignar una constante")
+                is ConstDeclarationNode -> {
+                    val value = evaluateExpression(statement.value)
+                    constants.add(statement.identifier.name, value)
                 }
-                val value = evaluateExpression(statement.value)
-                variables.add(statement.identifier.name, value)
-            }
-            is PrintStatementNode -> {
-                val value = evaluateExpression(statement.expression)
-                printEmitter.print(value)
-            }
-            is IfElseNode -> {
-                val condition = evaluateExpression(statement.condition) as? Boolean
-                    ?: throw IllegalArgumentException("La condición del if debe ser un valor booleano (true o false)")
-
-                if (condition) {
-                    interpretStatement(statement.ifBlock)
-                } else {
-                    statement.elseBlock?.let { interpretStatement(it) }
+                is AssignationNode -> {
+                    if (constants.get(statement.identifier.name) != null) {
+                        errorCollector.reportError("No se puede reasignar una constante: ${statement.identifier.name}")
+                        return
+                    }
+                    val value = evaluateExpression(statement.value)
+                    variables.add(statement.identifier.name, value)
                 }
-            }
-            is BlockNode -> {
-                // Entrar a un nuevo contexto para el bloque
-                variables.enterBlock()
-                // Interpretar cada statement dentro del bloque
-                statement.statements.forEach { interpretStatement(it) }
-                // Salir del bloque y restaurar el contexto anterior
-                variables.exitBlock()
-            }
-            else -> throw IllegalArgumentException(
-                "Tipo de declaración no soportada: ${statement::class.java.simpleName}",
-            )
-        }
-    }
+                is PrintStatementNode -> {
+                    val value = evaluateExpression(statement.expression)
+                    printEmitter.print(value!!)
+                }
+                is IfElseNode -> {
+                    val condition = evaluateExpression(statement.condition) as? Boolean
+                    if (condition == null) {
+                        errorCollector.reportError("La condición del if debe ser un valor booleano")
+                        return
+                    }
 
-    // Método para evaluar expresiones
-    private fun evaluateExpression(expression: ExpressionNode): Any {
-        return when (expression) {
-            is ReadInputNode -> {
-                val input = inputProvider.readInput(expression.value) // Usamos el InputProvider
-                return input
-            }
-            is ReadEnvNode -> {
-                val envValue = System.getenv(expression.value as String)
-                return envValue ?: throw IllegalArgumentException(
-                    "La variable de entorno '${expression.value}' no esta definida",
+                    if (condition) {
+                        interpretStatement(statement.ifBlock)
+                    } else {
+                        statement.elseBlock?.let { interpretStatement(it) }
+                    }
+                }
+                is BlockNode -> {
+                    variables.enterBlock()
+                    statement.statements.forEach { interpretStatement(it) }
+                    variables.exitBlock()
+                }
+                else -> errorCollector.reportError(
+                    "Tipo de declaración no soportada: ${statement::class.java.simpleName}",
                 )
             }
-
-            is IdentifierNode -> {
-                val value = constants.get(expression.name) ?: variables.get(expression.name)
-                value ?: throw IllegalArgumentException("Identificador no definido: ${expression.name}")
-            }
-
-            is StringLiteralNode -> expression.value
-            is NumberLiteralNode -> expression.value
-
-            is BooleanLiteralNode -> expression.value
-            is BinaryExpressionNode -> {
-                val leftValue = evaluateExpression(expression.left)
-                val rightValue = evaluateExpression(expression.right)
-
-                // Si uno de los operandos es String, realizar concatenación
-                if (expression.operator == TokenType.SUM && (leftValue is String || rightValue is String)) {
-                    return leftValue.toString() + rightValue.toString()
-                }
-
-                // Convertir ambos valores a Double si son Integer
-                val leftAsDouble = when (leftValue) {
-                    is Int -> leftValue.toDouble()
-                    is Double -> leftValue
-                    else -> throw IllegalArgumentException(
-                        "Operación no soportada para tipo: ${leftValue.javaClass.name}",
-                    )
-                }
-
-                val rightAsDouble = when (rightValue) {
-                    is Int -> rightValue.toDouble()
-                    is Double -> rightValue
-                    else -> throw IllegalArgumentException(
-                        "Operación no soportada para tipo: ${rightValue.javaClass.name}",
-                    )
-                }
-
-                when (expression.operator) {
-                    TokenType.SUM -> leftAsDouble + rightAsDouble
-                    TokenType.SUBTRACT -> leftAsDouble - rightAsDouble
-                    TokenType.MULTIPLY -> leftAsDouble * rightAsDouble
-                    TokenType.DIVIDE -> {
-                        if (rightAsDouble == 0.0) throw IllegalArgumentException("División por cero no permitida")
-                        leftAsDouble / rightAsDouble
-                    }
-                    else -> throw IllegalArgumentException("Operador binario inesperado: ${expression.operator}")
-                }
-            }
-            else -> throw IllegalArgumentException(
-                "Tipo de expresión no soportada: ${expression::class.java.simpleName}",
-            )
+        } catch (e: Exception) {
+            errorCollector.reportError("Error en la declaración: ${e.message}")
         }
     }
-    fun getContext(): ExecutionContext {
-        return variables
+
+    private fun evaluateExpression(expression: ExpressionNode): Any? {
+        return try {
+            when (expression) {
+                is ReadInputNode -> inputProvider.readInput(expression.value)
+                is ReadEnvNode -> {
+                    val envValue = System.getenv(expression.value as String)
+                    envValue ?: errorCollector.reportError(
+                        "La variable de entorno '${expression.value}" +
+                            "' no esta definida",
+                    )
+                }
+                is IdentifierNode -> {
+                    constants.get(expression.name) ?: variables.get(expression.name)
+                        ?: errorCollector.reportError("Identificador no definido: ${expression.name}")
+                }
+                is StringLiteralNode -> expression.value
+                is NumberLiteralNode -> expression.value
+                is BooleanLiteralNode -> expression.value
+                is BinaryExpressionNode -> {
+                    val leftValue = evaluateExpression(expression.left)
+                    val rightValue = evaluateExpression(expression.right)
+
+                    if (expression.operator == TokenType.SUM && (leftValue is String || rightValue is String)) {
+                        return leftValue.toString() + rightValue.toString()
+                    }
+
+                    val leftAsDouble = leftValue as? Double ?: (leftValue as? Int)?.toDouble()
+                    val rightAsDouble = rightValue as? Double ?: (rightValue as? Int)?.toDouble()
+
+                    if (leftAsDouble == null || rightAsDouble == null) {
+                        errorCollector.reportError(
+                            "Operación no soportada entre los operandos: " +
+                                "$leftValue y $rightValue",
+                        )
+                        return null
+                    }
+
+                    when (expression.operator) {
+                        TokenType.SUM -> leftAsDouble + rightAsDouble
+                        TokenType.SUBTRACT -> leftAsDouble - rightAsDouble
+                        TokenType.MULTIPLY -> leftAsDouble * rightAsDouble
+                        TokenType.DIVIDE -> {
+                            if (rightAsDouble == 0.0) {
+                                errorCollector.reportError("División por cero no permitida")
+                                return null
+                            }
+                            leftAsDouble / rightAsDouble
+                        }
+                        else -> errorCollector.reportError(
+                            "Operador binario inesperado:" +
+                                " ${expression.operator}",
+                        )
+                    }
+                }
+                else -> errorCollector.reportError(
+                    "Tipo de expresión no soportada: " +
+                        "${expression::class.java.simpleName}",
+                )
+            }
+        } catch (e: Exception) {
+            errorCollector.reportError("Error al evaluar la expresion: ${e.message}")
+            null
+        }
     }
-    private fun inferType(value: Any): TokenType {
+
+    private fun inferType(value: Any?): TokenType {
         return when (value) {
             is String -> TokenType.STRING_TYPE
             is Double, is Int -> TokenType.NUMBER_TYPE
             is Boolean -> TokenType.BOOLEAN_TYPE
-            else -> throw IllegalArgumentException("Tipo desconocido: ${value::class.java.simpleName}")
+            else -> throw IllegalArgumentException("Tipo desconocido: ${value?.javaClass?.simpleName}")
         }
     }
+
     private fun isTypeCompatible(inferredType: TokenType, declaredType: TokenType): Boolean {
         return inferredType == declaredType
     }
+
+    fun getContext(): ExecutionContext {
+        return variables
+    }
+
     fun getPrintEmitter(): PrintEmitter {
         return printEmitter
     }

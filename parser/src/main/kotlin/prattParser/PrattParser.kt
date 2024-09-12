@@ -13,19 +13,12 @@ class PrattParser(private val tokens: List<Token>) {
     private val infixParselets = mutableMapOf<TokenType, InfixParselet>()
 
     init {
-        // Registro de parselets prefix para manejar números y paréntesis
+        // Register prefix parselets for numbers, identifiers, strings, and parentheses
         registerPrefix(
             TokenType.NUMBER,
             object : PrefixParselet {
                 override fun parse(parser: PrattParser, token: Token): ExpressionNode {
-                    return when (token.value) {
-                        is TokenValue.NumberValue -> NumberLiteralNode(
-                            (token.value as TokenValue.NumberValue).value,
-                            token.line,
-                            token.column,
-                        )
-                        else -> throw RuntimeException("Expected a NumberValue for NUMBER")
-                    }
+                    return parseNumber(token)
                 }
             },
         )
@@ -33,14 +26,7 @@ class PrattParser(private val tokens: List<Token>) {
             TokenType.IDENTIFIER,
             object : PrefixParselet {
                 override fun parse(parser: PrattParser, token: Token): ExpressionNode {
-                    return when (token.value) {
-                        is TokenValue.StringValue -> IdentifierNode(
-                            (token.value as TokenValue.StringValue).value,
-                            token.line,
-                            token.column,
-                        )
-                        else -> throw RuntimeException("Expected a StringValue for IDENTIFIER")
-                    }
+                    return parseIdentifier(token)
                 }
             },
         )
@@ -48,18 +34,10 @@ class PrattParser(private val tokens: List<Token>) {
             TokenType.STRING,
             object : PrefixParselet {
                 override fun parse(parser: PrattParser, token: Token): ExpressionNode {
-                    return when (token.value) {
-                        is TokenValue.StringValue -> StringLiteralNode(
-                            (token.value as TokenValue.StringValue).value,
-                            token.line,
-                            token.column,
-                        )
-                        else -> throw RuntimeException("Expected a StringValue for STRING")
-                    }
+                    return parseString(token)
                 }
             },
         )
-
         registerPrefix(
             TokenType.LEFT_PARENTHESIS,
             object : PrefixParselet {
@@ -70,6 +48,8 @@ class PrattParser(private val tokens: List<Token>) {
                 }
             },
         )
+
+        // Register infix parselets for binary operators
         registerInfix(TokenType.SUM, BinaryOperatorParselet(Precedence.SUM))
         registerInfix(TokenType.SUBTRACT, BinaryOperatorParselet(Precedence.SUM))
         registerInfix(TokenType.MULTIPLY, BinaryOperatorParselet(Precedence.PRODUCT))
@@ -127,5 +107,29 @@ class PrattParser(private val tokens: List<Token>) {
             throw IllegalArgumentException("No more tokens available for peeking")
         }
         return tokens[currentPosition]
+    }
+
+    // Parse number tokens
+    private fun parseNumber(token: Token): ExpressionNode {
+        return when (val value = token.value) {
+            is TokenValue.NumberValue -> NumberLiteralNode(value.value, token.line, token.column)
+            else -> throw RuntimeException("Expected a NumberValue for NUMBER")
+        }
+    }
+
+    // Parse identifier tokens
+    private fun parseIdentifier(token: Token): ExpressionNode {
+        return when (val value = token.value) {
+            is TokenValue.StringValue -> IdentifierNode(value.value, token.line, token.column)
+            else -> throw RuntimeException("Expected a StringValue for IDENTIFIER")
+        }
+    }
+
+    // Parse string tokens
+    private fun parseString(token: Token): ExpressionNode {
+        return when (val value = token.value) {
+            is TokenValue.StringValue -> StringLiteralNode(value.value, token.line, token.column)
+            else -> throw RuntimeException("Expected a StringValue for STRING")
+        }
     }
 }
