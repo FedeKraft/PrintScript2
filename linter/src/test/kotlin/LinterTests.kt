@@ -4,7 +4,6 @@ import ast.PrintStatementNode
 import ast.StringLiteralNode
 import ast.VariableDeclarationNode
 import factory.LinterFactory
-import linter.Linter
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -27,7 +26,7 @@ class LinterTests {
                     NumberLiteralNode(42.0, line = 1, column = 10),
                     line = 1,
                     column = 1,
-                )
+                ),
             )
             private var index = 0
 
@@ -53,7 +52,7 @@ class LinterTests {
                     NumberLiteralNode(42.0, line = 1, column = 10),
                     line = 1,
                     column = 1,
-                )
+                ),
             )
             private var index = 0
 
@@ -62,7 +61,10 @@ class LinterTests {
             override fun getNextAST() = nodes[index++]
         }
 
-        val linter = LinterFactory().createLinter1_0(astProvider, """{ "identifier_format": "camel case" }""".byteInputStream())
+        val linter = LinterFactory().createLinter1_0(
+            astProvider,
+            """{ "identifier_format": "camel case" }""".byteInputStream(),
+        )
 
         val errors = linter.lint().toList()
 
@@ -77,7 +79,7 @@ class LinterTests {
             TokenType.STRING_TYPE,
             StringLiteralNode("value", 1, 1),
             1,
-            1
+            1,
         )
         val camelCaseRule = CamelCaseIdentifierRule(isActive = true)
         val errors = camelCaseRule.apply(node)
@@ -91,7 +93,7 @@ class LinterTests {
             TokenType.STRING_TYPE,
             StringLiteralNode("value", 1, 1),
             1,
-            1
+            1,
         )
         val camelCaseRule = CamelCaseIdentifierRule(isActive = true)
         val errors = camelCaseRule.apply(node)
@@ -106,7 +108,7 @@ class LinterTests {
             TokenType.STRING_TYPE,
             StringLiteralNode("value", 1, 1),
             1,
-            1
+            1,
         )
         val snakeCaseRule = SnakeCaseIdentifierRule(isActive = true)
         val errors = snakeCaseRule.apply(node)
@@ -120,7 +122,7 @@ class LinterTests {
             TokenType.STRING_TYPE,
             StringLiteralNode("value", 1, 1),
             1,
-            1
+            1,
         )
         val snakeCaseRule = SnakeCaseIdentifierRule(isActive = true)
         val errors = snakeCaseRule.apply(node)
@@ -141,7 +143,7 @@ class LinterTests {
         val node = PrintStatementNode(
             StringLiteralNode("This is a very long and complex expression that exceeds the limit", 1, 1),
             1,
-            1
+            1,
         )
         val printRule = PrintSimpleExpressionRule(isActive = true)
         val errors = printRule.apply(node)
@@ -156,7 +158,7 @@ class LinterTests {
             TokenType.STRING_TYPE,
             StringLiteralNode("value", 1, 1),
             1,
-            1
+            1,
         )
 
         val nodeSnake = VariableDeclarationNode(
@@ -164,7 +166,7 @@ class LinterTests {
             TokenType.STRING_TYPE,
             StringLiteralNode("value", 1, 1),
             1,
-            1
+            1,
         )
 
         val camelOrSnakeRules = CamelORSnakeRules(CamelCaseIdentifierRule(), SnakeCaseIdentifierRule())

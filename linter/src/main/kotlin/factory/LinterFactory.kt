@@ -9,11 +9,9 @@ import rules.CamelCaseIdentifierRule
 import rules.PrintSimpleExpressionRule
 import rules.ReadInputWithSimpleArgumentRule
 import rules.SnakeCaseIdentifierRule
-import java.io.File
 import java.io.InputStream
 
 class LinterFactory {
-
 
     fun createLinter1_0(astProvider: ASTProvider, configInputStream: InputStream): Linter {
         val mapper = jacksonObjectMapper()
@@ -36,7 +34,6 @@ class LinterFactory {
         val rules = listOf(camelCaseRule, snakeCaseRule, printRule)
         return Linter(rules, astProvider)
     }
-
 
     fun createLinter1_1(astProvider: ASTProvider): Linter {
         val rules =

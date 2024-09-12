@@ -121,6 +121,7 @@ class InterpreterTestWithParser {
         println(errorCollector.getErrors())
         assertEquals(0, errorCollector.getErrors().size)
     }
+
     @Test
     fun test11() {
         val lexer = LexerFactory().createLexer1_1(Reader(File("src/test/resources/test11.txt").inputStream()))

@@ -1,11 +1,11 @@
 import ast.IdentifierNode
 import ast.NumberLiteralNode
 import ast.VariableDeclarationNode
+import factory.LinterFactory
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import parser.ASTProvider
 import token.TokenType
-import factory.LinterFactory
 
 class LinterConfigLoaderTests {
 
@@ -30,7 +30,7 @@ class LinterConfigLoaderTests {
                     TokenType.NUMBER_TYPE,
                     NumberLiteralNode(42.0, line = 2, column = 10),
                     line = 2,
-                    column = 3
+                    column = 3,
                 )
             }
         }
@@ -67,7 +67,7 @@ class LinterConfigLoaderTests {
                     TokenType.NUMBER_TYPE,
                     NumberLiteralNode(42.0, line = 1, column = 5),
                     line = 1,
-                    column = 1
+                    column = 1,
                 )
             }
         }
