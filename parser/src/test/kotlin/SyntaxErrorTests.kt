@@ -87,8 +87,9 @@ class SyntaxErrorTests {
         val parser = ParserFactory().createParser1_1(lexer)
         val actualErrors = mutableListOf<StatementNode>()
         while (parser.hasNextAST()) {
-            actualErrors.add(parser.getNextAST())
+            val statement = parser.getNextAST()
+            actualErrors.add(statement)
+            println(statement)
         }
-        println(actualErrors)
     }
 }
