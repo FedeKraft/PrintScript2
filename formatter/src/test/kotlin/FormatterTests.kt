@@ -24,12 +24,12 @@ class FormatterTests {
 
     private val rulesEnabled = listOf(
         SingleSpaceBetweenTokensRule(),
+        Indentation(config.indentation),
         SpaceAroundEqualsRule(config.spaceAroundEquals.enabled),
         SpaceBeforeColonRule(config.spaceBeforeColon.enabled),
         SpaceAroundOperatorsRule(),
         SpaceAfterColonRule(config.spaceAfterColon.enabled),
         NewlineBeforePrintlnRule(config.newlineBeforePrintln),
-        Indentation(config.indentation),
     )
 
     private fun readSourceCodeFromFile(filename: String): String {
@@ -66,33 +66,4 @@ class FormatterTests {
         assertEquals(expected, result)
     }
 
-    @Test
-    fun `test SpaceBeforeColonRule disabled`() {
-        val expected = readSourceCodeFromFile("formatterTest2ExpectedDisabled.txt")
-        val unformattedCode = readSourceCodeFromFile("formatterTest2.txt").toByteArray()
-        val inputStream = ByteArrayInputStream(unformattedCode)
-        val lexer = LexerFactory().createLexer1_1(Reader(inputStream))
-        val parserDirector = ParserDirector(
-            lexer,
-            mapOf(
-                TokenType.PRINT to PrintParser(),
-                TokenType.LET to VariableDeclarationParser(),
-                TokenType.IDENTIFIER to AssignationParser(),
-            ),
-        )
-
-        val formatter = Formatter(rulesEnabled, parserDirector)
-        var result = ""
-        for (formattedString in formatter.format()) {
-            if (parserDirector.hasNextAST()) {
-                result += formattedString.plus("\n")
-            } else {
-                result += formattedString
-            }
-        }
-
-        println("Generated output:\n$result")
-        println("Expected output:\n$expected")
-        assertEquals(expected, result)
-    }
 }

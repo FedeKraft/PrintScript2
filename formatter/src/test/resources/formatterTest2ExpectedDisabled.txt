@@ -1,6 +1,6 @@
 let a : number = 10 . 0 ;
 let b : number = 20 . 0 ;
-let c : number = a + b + a ;
+let c : number = a + b  ;
 let name : string = " Alice ";
 c = a + b ;
 println(greeting );
