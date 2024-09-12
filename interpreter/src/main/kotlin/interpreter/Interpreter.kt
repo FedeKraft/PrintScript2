@@ -158,10 +158,7 @@ class Interpreter(
                     }
                 }
                 else ->
-                    errorCollector.reportError(
-                        "Tipo de expresión no soportada: " +
-                            "${expression::class.java.simpleName}",
-                    )
+                    errorCollector.reportError("")
             }
         } catch (e: Exception) {
             errorCollector.reportError("Error al evaluar la expresion: ${e.message}")

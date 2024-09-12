@@ -345,7 +345,20 @@ class ParserTest {
     fun `test readInput in parsers`() {
         val reader = Reader(File("src/test/resources/ReadEnvAndReadInput.txt").inputStream())
         val lexer = LexerFactory().createLexer1_1(reader)
-        val parser = ParserFactory().createParser1_0(lexer)
+        val parser = ParserFactory().createParser1_1(lexer)
+        val actualAst = mutableListOf<StatementNode>()
+        while (parser.hasNextAST()) {
+            val ast = parser.getNextAST()
+            println(ast)
+            actualAst.add(ast)
+        }
+    }
+
+    @Test
+    fun `test ifElse of TSK`() {
+        val reader = Reader(File("src/test/resources/If&IfElseAST/IfElseTSKtest.txt").inputStream())
+        val lexer = LexerFactory().createLexer1_1(reader)
+        val parser = ParserFactory().createParser1_1(lexer)
         val actualAst = mutableListOf<StatementNode>()
         while (parser.hasNextAST()) {
             val ast = parser.getNextAST()

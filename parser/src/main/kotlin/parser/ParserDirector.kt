@@ -3,9 +3,9 @@ package parser
 import ast.BlockNode
 import ast.BooleanLiteralNode
 import ast.ExpressionNode
+import ast.IdentifierNode
 import ast.IfElseNode
 import ast.StatementNode
-import ast.StringLiteralNode
 import command.AssignationParser
 import command.ConstDeclarationParser
 import command.Parser
@@ -46,6 +46,9 @@ class ParserDirector(
         }
         if (tokens.isEmpty()) {
             throw NoSuchElementException("No more tokens available")
+        }
+        if (currentToken.type != TokenType.SEMICOLON) {
+            throw RuntimeException("Expected semicolon at line: ${currentToken.line}, column: ${currentToken.column}")
         }
         return processStatement(tokens)
     }
@@ -104,18 +107,18 @@ class ParserDirector(
         currentToken = tokenProvider.nextToken()
 
         return when (currentToken.type) {
-            TokenType.STRING ->
-                StringLiteralNode(
-                    (currentToken.value as TokenValue.StringValue).value,
-                    currentToken.line,
-                    currentToken.column,
-                )
+            TokenType.IDENTIFIER -> IdentifierNode(
+                (currentToken.value as TokenValue.StringValue).value,
+                currentToken.line,
+                currentToken.column,
+            )
             TokenType.BOOLEAN ->
                 BooleanLiteralNode(
                     (currentToken.value as TokenValue.BooleanValue).value,
                     currentToken.line,
                     currentToken.column,
                 )
+
             else -> throw RuntimeException("Unsupported token type: ${currentToken.type}")
         }
     }

@@ -5,3 +5,4 @@ var1 = readInput("Chau: ");
 var2 = readInput("Ingresa otro numero: ");
 var3 = readInput("Ingresa otro boolean");
 println("");
+println("hola");
