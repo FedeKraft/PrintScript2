@@ -1,11 +1,17 @@
-let a : Number = 10.0;
-let b : Number = 20.0;
-let c : Number = a + b + a;
-let name : String = "Alice";
+let a : number = 10.0;
+let b : number = 20.0;
+let c : number = a + b + a;
+let name : string = "Alice";
 c = a + b;
 print(greeting);
-let x : Number = 3.14;
-let y : Number = 2.71;
-let z : Number = x * y;
-let isTrue : String = "true";
-let isFalse : String = "false";
+let x : number = 3.14;
+let y : number = 2.71;
+let z : number = x * y;
+let isTrue : string = "true";
+let isFalse : string = "false";
+if (true) {
+    println("True");
+}
+else {
+    println("False");
+}
