@@ -1,4 +1,4 @@
 let var3 : boolean = readInput("Ingresa un boolean");
 var3 = readInput("Ingresa otro boolean");
-println(" ");
-println(1);
+let numberResult: number = 5 * 5 - 8;
+println(numberResult);

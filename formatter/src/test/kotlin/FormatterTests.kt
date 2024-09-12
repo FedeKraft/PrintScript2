@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import parser.ParserDirector
 import reader.Reader
-import rules.NewlineAfterSemicolonRule
 import rules.SingleSpaceBetweenTokensRule
 import rules.SpaceAfterColonRule
 import rules.SpaceAroundEqualsRule
@@ -73,7 +72,7 @@ class FormatterTests {
 
     @Test
     fun `test SpaceBeforeColonRule disabled`() {
-        val expected = readSourceCodeFromFile("formatterTest2ExpectedDisabled.txt") // Adjust this expected file accordingly
+        val expected = readSourceCodeFromFile("formatterTest2ExpectedDisabled.txt")
         val unformattedCode = readSourceCodeFromFile("formatterTest2.txt").toByteArray()
         val inputStream = ByteArrayInputStream(unformattedCode)
         val lexer = LexerFactory().createLexer1_0(Reader(inputStream))
