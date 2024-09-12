@@ -62,4 +62,30 @@ class TestRule {
 
         linter.lint()
     }
+
+    @Test
+    fun testLinterFunctionalTest3() {
+        val path = Paths.get("src/test/resources/linterConfig3.json")
+        val inputStream: InputStream = Files.newInputStream(path)
+        val lexer = LexerFactory().createLexer1_0(
+            Reader(File("src/test/resources/linterFunctionalTest3.txt").inputStream()),
+        )
+        val parser = ParserFactory().createParser1_0(lexer)
+        val linter = LinterFactory().createLinter1_0(parser, inputStream)
+
+        linter.lint()
+    }
+
+    @Test
+    fun testLinterFunctionalTest4() {
+        val path = Paths.get("src/test/resources/linterConfig4.json")
+        val inputStream: InputStream = Files.newInputStream(path)
+        val lexer = LexerFactory().createLexer1_0(
+            Reader(File("src/test/resources/linterFunctionalTest4.txt").inputStream()),
+        )
+        val parser = ParserFactory().createParser1_0(lexer)
+        val linter = LinterFactory().createLinter1_0(parser, inputStream)
+
+        linter.lint()
+    }
 }
