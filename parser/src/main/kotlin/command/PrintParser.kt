@@ -16,72 +16,84 @@ import token.TokenType
 import token.TokenValue
 
 class PrintParser : Parser {
-    override fun parse(tokens: List<Token>): StatementNode {
-        val errorChecker = PrintSyntaxErrorChecker()
 
+    override fun parse(tokens: List<Token>): StatementNode {
+        // Perform syntax error checking
+        checkSyntaxErrors(tokens)
+
+        val args = tokens.subList(1, tokens.size)
+
+        // Handle cases where args size is greater than 3
+        if (args.size > 3) {
+            return handleComplexArgs(tokens, args)
+        }
+
+        // Handle simpler cases with a single expression
+        val expressionNode = parseSimpleExpression(tokens[2])
+        return PrintStatementNode(expressionNode, tokens[0].line, tokens[0].column)
+    }
+
+    // Checks for syntax errors using PrintSyntaxErrorChecker
+    private fun checkSyntaxErrors(tokens: List<Token>) {
+        val errorChecker = PrintSyntaxErrorChecker()
         if (!errorChecker.check(tokens)) {
             throw RuntimeException("Syntax error in print statement")
         }
-        val args = tokens.subList(1, tokens.size)
-
-        if (args.size > 3) {
-            if (args[1].type != TokenType.READ_INPUT) {
-                if (args[1].type != TokenType.READ_ENV) {
-                    val expressionNode = PrattParser(args).parseExpression()
-                    return PrintStatementNode(expressionNode, tokens[0].line, tokens[0].column)
-                }
-            }
-            val node = lookForReadEnvOrReadInput(args)
-            return PrintStatementNode(node, tokens[0].line, tokens[0].column)
-        }
-
-        val expressionToken = tokens[2]
-        val expressionNode = when (expressionToken.type) {
-            TokenType.IDENTIFIER -> {
-                val value = when (val tokenValue = expressionToken.value) {
-                    is TokenValue.StringValue -> tokenValue.value
-                    else -> throw RuntimeException("Expected a StringValue for IDENTIFIER")
-                }
-                IdentifierNode(value, expressionToken.line, expressionToken.column)
-            }
-            TokenType.STRING -> {
-                val value = when (val tokenValue = expressionToken.value) {
-                    is TokenValue.StringValue -> tokenValue.value
-                    else -> throw RuntimeException("Expected a StringValue for STRING")
-                }
-                StringLiteralNode(value, expressionToken.line, expressionToken.column)
-            }
-            TokenType.NUMBER -> {
-                val value = when (val tokenValue = expressionToken.value) {
-                    is TokenValue.NumberValue -> tokenValue.value
-                    else -> throw RuntimeException("Expected a NumberValue for NUMBER")
-                }
-                NumberLiteralNode(value, expressionToken.line, expressionToken.column)
-            }
-            TokenType.BOOLEAN -> {
-                val value = when (val tokenValue = expressionToken.value) {
-                    is TokenValue.BooleanValue -> tokenValue.value
-                    else -> throw RuntimeException("Expected a BooleanValue for BOOLEAN")
-                }
-                BooleanLiteralNode(value, expressionToken.line, expressionToken.column)
-            }
-            else -> throw RuntimeException("Unexpected token type in print statement")
-        }
-
-        // Create PrintStatementNode and return
-        val printNode = PrintStatementNode(expressionNode, expressionToken.line, expressionToken.column)
-        return printNode
     }
 
+    // Handles cases where the argument list is more complex
+    private fun handleComplexArgs(tokens: List<Token>, args: List<Token>): PrintStatementNode {
+        if (args[1].type != TokenType.READ_INPUT && args[1].type != TokenType.READ_ENV) {
+            val expressionNode = PrattParser(args).parseExpression()
+            return PrintStatementNode(expressionNode, tokens[0].line, tokens[0].column)
+        }
+        val node = lookForReadEnvOrReadInput(args)
+        return PrintStatementNode(node, tokens[0].line, tokens[0].column)
+    }
+
+    // Parses simple expressions (IDENTIFIER, STRING, NUMBER, BOOLEAN)
+    private fun parseSimpleExpression(token: Token): ExpressionNode {
+        return when (token.type) {
+            TokenType.IDENTIFIER -> IdentifierNode(parseStringValue(token), token.line, token.column)
+            TokenType.STRING -> StringLiteralNode(parseStringValue(token), token.line, token.column)
+            TokenType.NUMBER -> NumberLiteralNode(parseNumberValue(token), token.line, token.column)
+            TokenType.BOOLEAN -> BooleanLiteralNode(parseBooleanValue(token), token.line, token.column)
+            else -> throw RuntimeException("Unexpected token type in print statement")
+        }
+    }
+
+    // Retrieves string value from a token
+    private fun parseStringValue(token: Token): String {
+        return (token.value as? TokenValue.StringValue)?.value
+            ?: throw RuntimeException("Expected a StringValue for token type ${token.type}")
+    }
+
+    // Retrieves number value from a token
+    private fun parseNumberValue(token: Token): Double {
+        return (token.value as? TokenValue.NumberValue)?.value
+            ?: throw RuntimeException("Expected a NumberValue for token type ${token.type}")
+    }
+
+    // Retrieves boolean value from a token
+    private fun parseBooleanValue(token: Token): Boolean {
+        return (token.value as? TokenValue.BooleanValue)?.value
+            ?: throw RuntimeException("Expected a BooleanValue for token type ${token.type}")
+    }
+
+    // Handles READ_ENV or READ_INPUT tokens and returns the corresponding node
     private fun lookForReadEnvOrReadInput(tokens: List<Token>): ExpressionNode {
-        if (tokens[1].type == TokenType.READ_ENV) {
-            val value = (tokens[3].value as TokenValue.StringValue).value
-            return ReadEnvNode(value, tokens[0].line, tokens[0].column)
+        return when (tokens[1].type) {
+            TokenType.READ_ENV -> ReadEnvNode(
+                (tokens[3].value as TokenValue.StringValue).value,
+                tokens[0].line,
+                tokens[0].column,
+            )
+            TokenType.READ_INPUT -> ReadInputNode(
+                (tokens[3].value as TokenValue.StringValue).value,
+                tokens[0].line,
+                tokens[0].column,
+            )
+            else -> throw RuntimeException("Expected READ_ENV or READ_INPUT token")
         }
-        if (tokens[1].type == TokenType.READ_INPUT) {
-            val value = (tokens[3].value as TokenValue.StringValue).value
-            return ReadInputNode(value, tokens[0].line, tokens[0].column)
-        }
-        return null!!
     }
 }

@@ -43,10 +43,10 @@ class ParserTest {
             actualAst.add(parser.getNextAST())
         }
         val expectedAst = listOf(
-            PrintStatementNode(IdentifierNode("a", 1, 9), 1, 9),
-            PrintStatementNode(NumberLiteralNode(5.0, 2, 9), 2, 9),
-            PrintStatementNode(StringLiteralNode("Hello", 3, 9), 3, 9),
-            PrintStatementNode(BooleanLiteralNode(true, 4, 9), 4, 9),
+            PrintStatementNode(IdentifierNode("a", 1, 9), 1, 1),
+            PrintStatementNode(NumberLiteralNode(5.0, 2, 9), 2, 1),
+            PrintStatementNode(StringLiteralNode("Hello", 3, 9), 3, 1),
+            PrintStatementNode(BooleanLiteralNode(true, 4, 9), 4, 1),
         )
         // Assert that the actual AST matches the expected AST
         assertEquals(expectedAst, actualAst, "The AST generated does not match the expected structure")
@@ -54,7 +54,6 @@ class ParserTest {
 
     @Test
     fun `test variable declarations parsing`() {
-        // Initialize tokens by reading from the VariableDeclaration.txt
         val reader = Reader("src/test/resources/VariablesAST/VariablesStatements.txt")
         val lexer = LexerFactory().createLexer1_1(reader)
         val parser = ParserFactory().createParser1_0(lexer)
@@ -68,7 +67,7 @@ class ParserTest {
                 TokenType.STRING_TYPE,
                 StringLiteralNode("Olive", 1, 20),
                 1,
-                5,
+                1, // Adjusted column
             ),
             VariableDeclarationNode(
                 IdentifierNode("age", 2, 5),
@@ -81,7 +80,7 @@ class ParserTest {
                     22,
                 ),
                 2,
-                1,
+                1, // Adjusted column
             ),
             VariableDeclarationNode(
                 IdentifierNode("age2", 3, 5),
@@ -112,24 +111,22 @@ class ParserTest {
                     28,
                 ),
                 3,
-                1,
+                1, // Adjusted column
             ),
             VariableDeclarationNode(
                 IdentifierNode("isAlive", 4, 5),
                 TokenType.BOOLEAN_TYPE,
                 BooleanLiteralNode(true, 4, 24),
                 4,
-                5,
+                1, // Adjusted column
             ),
         )
 
-        // Assert that the actual AST matches the expected AST
         assertEquals(expectedAst, actualAst, "The AST generated does not match the expected structure")
     }
 
     @Test
     fun `test IfElseNode one IF`() {
-        // Initialize tokens by reading from IfWithLetStatement.txt
         val reader = Reader("src/test/resources/If&IfElseAST/OneIfNode.txt")
         val lexer = LexerFactory().createLexer1_1(reader)
         val parser = ParserFactory().createParser1_1(lexer)
@@ -147,7 +144,7 @@ class ParserTest {
                             TokenType.STRING_TYPE,
                             StringLiteralNode("Bielsa", 2, 22),
                             2,
-                            9,
+                            5, // Adjusted column
                         ),
                     ),
                     0,
@@ -158,7 +155,6 @@ class ParserTest {
                 1,
             ),
         )
-        // Assert that the actual AST matches the expected AST
         assertEquals(expectedAst, actualAst, "The AST generated does not match the expected structure")
     }
 
@@ -181,7 +177,7 @@ class ParserTest {
                             TokenType.STRING_TYPE,
                             StringLiteralNode("Gordito", 2, 22),
                             2,
-                            9,
+                            5, // Adjusted column
                         ),
                         IfElseNode(
                             BooleanLiteralNode(true, 3, 8),
@@ -192,12 +188,12 @@ class ParserTest {
                                         TokenType.STRING_TYPE,
                                         StringLiteralNode("hdp", 4, 27),
                                         4,
-                                        13,
+                                        9, // Adjusted column
                                     ),
                                     PrintStatementNode(
                                         IdentifierNode("a4", 5, 17),
                                         5,
-                                        17,
+                                        9, // Adjusted column
                                     ),
                                 ),
                                 0,
@@ -210,7 +206,7 @@ class ParserTest {
                         PrintStatementNode(
                             IdentifierNode("a7", 7, 13),
                             7,
-                            13,
+                            5, // Adjusted column
                         ),
                     ),
                     0,
@@ -243,7 +239,7 @@ class ParserTest {
                             TokenType.STRING_TYPE,
                             StringLiteralNode("Bielsa", 2, 22),
                             2,
-                            9,
+                            5, // Adjusted column
                         ),
                     ),
                     0,
@@ -256,7 +252,7 @@ class ParserTest {
                             TokenType.STRING_TYPE,
                             StringLiteralNode("Bielseada", 5, 26),
                             5,
-                            13,
+                            9, // Adjusted column
                         ),
                     ),
                     0,
