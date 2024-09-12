@@ -27,11 +27,10 @@ class ValidationCommand : CliktCommand(help = "Validate the syntax and semantics
                 ),
             )
         var statement = parserDirector.nextStatement()
-        while (statement != null) {
+        while (true) {
             println(statement)
             statement = parserDirector.nextStatement()
         }
 
-        println("file validated")
     }
 }

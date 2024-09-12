@@ -32,7 +32,6 @@ data class Indentation(
     val n: Int,
 )
 
-
 data class FormatterConfig(
     val singleSpaceBetweenTokens: SingleSpaceBetweenTokensConfig,
     val spaceBeforeColon: SpaceBeforeColonConfig,
