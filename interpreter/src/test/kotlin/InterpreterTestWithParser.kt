@@ -15,6 +15,7 @@ class InterpreterTestWithParser {
         val interpreter = Interpreter(parser, TestInputProvider("TestName"))
         interpreter.interpret()
     }
+
     @Test
     fun test2() {
         val lexer = LexerFactory().createLexer1_1(Reader("src/test/resources/test2.txt"))
@@ -24,7 +25,6 @@ class InterpreterTestWithParser {
         interpreter.interpret()
     }
 
-
     @Test
     fun test3() {
         val lexer = LexerFactory().createLexer1_1(Reader("src/test/resources/test3.txt"))
@@ -32,6 +32,7 @@ class InterpreterTestWithParser {
         val interpreter = Interpreter(parser, TestInputProvider("TestName"))
         interpreter.interpret()
     }
+
     @Test
     fun test4() {
         val lexer = LexerFactory().createLexer1_1(Reader("src/test/resources/test4.txt"))
@@ -39,6 +40,7 @@ class InterpreterTestWithParser {
         val interpreter = Interpreter(parser, TestInputProvider("TestName"))
         interpreter.interpret()
     }
+
     @Test
     fun test5() {
         val lexer = LexerFactory().createLexer1_1(Reader("src/test/resources/test5.txt"))
@@ -46,6 +48,7 @@ class InterpreterTestWithParser {
         val interpreter = Interpreter(parser, TestInputProvider(6))
         interpreter.interpret()
     }
+
     @Test
     fun test6() {
         val lexer = LexerFactory().createLexer1_1(Reader("src/test/resources/test6.txt"))
@@ -63,8 +66,8 @@ class InterpreterTestWithParser {
             interpreter.interpret()
         }
         assertEquals(exception.message, "Error de tipo: Se esperaba STRING_TYPE pero se encontró BOOLEAN_TYPE")
-
     }
+
     @Test
     fun test8() {
         val lexer = LexerFactory().createLexer1_1(Reader("src/test/resources/test8.txt"))
@@ -73,8 +76,9 @@ class InterpreterTestWithParser {
         val exception = assertThrows<IllegalArgumentException> {
             interpreter.interpret()
         }
-        assertEquals(exception.message,"No se puede reasignar una constante")
+        assertEquals(exception.message, "No se puede reasignar una constante")
     }
+
     @Test
     fun test9() {
         val lexer = LexerFactory().createLexer1_1(Reader("src/test/resources/test9.txt"))
@@ -83,7 +87,6 @@ class InterpreterTestWithParser {
         val exception = assertThrows<IllegalArgumentException> {
             interpreter.interpret()
         }
-        assertEquals(exception.message,"La variable de entorno '/src' no esta definida")
+        assertEquals(exception.message, "La variable de entorno '/src' no esta definida")
     }
-
 }

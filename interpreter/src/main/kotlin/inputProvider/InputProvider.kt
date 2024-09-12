@@ -15,4 +15,3 @@ class TestInputProvider(private val mockInput: Any) : InputProvider {
         return mockInput
     }
 }
-

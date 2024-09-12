@@ -19,7 +19,7 @@ import inputProvider.InputProvider
 import parser.ASTProvider
 import token.TokenType
 
-class Interpreter(private val provider: ASTProvider,private val inputProvider: InputProvider) {
+class Interpreter(private val provider: ASTProvider, private val inputProvider: InputProvider) {
 
     private var variables = ExecutionContext()
     private var constants = ExecutionContext()
@@ -42,7 +42,7 @@ class Interpreter(private val provider: ASTProvider,private val inputProvider: I
                 // Verificamos que el tipo de la expresión coincida con el tipo declarado
                 if (!isTypeCompatible(inferredType, statement.type)) {
                     throw IllegalArgumentException(
-                        "Error de tipo: Se esperaba ${statement.type} pero se encontró $inferredType"
+                        "Error de tipo: Se esperaba ${statement.type} pero se encontró $inferredType",
                     )
                 }
 
@@ -96,7 +96,9 @@ class Interpreter(private val provider: ASTProvider,private val inputProvider: I
             }
             is ReadEnvNode -> {
                 val envValue = System.getenv(expression.value as String)
-                return envValue ?: throw IllegalArgumentException("La variable de entorno '${expression.value}' no esta definida")
+                return envValue ?: throw IllegalArgumentException(
+                    "La variable de entorno '${expression.value}' no esta definida",
+                )
             }
 
             is IdentifierNode -> {

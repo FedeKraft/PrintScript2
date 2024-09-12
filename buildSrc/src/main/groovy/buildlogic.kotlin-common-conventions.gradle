@@ -25,11 +25,11 @@ dependencies {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(11)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 group = "printScript"
-version = "1.0"
+version = "1.1"
 
 tasks.named('test') {
     useJUnitPlatform()

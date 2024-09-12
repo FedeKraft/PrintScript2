@@ -43,12 +43,18 @@ class VariableDeclarationParser : Parser {
                         Token(TokenType.RIGHT_PARENTHESIS, TokenValue.StringValue(")"), 0, 0),
                     )
                     val expressionNode = PrattParser(newArgs).parseExpression()
-                    return VariableDeclarationNode(identifierNode,tokenType, expressionNode, tokens[0].line, tokens[0].column)
+                    return VariableDeclarationNode(
+                        identifierNode,
+                        tokenType,
+                        expressionNode,
+                        tokens[0].line,
+                        tokens[0].column,
+                    )
                 }
             }
 
             val node = lookForReadEnvOrReadInput(args)
-            return VariableDeclarationNode(identifierNode,tokens[3].type, node, tokens[0].line, tokens[0].column)
+            return VariableDeclarationNode(identifierNode, tokens[3].type, node, tokens[0].line, tokens[0].column)
         }
         val expressionToken = tokens[5]
 
@@ -85,7 +91,13 @@ class VariableDeclarationParser : Parser {
         }
 
         val variableNode =
-            VariableDeclarationNode(identifierNode,tokenType, expressionNode, identifierToken.line, identifierToken.column)
+            VariableDeclarationNode(
+                identifierNode,
+                tokenType,
+                expressionNode,
+                identifierToken.line,
+                identifierToken.column,
+            )
 
         return variableNode
     }

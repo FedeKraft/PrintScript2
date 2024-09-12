@@ -9,15 +9,16 @@ class InterpreterTest {
     @Test
     fun test() {
         val dummyParser = DummyASTProvider()
-        val interpreter = Interpreter(dummyParser,ConsoleInputProvider())
+        val interpreter = Interpreter(dummyParser, ConsoleInputProvider())
         interpreter.interpret()
     }
+
     @Test
     fun test2() {
         val consoleInputProvider = ConsoleInputProvider()
         val exception = assertThrows<IllegalArgumentException> {
             consoleInputProvider.readInput("TestName")
         }
-        assertEquals(exception.message,"Error al leer la entrada del usuario")
+        assertEquals(exception.message, "Error al leer la entrada del usuario")
     }
 }

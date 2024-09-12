@@ -76,9 +76,13 @@ class LinterTests {
     @Test
     fun `test valid camelCase identifier`() {
         val node =
-            VariableDeclarationNode(IdentifierNode("validCamelCase", 1, 1),
+            VariableDeclarationNode(
+                IdentifierNode("validCamelCase", 1, 1),
                 TokenType.STRING_TYPE,
-                StringLiteralNode("value", 1, 1), 1, 1)
+                StringLiteralNode("value", 1, 1),
+                1,
+                1,
+            )
         val errors = camelCaseRule.apply(node)
         assertEquals(0, errors.size)
     }
@@ -86,9 +90,13 @@ class LinterTests {
     @Test
     fun `test invalid camelCase identifier`() {
         val node =
-            VariableDeclarationNode(IdentifierNode("Invalid_camelCase", 1, 1),
+            VariableDeclarationNode(
+                IdentifierNode("Invalid_camelCase", 1, 1),
                 TokenType.STRING_TYPE,
-                StringLiteralNode("value", 1, 1), 1, 1)
+                StringLiteralNode("value", 1, 1),
+                1,
+                1,
+            )
         val errors = camelCaseRule.apply(node)
         assertEquals(1, errors.size)
         assertEquals("Identifier 'Invalid_camelCase' should be in camelCase", errors[0].message)
@@ -98,9 +106,13 @@ class LinterTests {
     @Test
     fun `test valid snake_case identifier`() {
         val node =
-            VariableDeclarationNode(IdentifierNode("valid_snake_case", 1, 1),
+            VariableDeclarationNode(
+                IdentifierNode("valid_snake_case", 1, 1),
                 TokenType.STRING_TYPE,
-                StringLiteralNode("value", 1, 1), 1, 1)
+                StringLiteralNode("value", 1, 1),
+                1,
+                1,
+            )
         val errors = snakeCaseRule.apply(node)
         assertEquals(0, errors.size)
     }
@@ -108,9 +120,13 @@ class LinterTests {
     @Test
     fun `test invalid snake_case identifier`() {
         val node =
-            VariableDeclarationNode(IdentifierNode("InvalidSnakeCase", 1, 1),
+            VariableDeclarationNode(
+                IdentifierNode("InvalidSnakeCase", 1, 1),
                 TokenType.STRING_TYPE,
-                StringLiteralNode("value", 1, 1), 1, 1)
+                StringLiteralNode("value", 1, 1),
+                1,
+                1,
+            )
         val errors = snakeCaseRule.apply(node)
         assertEquals(1, errors.size)
         assertEquals("Identifier 'InvalidSnakeCase' should be in camelCase", errors[0].message)
@@ -142,9 +158,13 @@ class LinterTests {
     @Test
     fun `test valid camelCase identifier1`() {
         val node =
-            VariableDeclarationNode(IdentifierNode("validCamelCase", 1, 1),
+            VariableDeclarationNode(
+                IdentifierNode("validCamelCase", 1, 1),
                 TokenType.STRING_TYPE,
-                StringLiteralNode("value", 1, 1), 1, 1)
+                StringLiteralNode("value", 1, 1),
+                1,
+                1,
+            )
         val errors = camelOrSnakeRules.apply(node)
         assertEquals(0, errors.size)
     }
@@ -152,9 +172,13 @@ class LinterTests {
     @Test
     fun `test valid snake_case identifier1`() {
         val node =
-            VariableDeclarationNode(IdentifierNode("valid_snake_case", 1, 1),
+            VariableDeclarationNode(
+                IdentifierNode("valid_snake_case", 1, 1),
                 TokenType.STRING_TYPE,
-                StringLiteralNode("value", 1, 1), 1, 1)
+                StringLiteralNode("value", 1, 1),
+                1,
+                1,
+            )
         val errors = camelOrSnakeRules.apply(node)
         assertEquals(0, errors.size)
     }

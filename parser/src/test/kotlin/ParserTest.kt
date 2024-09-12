@@ -340,8 +340,9 @@ class ParserTest {
         )
         assertEquals(expectedAst, actualAst, "The AST generated does not match the expected structure")
     }
+
     @Test
-    fun `test readInput in parsers`(){
+    fun `test readInput in parsers`() {
         val reader = Reader("src/test/resources/ReadEnvAndReadInput.txt")
         val lexer = LexerFactory().createLexer1_1(reader)
         val parser = ParserFactory().createParser1_0(lexer)
