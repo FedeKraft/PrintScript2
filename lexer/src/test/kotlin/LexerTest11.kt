@@ -303,4 +303,48 @@ class LexerTest11 {
 
         assertEquals(expectedToken, actualTokens, "Tokens do not match")
     }
+
+    @Test
+    fun `readInput`() {
+        val reader = Reader("src/test/resources/readEnvAndReadInputTokens/readInputToken.txt")
+        val lexer = LexerFactory().createLexer1_1(reader)
+        val actualTokens = mutableListOf<Token>()
+        while (lexer.hasNextToken()) {
+            actualTokens.add(lexer.nextToken())
+        }
+        val expectedTokens = listOf(
+            Token(TokenType.LET, TokenValue.StringValue("let"), 1, 1),
+            Token(TokenType.IDENTIFIER, TokenValue.StringValue("input"), 1, 5),
+            Token(TokenType.COLON, TokenValue.StringValue(":"), 1, 10),
+            Token(TokenType.BOOLEAN_TYPE, TokenValue.StringValue("boolean"), 1, 12),
+            Token(TokenType.ASSIGN, TokenValue.StringValue("="), 1, 20),
+            Token(TokenType.READ_INPUT, TokenValue.StringValue("readInput"), 1, 22),
+            Token(TokenType.LEFT_PARENTHESIS, TokenValue.StringValue("("), 1, 31),
+            Token(TokenType.STRING, TokenValue.StringValue("Please enter a boolean value"), 1, 32),
+            Token(TokenType.RIGHT_PARENTHESIS, TokenValue.StringValue(")"), 1, 62),
+        )
+        assertEquals(expectedTokens, actualTokens, "Tokens do not match")
+    }
+
+    @Test
+    fun `readEnv `() {
+        val reader = Reader("src/test/resources/readEnvAndReadInputTokens/readEnvToken.txt")
+        val lexer = LexerFactory().createLexer1_1(reader)
+        val actualTokens = mutableListOf<Token>()
+        while (lexer.hasNextToken()) {
+            actualTokens.add(lexer.nextToken())
+        }
+        val expectedTokens = listOf(
+            Token(TokenType.LET, TokenValue.StringValue("let"), 1, 1),
+            Token(TokenType.IDENTIFIER, TokenValue.StringValue("input"), 1, 5),
+            Token(TokenType.COLON, TokenValue.StringValue(":"), 1, 10),
+            Token(TokenType.BOOLEAN_TYPE, TokenValue.StringValue("boolean"), 1, 12),
+            Token(TokenType.ASSIGN, TokenValue.StringValue("="), 1, 20),
+            Token(TokenType.READ_ENV, TokenValue.StringValue("readEnv"), 1, 22),
+            Token(TokenType.LEFT_PARENTHESIS, TokenValue.StringValue("("), 1, 29),
+            Token(TokenType.STRING, TokenValue.StringValue("Please enter a boolean value"), 1, 30),
+            Token(TokenType.RIGHT_PARENTHESIS, TokenValue.StringValue(")"), 1, 60),
+        )
+        assertEquals(expectedTokens, actualTokens, "Tokens do not match")
+    }
 }

@@ -1,0 +1,8 @@
+let a : string = readInput("Ingrese un valor");
+let a : string = readEnv("Ingrese un valor");
+a = readInput("Ingrese un valor");
+a = readEnv("Ingrese un valor");
+const a : string = readInput("Ingrese un valor");
+const a : string = readEnv("Ingrese un valor");
+println(readInput("Ingrese un valor"));
+println(readEnv("Ingrese un valor"));

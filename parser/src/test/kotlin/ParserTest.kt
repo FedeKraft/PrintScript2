@@ -20,6 +20,17 @@ import reader.Reader
 import token.TokenType
 
 class ParserTest {
+    @Test
+    fun `test parser`(){
+        val reader = Reader("src/test/resources/testCodeIdentifier.txt")
+        val lexer = LexerFactory().createLexer1_1(reader)
+        val parser = ParserFactory().createParser1_0(lexer)
+        val actualAst = mutableListOf<StatementNode>()
+        while (parser.hasNextAST()) {
+            actualAst.add(parser.getNextAST())
+        }
+        println(actualAst)
+    }
 
     @Test
     fun `test print statements parsing`() {

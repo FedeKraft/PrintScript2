@@ -75,6 +75,11 @@ class PrintSyntaxErrorChecker : ErrorChecker {
                     TokenType.SUBTRACT,
                     TokenType.MULTIPLY,
                     TokenType.DIVIDE,
+                    TokenType.READ_ENV,
+                    TokenType.READ_INPUT,
+                    TokenType.STRING,
+                    TokenType.LEFT_PARENTHESIS,
+                    TokenType.RIGHT_PARENTHESIS,
                 )
             ) {
                 throw RuntimeException(
@@ -89,6 +94,8 @@ class PrintSyntaxErrorChecker : ErrorChecker {
                     TokenType.NUMBER,
                     TokenType.STRING,
                     TokenType.BOOLEAN,
+                    TokenType.READ_ENV,
+                    TokenType.READ_INPUT,
                 )
             ) {
                 throw RuntimeException(

@@ -71,7 +71,7 @@ class VariableDeclarationSyntaxErrorChecker : ErrorChecker {
         token = iterator.next()
 
         if (token.type != TokenType.STRING && token.type != TokenType.NUMBER && token.type != TokenType.IDENTIFIER &&
-            token.type != TokenType.BOOLEAN
+            token.type != TokenType.BOOLEAN && token.type != TokenType.READ_ENV && token.type != TokenType.READ_INPUT
         ) {
             throw RuntimeException(
                 "Expected value token, found ${token.type} line: ${token.line}, column: ${token.column}",

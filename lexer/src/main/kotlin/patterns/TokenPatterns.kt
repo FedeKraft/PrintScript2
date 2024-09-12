@@ -2,6 +2,8 @@ package patterns
 
 object TokenPatterns {
     // KEYWORDS
+    val READ_INPUT = Regex("\\breadInput\\b")
+    val READ_ENV = Regex("\\breadEnv\\b")
     val LET = Regex("\\blet\\b")
     val PRINT = Regex("\\bprintln\\b")
     val IF = Regex("\\bif\\b")

@@ -4,6 +4,7 @@ import ast.AssignationNode
 import ast.BinaryExpressionNode
 import ast.BlockNode
 import ast.BooleanLiteralNode
+import ast.ConstDeclarationNode
 import ast.ExpressionNode
 import ast.IdentifierNode
 import ast.IfElseNode
@@ -17,7 +18,8 @@ import token.TokenType
 
 class Interpreter(private val provider: ASTProvider) {
 
-    private var context = ExecutionContext()
+    private var variables = ExecutionContext()
+    private var constants = ExecutionContext()
 
     // Método principal para interpretar una declaración
     fun interpret() {
@@ -32,11 +34,18 @@ class Interpreter(private val provider: ASTProvider) {
         when (statement) {
             is VariableDeclarationNode -> {
                 val value = evaluateExpression(statement.value)
-                context.addVariable(statement.identifier.name, value)
+                variables.add(statement.identifier.name, value)
+            }
+            is ConstDeclarationNode -> {
+                val value = evaluateExpression(statement.value)
+                constants.add(statement.identifier.name, value)
             }
             is AssignationNode -> {
+                if (constants.get(statement.identifier.name) != null) {
+                    throw IllegalArgumentException("No se puede reasignar una constante")
+                }
                 val value = evaluateExpression(statement.value)
-                context.addVariable(statement.identifier.name, value)
+                variables.add(statement.identifier.name, value)
             }
             is PrintStatementNode -> {
                 val value = evaluateExpression(statement.expression)
@@ -54,11 +63,11 @@ class Interpreter(private val provider: ASTProvider) {
             }
             is BlockNode -> {
                 // Entrar a un nuevo contexto para el bloque
-                context.enterBlock()
+                variables.enterBlock()
                 // Interpretar cada statement dentro del bloque
                 statement.statements.forEach { interpretStatement(it) }
                 // Salir del bloque y restaurar el contexto anterior
-                context.exitBlock()
+                variables.exitBlock()
             }
             else -> throw IllegalArgumentException(
                 "Tipo de declaración no soportada: ${statement::class.java.simpleName}",
@@ -70,9 +79,10 @@ class Interpreter(private val provider: ASTProvider) {
     private fun evaluateExpression(expression: ExpressionNode): Any {
         return when (expression) {
             is IdentifierNode -> {
-                context.getVariable(expression.name)
-                    ?: throw IllegalArgumentException("Variable '${expression.name}' no declarada.")
+                val value = constants.get(expression.name) ?: variables.get(expression.name)
+                value ?: throw IllegalArgumentException("Identificador no definido: ${expression.name}")
             }
+
             is StringLiteralNode -> expression.value
             is NumberLiteralNode -> expression.value
 
@@ -120,6 +130,6 @@ class Interpreter(private val provider: ASTProvider) {
         }
     }
     fun getContext(): ExecutionContext {
-        return context
+        return variables
     }
 }
