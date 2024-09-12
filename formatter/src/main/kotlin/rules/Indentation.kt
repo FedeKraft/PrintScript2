@@ -1,0 +1,4 @@
+package rules
+
+class Indentation {
+}
