@@ -1,7 +1,4 @@
-let x : / = 5.0;
 let : string = "hello";
 let x string = "hello";
-let x : string "hello";
-let x : string = ;
-x : string = "hello";
-let x : string;
+let x : strings = "hello";
+let x : string  "hello";

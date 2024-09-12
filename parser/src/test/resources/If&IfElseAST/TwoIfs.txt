@@ -1,0 +1,8 @@
+if(true){
+    let a2: string = "Gordito";
+    if(true){
+        let a3 : string = "hdp";
+        println(a4);
+    }
+    println(a7);
+}

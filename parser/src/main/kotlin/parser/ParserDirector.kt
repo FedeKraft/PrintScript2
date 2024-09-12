@@ -24,7 +24,7 @@ class ParserDirector(private val tokenProvider: TokenProvider, private val comma
         while (tokenProvider.hasNextToken()) {
             if (currentToken.type == TokenType.UNKNOWN) {
                 throw RuntimeException(
-                    "unk token in variable assign at line: " + "${currentToken.line}, column: ${currentToken.column}",
+                    "unknown token in variable assign at line: " + "${currentToken.line}, column: ${currentToken.column}",
                 )
             }
 
