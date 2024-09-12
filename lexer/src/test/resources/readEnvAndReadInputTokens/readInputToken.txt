@@ -1,0 +1,1 @@
+let input: boolean = readInput("Please enter a boolean value")

@@ -13,20 +13,20 @@ import token.TokenType
 import token.TokenValue
 
 class PrintParser : Parser {
-    override fun parse(parser: List<Token>): StatementNode {
+    override fun parse(tokens: List<Token>): StatementNode {
         val errorChecker = PrintSyntaxErrorChecker()
 
-        if (!errorChecker.check(parser)) {
+        if (!errorChecker.check(tokens)) {
             throw RuntimeException("Syntax error in print statement")
         }
-        val args = parser.subList(1, parser.size)
+        val args = tokens.subList(1, tokens.size)
 
         if (args.size > 3) {
             val expressionNode = PrattParser(args).parseExpression()
-            return PrintStatementNode(expressionNode, parser[0].line, parser[0].column)
+            return PrintStatementNode(expressionNode, tokens[0].line, tokens[0].column)
         }
 
-        val expressionToken = parser[2]
+        val expressionToken = tokens[2]
         val expressionNode = when (expressionToken.type) {
             TokenType.IDENTIFIER -> {
                 val value = when (val tokenValue = expressionToken.value) {

@@ -43,6 +43,9 @@ class LexerFactory {
             TokenPatterns.IF to TokenType.IF,
             TokenPatterns.ELSE to TokenType.ELSE,
 
+            TokenPatterns.READ_INPUT to TokenType.READ_INPUT,
+            TokenPatterns.READ_ENV to TokenType.READ_ENV,
+
             TokenPatterns.ASSIGN to TokenType.ASSIGN,
             TokenPatterns.LEFT_PARENTHESIS to TokenType.LEFT_PARENTHESIS,
             TokenPatterns.RIGHT_PARENTHESIS to TokenType.RIGHT_PARENTHESIS,
