@@ -109,6 +109,7 @@ data class BinaryExpressionNode(
 
 data class ConstDeclarationNode(
     val identifier: IdentifierNode,
+    val type: TokenType,
     val value: ExpressionNode,
     val line: Int,
     val column: Int,
@@ -192,6 +193,7 @@ class ReadEnvNode(
 }
 
 class NullValueNode(
+    val defaultValue: Any,
     val line: Int,
     val column: Int,
 ) : ExpressionNode() {

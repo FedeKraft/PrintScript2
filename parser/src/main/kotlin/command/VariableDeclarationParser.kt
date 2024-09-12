@@ -24,10 +24,16 @@ class VariableDeclarationParser : Parser {
         val identifierNode = parseIdentifier(tokens[1])
         tokenType = tokens[3].type
         if (tokens.size < 5) {
+            val defaultValue = when (tokenType) {
+                TokenType.STRING_TYPE -> StringLiteralNode("", 0, 0)
+                TokenType.NUMBER_TYPE -> NumberLiteralNode(0.0, 0, 0)
+                TokenType.BOOLEAN_TYPE -> BooleanLiteralNode(false, 0, 0)
+                else -> throw RuntimeException("Unexpected token type in const declaration")
+            }
             return VariableDeclarationNode(
                 identifierNode,
                 tokenType,
-                NullValueNode(0, 0),
+                NullValueNode(defaultValue, 0, 0),
                 tokens[0].line,
                 tokens[0].column,
             )

@@ -109,4 +109,16 @@ class InterpreterTestWithParser {
         // Verificamos que el PrintEmitter funcione correctamente
         assertEquals(0, interpreter.getPrintEmitter().getCount())
     }
+
+    @Test
+    fun test10() {
+        val lexer = LexerFactory().createLexer1_1(Reader(File("src/test/resources/test10.txt").inputStream()))
+        val parser = ParserFactory().createParser1_1(lexer)
+        val errorCollector = ErrorCollector()
+        val interpreter = Interpreter(parser, TestInputProvider(true), PrintEmitter(), errorCollector)
+
+        interpreter.interpret()
+        println(errorCollector.getErrors())
+        assertEquals(0, errorCollector.getErrors().size)
+    }
 }

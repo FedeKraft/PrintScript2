@@ -8,6 +8,7 @@ import ast.ConstDeclarationNode
 import ast.ExpressionNode
 import ast.IdentifierNode
 import ast.IfElseNode
+import ast.NullValueNode
 import ast.NumberLiteralNode
 import ast.PrintStatementNode
 import ast.ReadEnvNode
@@ -120,6 +121,7 @@ class Interpreter(
                 is StringLiteralNode -> expression.value
                 is NumberLiteralNode -> expression.value
                 is BooleanLiteralNode -> expression.value
+                is NullValueNode -> expression.defaultValue
                 is BinaryExpressionNode -> {
                     val leftValue = evaluateExpression(expression.left)
                     val rightValue = evaluateExpression(expression.right)
@@ -171,6 +173,9 @@ class Interpreter(
             is String -> TokenType.STRING_TYPE
             is Double, is Int -> TokenType.NUMBER_TYPE
             is Boolean -> TokenType.BOOLEAN_TYPE
+            is NumberLiteralNode -> TokenType.NUMBER_TYPE
+            is StringLiteralNode -> TokenType.STRING_TYPE
+            is BooleanLiteralNode -> TokenType.BOOLEAN_TYPE
             else -> throw IllegalArgumentException("Tipo desconocido: ${value?.javaClass?.simpleName}")
         }
 

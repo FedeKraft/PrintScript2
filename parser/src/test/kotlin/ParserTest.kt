@@ -321,18 +321,21 @@ class ParserTest {
             listOf(
                 ConstDeclarationNode(
                     IdentifierNode("name", 1, 7),
+                    TokenType.STRING_TYPE,
                     StringLiteralNode("Olive", 1, 22),
                     1,
                     7,
                 ),
                 ConstDeclarationNode(
                     IdentifierNode("age", 2, 7),
+                    TokenType.NUMBER_TYPE,
                     NumberLiteralNode(10.0, 2, 21),
                     2,
                     7,
                 ),
                 ConstDeclarationNode(
                     IdentifierNode("isAlive", 3, 7),
+                    TokenType.BOOLEAN_TYPE,
                     BooleanLiteralNode(false, 3, 26),
                     3,
                     7,

@@ -11,7 +11,6 @@ import ast.ReadEnvNode
 import ast.ReadInputNode
 import ast.StatementNode
 import ast.StringLiteralNode
-import ast.VariableDeclarationNode
 import token.Token
 import token.TokenType
 import token.TokenValue
@@ -21,10 +20,16 @@ class ConstDeclarationParser : Parser {
         val identifierNode = parseIdentifier(tokens[1])
         val tokenType = tokens[3].type
         if (tokens.size < 5) {
-            return VariableDeclarationNode(
+            val defaultValue = when (tokenType) {
+                TokenType.STRING_TYPE -> StringLiteralNode("", 0, 0)
+                TokenType.NUMBER_TYPE -> NumberLiteralNode(0.0, 0, 0)
+                TokenType.BOOLEAN_TYPE -> BooleanLiteralNode(false, 0, 0)
+                else -> throw RuntimeException("Unexpected token type in const declaration")
+            }
+            return ConstDeclarationNode(
                 identifierNode,
                 tokenType,
-                NullValueNode(0, 0),
+                NullValueNode(defaultValue, 0, 0),
                 tokens[0].line,
                 tokens[0].column,
             )
@@ -34,7 +39,7 @@ class ConstDeclarationParser : Parser {
             handleMultipleArgs(identifierNode, args, tokens)
         } else {
             val expressionNode = parseExpressionNode(tokens[5])
-            ConstDeclarationNode(identifierNode, expressionNode, identifierNode.line, identifierNode.column)
+            ConstDeclarationNode(identifierNode, tokenType, expressionNode, identifierNode.line, identifierNode.column)
         }
     }
 
@@ -53,12 +58,14 @@ class ConstDeclarationParser : Parser {
         tokens: List<Token>,
     ): ConstDeclarationNode =
         if (args[0].type != TokenType.READ_INPUT && args[0].type != TokenType.READ_ENV) {
+            val constType = tokens[3].type
             val newArgs = wrapInParentheses(args)
             val expressionNode = PrattParser(newArgs).parseExpression()
-            ConstDeclarationNode(identifierNode, expressionNode, identifierNode.line, identifierNode.column)
+            ConstDeclarationNode(identifierNode, constType, expressionNode, identifierNode.line, identifierNode.column)
         } else {
             val node = lookForReadEnvOrReadInput(args)
-            ConstDeclarationNode(identifierNode, node, identifierNode.line, identifierNode.column)
+            val constType = tokens[3].type
+            ConstDeclarationNode(identifierNode, constType, node, identifierNode.line, identifierNode.column)
         }
 
     // Wraps arguments in parentheses for parsing

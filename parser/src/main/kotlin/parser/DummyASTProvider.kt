@@ -5,6 +5,7 @@ import ast.IdentifierNode
 import ast.NumberLiteralNode
 import ast.PrintStatementNode
 import ast.StatementNode
+import token.TokenType
 import java.util.Stack
 
 class DummyASTProvider : ASTProvider {
@@ -20,6 +21,7 @@ class DummyASTProvider : ASTProvider {
         nodes.push(
             ConstDeclarationNode(
                 identifier = IdentifierNode("PI", 0, 0),
+                type = TokenType.NUMBER,
                 value = NumberLiteralNode(3.1416, 0, 0),
                 0,
                 0,
