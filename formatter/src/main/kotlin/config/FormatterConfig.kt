@@ -1,4 +1,4 @@
-package formatter.config
+package config
 
 data class SpaceBeforeColonConfig(val enabled: Boolean)
 data class SpaceAfterColonConfig(val enabled: Boolean)

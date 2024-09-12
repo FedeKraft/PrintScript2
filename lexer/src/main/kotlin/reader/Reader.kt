@@ -1,7 +1,6 @@
 package reader
 
 import java.io.BufferedReader
-import java.io.File
 import java.io.InputStream
 
 class Reader(private val filePath: InputStream) {

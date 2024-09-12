@@ -11,7 +11,8 @@ class SyntaxErrorTests {
 
     @Test
     fun `test variable declaration errors`() {
-        val reader = Reader(File("src/test/resources/VariableDeclarationErrors/VariableDeclarationErrors.txt").inputStream())
+        val reader =
+            Reader(File("src/test/resources/VariableDeclarationErrors/VariableDeclarationErrors.txt").inputStream())
         val lexer = LexerFactory().createLexer1_1(reader)
         val parser = ParserFactory().createParser1_1(lexer)
         val actualErrors = mutableListOf<String>()

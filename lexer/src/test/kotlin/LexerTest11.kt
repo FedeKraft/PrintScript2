@@ -11,7 +11,8 @@ class LexerTest11 {
 
     @Test
     fun `variable declaration 1_1`() {
-        val reader = Reader(File("src/test/resources/VariableDeclarationTokens/VariableDeclarationTokens.txt").inputStream())
+        val reader =
+            Reader(File("src/test/resources/VariableDeclarationTokens/VariableDeclarationTokens.txt").inputStream())
         val lexer = LexerFactory().createLexer1_1(reader)
         val actualTokens = mutableListOf<Token>()
 

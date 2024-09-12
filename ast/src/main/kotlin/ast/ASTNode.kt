@@ -115,7 +115,7 @@ data class ConstDeclarationNode(
     override fun toFormattedString(variableTypes: Map<String, String>): String {
         val type = inferType(value, variableTypes)
         return "const ${identifier.toFormattedString(variableTypes)}: " +
-                "$type = ${value.toFormattedString(variableTypes)};"
+            "$type = ${value.toFormattedString(variableTypes)};"
     }
 
     private fun inferType(expression: ExpressionNode, variableTypes: Map<String, String>): String {
