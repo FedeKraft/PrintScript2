@@ -96,7 +96,7 @@ class Interpreter(private val provider: ASTProvider,private val inputProvider: I
             }
             is ReadEnvNode -> {
                 val envValue = System.getenv(expression.value as String)
-                return envValue ?: throw IllegalArgumentException("La variable de entorno '${expression.value}' no está definida")
+                return envValue ?: throw IllegalArgumentException("La variable de entorno '${expression.value}' no esta definida")
             }
 
             is IdentifierNode -> {
