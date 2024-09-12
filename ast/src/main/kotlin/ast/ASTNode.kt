@@ -15,9 +15,11 @@ data class VariableDeclarationNode(
 ) : StatementNode() {
 
     override fun toFormattedString(variableTypes: Map<String, String>): String {
-        val type = inferType(value, variableTypes)
+        val inferredType = inferType(value, variableTypes)
+        // Add the variable's type to the map
+        (variableTypes as MutableMap)[identifier.name] = inferredType
         return "let ${identifier.toFormattedString(variableTypes)}: " +
-            "$type = ${value.toFormattedString(variableTypes)};"
+            "$inferredType = ${value.toFormattedString(variableTypes)};"
     }
 
     private fun inferType(expression: ExpressionNode, variableTypes: Map<String, String>): String {
@@ -31,7 +33,7 @@ data class VariableDeclarationNode(
                 val rightType = inferType(expression.right, variableTypes)
                 if (leftType == rightType) leftType else "UnknownType"
             }
-            else -> "UnknownType" // Agregado para manejar tipos no conocidos
+            else -> "UnknownType"
         }
     }
 }
