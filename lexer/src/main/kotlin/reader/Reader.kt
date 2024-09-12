@@ -2,10 +2,11 @@ package reader
 
 import java.io.BufferedReader
 import java.io.File
+import java.io.InputStream
 
-class Reader(private val filePath: String) {
+class Reader(private val filePath: InputStream) {
 
-    private val reader: BufferedReader = File(filePath).bufferedReader()
+    private val reader: BufferedReader = filePath.bufferedReader()
     private var nextChar: Int = reader.read()
 
     fun read(): Char? {

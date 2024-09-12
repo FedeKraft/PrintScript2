@@ -1,4 +1,3 @@
-// ParserTest.kt
 package parser
 
 import ast.AssignationNode
@@ -18,11 +17,12 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import reader.Reader
 import token.TokenType
+import java.io.File
 
 class ParserTest {
     @Test
     fun `test parser`() {
-        val reader = Reader("src/test/resources/testCodeIdentifier.txt")
+        val reader = Reader(File("src/test/resources/testCodeIdentifier.txt").inputStream())
         val lexer = LexerFactory().createLexer1_1(reader)
         val parser = ParserFactory().createParser1_0(lexer)
         val actualAst = mutableListOf<StatementNode>()
@@ -34,8 +34,7 @@ class ParserTest {
 
     @Test
     fun `test print statements parsing`() {
-        // Initialize tokens by reading from the PrintStatements.txt
-        val reader = Reader("src/test/resources/PrintAST/PrintStatements.txt")
+        val reader = Reader(File("src/test/resources/PrintAST/PrintStatements.txt").inputStream())
         val lexer = LexerFactory().createLexer1_1(reader)
         val parser = ParserFactory().createParser1_0(lexer)
         val actualAst = mutableListOf<StatementNode>()
@@ -48,14 +47,12 @@ class ParserTest {
             PrintStatementNode(StringLiteralNode("Hello", 3, 9), 3, 9),
             PrintStatementNode(BooleanLiteralNode(true, 4, 9), 4, 9),
         )
-        // Assert that the actual AST matches the expected AST
         assertEquals(expectedAst, actualAst, "The AST generated does not match the expected structure")
     }
 
     @Test
     fun `test variable declarations parsing`() {
-        // Initialize tokens by reading from the VariableDeclaration.txt
-        val reader = Reader("src/test/resources/VariablesAST/VariablesStatements.txt")
+        val reader = Reader(File("src/test/resources/VariablesAST/VariablesStatements.txt").inputStream())
         val lexer = LexerFactory().createLexer1_1(reader)
         val parser = ParserFactory().createParser1_0(lexer)
         val actualAst = mutableListOf<StatementNode>()
@@ -122,15 +119,12 @@ class ParserTest {
                 5,
             ),
         )
-
-        // Assert that the actual AST matches the expected AST
         assertEquals(expectedAst, actualAst, "The AST generated does not match the expected structure")
     }
 
     @Test
     fun `test IfElseNode one IF`() {
-        // Initialize tokens by reading from IfWithLetStatement.txt
-        val reader = Reader("src/test/resources/If&IfElseAST/OneIfNode.txt")
+        val reader = Reader(File("src/test/resources/If&IfElseAST/OneIfNode.txt").inputStream())
         val lexer = LexerFactory().createLexer1_1(reader)
         val parser = ParserFactory().createParser1_1(lexer)
         val actualAst = mutableListOf<StatementNode>()
@@ -158,13 +152,12 @@ class ParserTest {
                 1,
             ),
         )
-        // Assert that the actual AST matches the expected AST
         assertEquals(expectedAst, actualAst, "The AST generated does not match the expected structure")
     }
 
     @Test
     fun `test IfElseNode TWO IFS`() {
-        val reader = Reader("src/test/resources/If&IfElseAST/TwoIfs.txt")
+        val reader = Reader(File("src/test/resources/If&IfElseAST/TwoIfs.txt").inputStream())
         val lexer = LexerFactory().createLexer1_1(reader)
         val parser = ParserFactory().createParser1_1(lexer)
         val actualAst = mutableListOf<StatementNode>()
@@ -226,7 +219,7 @@ class ParserTest {
 
     @Test
     fun `test IfElseNode with variable declarations in both if and else blocks`() {
-        val reader = Reader("src/test/resources/If&IfElseAST/IfElseNode.txt")
+        val reader = Reader(File("src/test/resources/If&IfElseAST/IfElseNode.txt").inputStream())
         val lexer = LexerFactory().createLexer1_1(reader)
         val parser = ParserFactory().createParser1_1(lexer)
         val actualAst = mutableListOf<StatementNode>()
@@ -271,15 +264,13 @@ class ParserTest {
 
     @Test
     fun `test assignation parsing`() {
-        val reader = Reader("src/test/resources/AssignationAST/AssignationStatements.txt")
+        val reader = Reader(File("src/test/resources/AssignationAST/AssignationStatements.txt").inputStream())
         val lexer = LexerFactory().createLexer1_1(reader)
         val parser = ParserFactory().createParser1_0(lexer)
         val actualAst = mutableListOf<StatementNode>()
         while (parser.hasNextAST()) {
             actualAst.add(parser.getNextAST())
         }
-
-        // Expected AST with nodes for all four lines
         val expectedAst = listOf(
             AssignationNode(
                 IdentifierNode("name", 1, 1),
@@ -311,7 +302,7 @@ class ParserTest {
 
     @Test
     fun `test Const parsing`() {
-        val reader = Reader("src/test/resources/ConstAST/ConstStatements.txt")
+        val reader = Reader(File("src/test/resources/ConstAST/ConstStatements.txt").inputStream())
         val lexer = LexerFactory().createLexer1_1(reader)
         val parser = ParserFactory().createParser1_1(lexer)
         val actualAst = mutableListOf<StatementNode>()
@@ -343,7 +334,7 @@ class ParserTest {
 
     @Test
     fun `test readInput in parsers`() {
-        val reader = Reader("src/test/resources/ReadEnvAndReadInput.txt")
+        val reader = Reader(File("src/test/resources/ReadEnvAndReadInput.txt").inputStream())
         val lexer = LexerFactory().createLexer1_1(reader)
         val parser = ParserFactory().createParser1_0(lexer)
         val actualAst = mutableListOf<StatementNode>()

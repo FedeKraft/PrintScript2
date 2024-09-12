@@ -4,13 +4,14 @@ import factory.LexerFactory
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import reader.Reader
+import java.io.File
 import java.lang.RuntimeException
 
 class SyntaxErrorTests {
 
     @Test
     fun `test variable declaration errors`() {
-        val reader = Reader("src/test/resources/VariableDeclarationErrors/VariableDeclarationErrors.txt")
+        val reader = Reader(File("src/test/resources/VariableDeclarationErrors/VariableDeclarationErrors.txt").inputStream())
         val lexer = LexerFactory().createLexer1_1(reader)
         val parser = ParserFactory().createParser1_1(lexer)
         val actualErrors = mutableListOf<String>()
@@ -32,7 +33,7 @@ class SyntaxErrorTests {
 
     @Test
     fun `test assignation errors`() {
-        val reader = Reader("src/test/resources/AssignationErrors/AssignationErrors.txt")
+        val reader = Reader(File("src/test/resources/AssignationErrors/AssignationErrors.txt").inputStream())
         val lexer = LexerFactory().createLexer1_1(reader)
         val parser = ParserFactory().createParser1_1(lexer)
         val actualErrors = mutableListOf<String>()
@@ -53,7 +54,7 @@ class SyntaxErrorTests {
 
     @Test
     fun `test print statement errors`() {
-        val reader = Reader("src/test/resources/PrintErrors/PrintErrors.txt")
+        val reader = Reader(File("src/test/resources/PrintErrors/PrintErrors.txt").inputStream())
         val lexer = LexerFactory().createLexer1_1(reader)
         val parser = ParserFactory().createParser1_1(lexer)
         val actualErrors = mutableListOf<String>()
