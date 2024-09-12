@@ -15,11 +15,16 @@ import ast.ReadInputNode
 import ast.StatementNode
 import ast.StringLiteralNode
 import ast.VariableDeclarationNode
-import inputProvider.InputProvider
+import emitter.PrintEmitter
 import parser.ASTProvider
+import provider.InputProvider
 import token.TokenType
 
-class Interpreter(private val provider: ASTProvider, private val inputProvider: InputProvider) {
+class Interpreter(
+    private val provider: ASTProvider,
+    private val inputProvider: InputProvider,
+    private val printEmitter: PrintEmitter,
+) {
 
     private var variables = ExecutionContext()
     private var constants = ExecutionContext()
@@ -61,7 +66,7 @@ class Interpreter(private val provider: ASTProvider, private val inputProvider: 
             }
             is PrintStatementNode -> {
                 val value = evaluateExpression(statement.expression)
-                println(value)
+                printEmitter.print(value.toString())
             }
             is IfElseNode -> {
                 val condition = evaluateExpression(statement.condition) as? Boolean
@@ -165,5 +170,8 @@ class Interpreter(private val provider: ASTProvider, private val inputProvider: 
     }
     private fun isTypeCompatible(inferredType: TokenType, declaredType: TokenType): Boolean {
         return inferredType == declaredType
+    }
+    fun getPrintEmitter(): PrintEmitter {
+        return printEmitter
     }
 }

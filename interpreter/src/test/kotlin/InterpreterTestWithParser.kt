@@ -1,67 +1,69 @@
+import emitter.PrintEmitter
 import factory.LexerFactory
-import inputProvider.TestInputProvider
 import interpreter.Interpreter
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import parser.ParserFactory
+import provider.TestInputProvider
 import reader.Reader
+import java.io.File
 
 class InterpreterTestWithParser {
     @Test
     fun test1() {
-        val lexer = LexerFactory().createLexer1_1(Reader("src/test/resources/test1.txt"))
+        val lexer = LexerFactory().createLexer1_1(Reader(File("src/test/resources/test1.txt").inputStream()))
         val parser = ParserFactory().createParser1_1(lexer)
-        val interpreter = Interpreter(parser, TestInputProvider("TestName"))
+        val interpreter = Interpreter(parser, TestInputProvider("TestName"), PrintEmitter())
         interpreter.interpret()
     }
 
     @Test
     fun test2() {
-        val lexer = LexerFactory().createLexer1_1(Reader("src/test/resources/test2.txt"))
+        val lexer = LexerFactory().createLexer1_1(Reader(File("src/test/resources/test2.txt").inputStream()))
         val parser = ParserFactory().createParser1_1(lexer)
         val inputProvider = TestInputProvider("TestName") // Simulamos el input
-        val interpreter = Interpreter(parser, inputProvider)
+        val interpreter = Interpreter(parser, inputProvider, PrintEmitter())
         interpreter.interpret()
     }
 
     @Test
     fun test3() {
-        val lexer = LexerFactory().createLexer1_1(Reader("src/test/resources/test3.txt"))
+        val lexer = LexerFactory().createLexer1_1(Reader(File("src/test/resources/test3.txt").inputStream()))
         val parser = ParserFactory().createParser1_1(lexer)
-        val interpreter = Interpreter(parser, TestInputProvider("TestName"))
+        val interpreter = Interpreter(parser, TestInputProvider("TestName"), PrintEmitter())
         interpreter.interpret()
     }
 
     @Test
     fun test4() {
-        val lexer = LexerFactory().createLexer1_1(Reader("src/test/resources/test4.txt"))
+        val lexer = LexerFactory().createLexer1_1(Reader(File("src/test/resources/test4.txt").inputStream()))
         val parser = ParserFactory().createParser1_1(lexer)
-        val interpreter = Interpreter(parser, TestInputProvider("TestName"))
+        val interpreter = Interpreter(parser, TestInputProvider("TestName"), PrintEmitter())
         interpreter.interpret()
     }
 
     @Test
     fun test5() {
-        val lexer = LexerFactory().createLexer1_1(Reader("src/test/resources/test5.txt"))
+        val lexer = LexerFactory().createLexer1_1(Reader(File("src/test/resources/test5.txt").inputStream()))
         val parser = ParserFactory().createParser1_1(lexer)
-        val interpreter = Interpreter(parser, TestInputProvider(6))
+        val interpreter = Interpreter(parser, TestInputProvider(6), PrintEmitter())
         interpreter.interpret()
     }
 
     @Test
     fun test6() {
-        val lexer = LexerFactory().createLexer1_1(Reader("src/test/resources/test6.txt"))
+        val lexer = LexerFactory().createLexer1_1(Reader(File("src/test/resources/test6.txt").inputStream()))
         val parser = ParserFactory().createParser1_1(lexer)
-        val interpreter = Interpreter(parser, TestInputProvider(true))
+        val interpreter = Interpreter(parser, TestInputProvider(true), PrintEmitter())
         interpreter.interpret()
     }
 
     @Test
     fun test7() {
-        val lexer = LexerFactory().createLexer1_1(Reader("src/test/resources/test7.txt"))
+        val lexer = LexerFactory().createLexer1_1(Reader(File("src/test/resources/test7.txt").inputStream()))
         val parser = ParserFactory().createParser1_1(lexer)
-        val interpreter = Interpreter(parser, TestInputProvider(true))
+        val interpreter = Interpreter(parser, TestInputProvider(true), PrintEmitter())
         val exception = assertThrows<IllegalArgumentException> {
             interpreter.interpret()
         }
@@ -70,9 +72,9 @@ class InterpreterTestWithParser {
 
     @Test
     fun test8() {
-        val lexer = LexerFactory().createLexer1_1(Reader("src/test/resources/test8.txt"))
+        val lexer = LexerFactory().createLexer1_1(Reader(File("src/test/resources/test8.txt").inputStream()))
         val parser = ParserFactory().createParser1_1(lexer)
-        val interpreter = Interpreter(parser, TestInputProvider(true))
+        val interpreter = Interpreter(parser, TestInputProvider(true), PrintEmitter())
         val exception = assertThrows<IllegalArgumentException> {
             interpreter.interpret()
         }
@@ -81,12 +83,13 @@ class InterpreterTestWithParser {
 
     @Test
     fun test9() {
-        val lexer = LexerFactory().createLexer1_1(Reader("src/test/resources/test9.txt"))
+        val lexer = LexerFactory().createLexer1_1(Reader(File("src/test/resources/test9.txt").inputStream()))
         val parser = ParserFactory().createParser1_1(lexer)
-        val interpreter = Interpreter(parser, TestInputProvider(true))
+        val interpreter = Interpreter(parser, TestInputProvider(true), PrintEmitter())
         val exception = assertThrows<IllegalArgumentException> {
             interpreter.interpret()
         }
+        print(interpreter.getPrintEmitter().getCount())
         assertEquals(exception.message, "La variable de entorno '/src' no esta definida")
     }
 }

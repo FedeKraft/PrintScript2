@@ -15,7 +15,7 @@ class ValidationCommand : CliktCommand(help = "Validate the syntax and semantics
     private val file by argument(help = "Source file to validate")
     override fun run() {
         var sourceCode = File(file).readText()
-        val lexer = LexerFactory().createLexer1_0(Reader(sourceCode))
+        val lexer = LexerFactory().createLexer1_0(Reader(File(sourceCode).inputStream()))
         val parserDirector = ParserDirector(
             lexer,
             mapOf(

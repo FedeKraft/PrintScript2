@@ -5,12 +5,14 @@ import reader.Reader
 import token.Token
 import token.TokenType
 import token.TokenValue
+import java.io.File
 
 class LexerTest11 {
 
     @Test
     fun `variable declaration 1_1`() {
-        val reader = Reader("src/test/resources/VariableDeclarationTokens/VariableDeclarationTokens.txt")
+        val reader =
+            Reader(File("src/test/resources/VariableDeclarationTokens/VariableDeclarationTokens.txt").inputStream())
         val lexer = LexerFactory().createLexer1_1(reader)
         val actualTokens = mutableListOf<Token>()
 
@@ -40,7 +42,7 @@ class LexerTest11 {
 
     @Test
     fun `print statement 1_1`() {
-        val reader = Reader("src/test/resources/PrintTokens/PrintTokens.txt")
+        val reader = Reader(File("src/test/resources/PrintTokens/PrintTokens.txt").inputStream())
         val lexer = LexerFactory().createLexer1_1(reader)
         val actualTokens = mutableListOf<Token>()
 
@@ -68,7 +70,7 @@ class LexerTest11 {
 
     @Test
     fun `assignation 1_1`() {
-        val reader = Reader("src/test/resources/AssignationTokens/AssignationTokens.txt")
+        val reader = Reader(File("src/test/resources/AssignationTokens/AssignationTokens.txt").inputStream())
         val lexer = LexerFactory().createLexer1_1(reader)
         val actualTokens = mutableListOf<Token>()
 
@@ -91,7 +93,7 @@ class LexerTest11 {
 
     @Test
     fun `operations 1_1`() {
-        val reader = Reader("src/test/resources/BinaryOperationTokens/BinaryOperationTokens.txt")
+        val reader = Reader(File("src/test/resources/BinaryOperationTokens/BinaryOperationTokens.txt").inputStream())
         val lexer = LexerFactory().createLexer1_1(reader)
         val actualTokens = mutableListOf<Token>()
 
@@ -145,7 +147,7 @@ class LexerTest11 {
 
     @Test
     fun `test lexer with errors 1_1`() {
-        val reader = Reader("src/test/resources/StatementWithError/StatementsWithErrors.txt")
+        val reader = Reader(File("src/test/resources/StatementWithError/StatementsWithErrors.txt").inputStream())
         val lexer = LexerFactory().createLexer1_1(reader)
         val actualTokens = mutableListOf<Token>()
 
@@ -177,7 +179,7 @@ class LexerTest11 {
 
     @Test
     fun `statement with braces`() {
-        val reader = Reader("src/test/resources/BraceTokens/Braces.txt")
+        val reader = Reader(File("src/test/resources/BraceTokens/Braces.txt").inputStream())
         val lexer = LexerFactory().createLexer1_1(reader)
         val actualTokens = mutableListOf<Token>()
 
@@ -200,7 +202,7 @@ class LexerTest11 {
 
     @Test
     fun `const statements`() {
-        val reader = Reader("src/test/resources/ConstTokens/ConstTokens.txt")
+        val reader = Reader(File("src/test/resources/ConstTokens/ConstTokens.txt").inputStream())
         val lexer = LexerFactory().createLexer1_1(reader)
         val actualTokens = mutableListOf<Token>()
 
@@ -229,7 +231,7 @@ class LexerTest11 {
 
     @Test
     fun `else statements`() {
-        val reader = Reader("src/test/resources/ElseTokens/Elses.txt")
+        val reader = Reader(File("src/test/resources/ElseTokens/Elses.txt").inputStream())
         val lexer = LexerFactory().createLexer1_1(reader)
         val actualTokens = mutableListOf<Token>()
 
@@ -251,7 +253,7 @@ class LexerTest11 {
 
     @Test
     fun `if statements 1_1`() {
-        val reader = Reader("src/test/resources/IfTokens/Ifs.txt")
+        val reader = Reader(File("src/test/resources/IfTokens/Ifs.txt").inputStream())
         val lexer = LexerFactory().createLexer1_1(reader)
         val actualTokens = mutableListOf<Token>()
 
@@ -284,7 +286,7 @@ class LexerTest11 {
 
     @Test
     fun `Boolean and Bool tokens`() {
-        val reader = Reader("src/test/resources/BooleanTokens/Bool&BooleanTokens.txt")
+        val reader = Reader(File("src/test/resources/BooleanTokens/Bool&BooleanTokens.txt").inputStream())
         val lexer = LexerFactory().createLexer1_1(reader)
         val actualTokens = mutableListOf<Token>()
 
@@ -306,7 +308,7 @@ class LexerTest11 {
 
     @Test
     fun `readInput`() {
-        val reader = Reader("src/test/resources/readEnvAndReadInputTokens/readInputToken.txt")
+        val reader = Reader(File("src/test/resources/readEnvAndReadInputTokens/readInputToken.txt").inputStream())
         val lexer = LexerFactory().createLexer1_1(reader)
         val actualTokens = mutableListOf<Token>()
         while (lexer.hasNextToken()) {
@@ -328,7 +330,7 @@ class LexerTest11 {
 
     @Test
     fun `readEnv `() {
-        val reader = Reader("src/test/resources/readEnvAndReadInputTokens/readEnvToken.txt")
+        val reader = Reader(File("src/test/resources/readEnvAndReadInputTokens/readEnvToken.txt").inputStream())
         val lexer = LexerFactory().createLexer1_1(reader)
         val actualTokens = mutableListOf<Token>()
         while (lexer.hasNextToken()) {

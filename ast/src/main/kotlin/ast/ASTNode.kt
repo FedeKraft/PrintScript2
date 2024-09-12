@@ -3,7 +3,7 @@ package ast
 import token.TokenType
 
 sealed class StatementNode {
-    abstract fun toFormattedString(variableTypes: MutableMap<String, String>): String
+    abstract fun toFormattedString(variableTypes: Map<String, String>): String
 }
 
 data class VariableDeclarationNode(
@@ -14,17 +14,17 @@ data class VariableDeclarationNode(
     val column: Int,
 ) : StatementNode() {
 
-    override fun toFormattedString(variableTypes: MutableMap<String, String>): String {
+    override fun toFormattedString(variableTypes: Map<String, String>): String {
         val type = inferType(value, variableTypes)
-        variableTypes[identifier.name] = type // Almacenar el tipo de la variable
-        return "let ${identifier.toFormattedString(variableTypes)}: $type = ${value.toFormattedString(variableTypes)};"
+        return "let ${identifier.toFormattedString(variableTypes)}: " +
+            "$type = ${value.toFormattedString(variableTypes)};"
     }
 
     private fun inferType(expression: ExpressionNode, variableTypes: Map<String, String>): String {
         return when (expression) {
-            is StringLiteralNode -> "String"
-            is NumberLiteralNode -> "Number"
-            is BooleanLiteralNode -> "Boolean"
+            is StringLiteralNode -> "string"
+            is NumberLiteralNode -> "number"
+            is BooleanLiteralNode -> "boolean"
             is IdentifierNode -> variableTypes[expression.name] ?: "UnknownType"
             is BinaryExpressionNode -> {
                 val leftType = inferType(expression.left, variableTypes)
@@ -42,7 +42,7 @@ data class AssignationNode(
     val line: Int,
     val column: Int,
 ) : StatementNode() {
-    override fun toFormattedString(variableTypes: MutableMap<String, String>): String {
+    override fun toFormattedString(variableTypes: Map<String, String>): String {
         return "${identifier.toFormattedString(variableTypes)} = ${value.toFormattedString(variableTypes)};"
     }
 }
@@ -52,7 +52,7 @@ data class PrintStatementNode(
     val line: Int,
     val column: Int,
 ) : StatementNode() {
-    override fun toFormattedString(variableTypes: MutableMap<String, String>): String {
+    override fun toFormattedString(variableTypes: Map<String, String>): String {
         return "print(${expression.toFormattedString(variableTypes)});"
     }
 }
@@ -81,11 +81,7 @@ data class NumberLiteralNode(
     }
 }
 
-data class StringLiteralNode(
-    val value: String,
-    val line: Int,
-    val column: Int,
-) : ExpressionNode() {
+data class StringLiteralNode(val value: String, val line: Int, val column: Int) : ExpressionNode() {
     override fun toFormattedString(variableTypes: Map<String, String>): String {
         return "\"$value\""
     }
@@ -116,18 +112,17 @@ data class ConstDeclarationNode(
     val line: Int,
     val column: Int,
 ) : StatementNode() {
-    override fun toFormattedString(variableTypes: MutableMap<String, String>): String {
+    override fun toFormattedString(variableTypes: Map<String, String>): String {
         val type = inferType(value, variableTypes)
-        variableTypes[identifier.name] = type // Almacenar el tipo de la constante
         return "const ${identifier.toFormattedString(variableTypes)}: " +
             "$type = ${value.toFormattedString(variableTypes)};"
     }
 
     private fun inferType(expression: ExpressionNode, variableTypes: Map<String, String>): String {
         return when (expression) {
-            is StringLiteralNode -> "String"
-            is NumberLiteralNode -> "Number"
-            is BooleanLiteralNode -> "Boolean"
+            is StringLiteralNode -> "string"
+            is NumberLiteralNode -> "number"
+            is BooleanLiteralNode -> "boolean"
             is IdentifierNode -> variableTypes[expression.name] ?: "UnknownType"
             is BinaryExpressionNode -> {
                 val leftType = inferType(expression.left, variableTypes)
@@ -146,14 +141,13 @@ data class IfElseNode(
     val line: Int,
     val column: Int,
 ) : StatementNode() {
-    override fun toFormattedString(variableTypes: MutableMap<String, String>): String {
-        val elseBlockString = if (elseBlock != null) {
-            " else {\n${elseBlock.toFormattedString(variableTypes)}\n}"
-        } else {
-            ""
+    override fun toFormattedString(variableTypes: Map<String, String>): String {
+        val ifBlockString = ifBlock.toFormattedString(variableTypes)
+        val elseBlockString = elseBlock?.toFormattedString(variableTypes) ?: ""
+        if (elseBlock == null) {
+            return "if (${condition.toFormattedString(variableTypes)}) {\n$ifBlockString\n}"
         }
-        return "if (${condition.toFormattedString(variableTypes)}) " +
-            "{\n${ifBlock.toFormattedString(variableTypes)}\n}$elseBlockString"
+        return "if (${condition.toFormattedString(variableTypes)}) {\n$ifBlockString\n}\nelse {\n$elseBlockString\n}"
     }
 }
 
@@ -162,7 +156,7 @@ data class BlockNode(
     val line: Int,
     val column: Int,
 ) : StatementNode() {
-    override fun toFormattedString(variableTypes: MutableMap<String, String>): String {
+    override fun toFormattedString(variableTypes: Map<String, String>): String {
         return statements.joinToString(separator = "\n") { it.toFormattedString(variableTypes) }
     }
 }
