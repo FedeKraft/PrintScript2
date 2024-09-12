@@ -34,7 +34,6 @@ class LinterConfigLoader(
 
     init {
         val mapper = jacksonObjectMapper()
-
         config = try {
             if (configInputStream != null) {
                 mapper.readValue(configInputStream)

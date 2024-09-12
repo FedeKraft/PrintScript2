@@ -5,6 +5,7 @@ import java.io.ByteArrayInputStream
 import java.io.IOException
 
 class LinterConfigLoaderErrorTests {
+
     @Test
     fun testLoadConfigWithInvalidStream() {
         val invalidConfigInputStream = ByteArrayInputStream(ByteArray(0))

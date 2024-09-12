@@ -193,5 +193,7 @@ class LinterTests {
         assertEquals(0, errors.size)
         val linter = LinterFactory().createLinter1_0(DummyASTProvider())
         linter.lint()
+        val linter1 = LinterFactory().createLinter1_1(DummyASTProvider())
+        linter1.lint()
     }
 }
