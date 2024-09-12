@@ -1,4 +1,5 @@
 import emitter.PrintEmitter
+import errorCollector.ErrorCollector
 import interpreter.Interpreter
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -10,7 +11,7 @@ class InterpreterTest {
     @Test
     fun test() {
         val dummyParser = DummyASTProvider()
-        val interpreter = Interpreter(dummyParser, ConsoleInputProvider(), PrintEmitter())
+        val interpreter = Interpreter(dummyParser, ConsoleInputProvider(), PrintEmitter(), ErrorCollector())
         interpreter.interpret()
     }
 
