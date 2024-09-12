@@ -12,6 +12,10 @@
     "enabled": true,
     "newlineCount": 2
   },
+    "indentation": {
+        "enabled": true,
+        "newlineCount": 2
+    },
   "newlineAfterSemicolon": {
     "enabled": true
   },
