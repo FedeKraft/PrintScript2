@@ -1,4 +1,7 @@
 {
+  "singleSpaceBetweenTokens": {
+    "enabled": true
+  },
   "spaceBeforeColon": {
     "enabled": true
   },
@@ -15,10 +18,11 @@
   "newlineAfterSemicolon": {
     "enabled": true
   },
-  "singleSpaceBetweenTokens": {
-    "enabled": true
-  },
   "spaceAroundOperators": {
     "enabled": true
+  },
+  "indentation": {
+    "enabled": true,
+    "n": 4
   }
 }

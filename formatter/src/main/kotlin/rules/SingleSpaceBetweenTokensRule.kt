@@ -1,5 +1,7 @@
 package rules
 
+import ast.IfElseNode
+import ast.PrintStatementNode
 import ast.StatementNode
 
 class SingleSpaceBetweenTokensRule : FormatterRule {
@@ -8,6 +10,14 @@ class SingleSpaceBetweenTokensRule : FormatterRule {
         variableTypes: Map<String, Any>,
         result: String,
     ): String {
+        if (node is PrintStatementNode) {
+            // Special handling for PrintStatementNode to avoid separating println from its arguments
+            return result.replace("\\s+".toRegex(), " ").trim()
+        }
+        if (node is IfElseNode) {
+            return result
+        }
+
         val modifiedResult = StringBuilder()
         var i = 0
 

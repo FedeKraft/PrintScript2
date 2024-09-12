@@ -8,6 +8,8 @@ import parserTypes.AssignationParser
 import parserTypes.PrintParser
 import parserTypes.VariableDeclarationParser
 import reader.Reader
+import rules.Indentation
+import rules.NewlineBeforePrintlnRule
 import rules.SingleSpaceBetweenTokensRule
 import rules.SpaceAfterColonRule
 import rules.SpaceAroundEqualsRule
@@ -21,19 +23,13 @@ class FormatterTests {
     private val config = FormatterConfigLoader.loadConfig("src/test/resources/formatter-config.json")
 
     private val rulesEnabled = listOf(
+        SingleSpaceBetweenTokensRule(),
         SpaceAroundEqualsRule(config.spaceAroundEquals.enabled),
         SpaceBeforeColonRule(config.spaceBeforeColon.enabled),
         SpaceAroundOperatorsRule(),
-        SpaceAfterColonRule(enabled = config.spaceAfterColon.enabled),
-        SingleSpaceBetweenTokensRule(),
-    )
-
-    private val rulesDisabled = listOf(
-        SpaceAroundEqualsRule(config.spaceAroundEquals.enabled),
-        SpaceBeforeColonRule(false),
-        SpaceAroundOperatorsRule(),
-        SpaceAfterColonRule(enabled = config.spaceAfterColon.enabled),
-        SingleSpaceBetweenTokensRule(),
+        SpaceAfterColonRule(config.spaceAfterColon.enabled),
+        NewlineBeforePrintlnRule(config.newlineBeforePrintln),
+        Indentation(config.indentation),
     )
 
     private fun readSourceCodeFromFile(filename: String): String {
@@ -45,7 +41,7 @@ class FormatterTests {
         val expected = readSourceCodeFromFile("formatterTest2Expected.txt")
         val unformattedCode = readSourceCodeFromFile("formatterTest2.txt").toByteArray()
         val inputStream = ByteArrayInputStream(unformattedCode)
-        val lexer = LexerFactory().createLexer1_0(Reader(inputStream))
+        val lexer = LexerFactory().createLexer1_1(Reader(inputStream))
         val parserDirector = ParserDirector(
             lexer,
             mapOf(
@@ -75,7 +71,7 @@ class FormatterTests {
         val expected = readSourceCodeFromFile("formatterTest2ExpectedDisabled.txt")
         val unformattedCode = readSourceCodeFromFile("formatterTest2.txt").toByteArray()
         val inputStream = ByteArrayInputStream(unformattedCode)
-        val lexer = LexerFactory().createLexer1_0(Reader(inputStream))
+        val lexer = LexerFactory().createLexer1_1(Reader(inputStream))
         val parserDirector = ParserDirector(
             lexer,
             mapOf(
@@ -85,7 +81,7 @@ class FormatterTests {
             ),
         )
 
-        val formatter = Formatter(rulesDisabled, parserDirector)
+        val formatter = Formatter(rulesEnabled, parserDirector)
         var result = ""
         for (formattedString in formatter.format()) {
             if (parserDirector.hasNextAST()) {
