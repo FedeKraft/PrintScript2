@@ -3,13 +3,13 @@ package commands
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.options.option
-import command.AssignationParser
-import command.PrintParser
-import command.VariableDeclarationParser
 import factory.LexerFactory
 import formatter.Formatter
 import formatter.FormatterConfigLoader
 import parser.ParserDirector
+import parserTypes.AssignationParser
+import parserTypes.PrintParser
+import parserTypes.VariableDeclarationParser
 import reader.Reader
 import rules.SpaceAroundEqualsRule
 import token.TokenType

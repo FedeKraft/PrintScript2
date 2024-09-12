@@ -1,12 +1,12 @@
-import command.AssignationParser
-import command.PrintParser
-import command.VariableDeclarationParser
 import factory.LexerFactory
 import formatter.Formatter
 import formatter.FormatterConfigLoader
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import parser.ParserDirector
+import parserTypes.AssignationParser
+import parserTypes.PrintParser
+import parserTypes.VariableDeclarationParser
 import reader.Reader
 import rules.SingleSpaceBetweenTokensRule
 import rules.SpaceAfterColonRule

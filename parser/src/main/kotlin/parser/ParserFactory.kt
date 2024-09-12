@@ -1,9 +1,9 @@
 package parser
 
-import command.AssignationParser
-import command.ConstDeclarationParser
-import command.PrintParser
-import command.VariableDeclarationParser
+import parserTypes.AssignationParser
+import parserTypes.ConstDeclarationParser
+import parserTypes.PrintParser
+import parserTypes.VariableDeclarationParser
 import token.TokenProvider
 import token.TokenType
 

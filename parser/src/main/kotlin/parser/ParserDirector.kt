@@ -6,11 +6,11 @@ import ast.ExpressionNode
 import ast.IdentifierNode
 import ast.IfElseNode
 import ast.StatementNode
-import command.AssignationParser
-import command.ConstDeclarationParser
-import command.Parser
-import command.PrintParser
-import command.VariableDeclarationParser
+import parserTypes.AssignationParser
+import parserTypes.ConstDeclarationParser
+import parserTypes.Parser
+import parserTypes.PrintParser
+import parserTypes.VariableDeclarationParser
 import token.Token
 import token.TokenProvider
 import token.TokenType
@@ -25,29 +25,22 @@ class ParserDirector(
     fun nextStatement(): StatementNode {
         val tokens = mutableListOf<token.Token>()
         while (tokenProvider.hasNextToken()) {
-            if (currentToken.type == TokenType.UNKNOWN) {
-                throw RuntimeException(
-                    "unknown token in variable assign at line: ${currentToken.line}, column: ${currentToken.column}",
-                )
-            }
-
-            if (currentToken.type == TokenType.IF) {
+            checkUnknownToken()
+            if (isIfOrElseTokenType()) {
                 return processBlockNode()
             }
-            if (currentToken.type == TokenType.ELSE) {
-                return processBlockNode()
-            }
-            if (currentToken.type == TokenType.SEMICOLON) {
+            if (isSemiColonType()) {
                 currentToken = tokenProvider.nextToken()
                 return processStatement(tokens)
             }
+
             tokens.add(currentToken)
             currentToken = tokenProvider.nextToken()
         }
         if (tokens.isEmpty()) {
             throw NoSuchElementException("No more tokens available")
         }
-        if (currentToken.type != TokenType.SEMICOLON) {
+        if (!isSemiColonType()) {
             throw RuntimeException("Expected semicolon at line: ${currentToken.line}, column: ${currentToken.column}")
         }
         return processStatement(tokens)
@@ -58,11 +51,14 @@ class ParserDirector(
     override fun hasNextAST(): Boolean = tokenProvider.hasNextToken()
 
     private fun processBlockNode(): StatementNode {
-        val currentIfLine = currentToken.line
-        val currentIfColumn = currentToken.column
+        // guardo la linea y columna del if
+        val blockLine = currentToken.line
+        val blockColumn = currentToken.column
+        // me salteo la palabra reservada if
         currentToken = tokenProvider.nextToken()
+
         val condition = getIfCondition()
-        val blockAst = mutableListOf<StatementNode>() // armo listita vacia para agregar los statements
+        val blockAst = mutableListOf<StatementNode>()
         currentToken = tokenProvider.nextToken()
         currentToken = tokenProvider.nextToken()
         currentToken = tokenProvider.nextToken()
@@ -83,23 +79,15 @@ class ParserDirector(
         if (currentToken.type == TokenType.ELSE) {
             val elseBlockNode = processElseBlockNode()
             val blockStatements = BlockNode(blockAst, 0, 0)
-            return IfElseNode(condition, blockStatements, elseBlockNode, currentIfLine, currentIfColumn)
+            return IfElseNode(condition, blockStatements, elseBlockNode, blockLine, blockColumn)
         }
         val blockStatements = BlockNode(blockAst, 0, 0)
-        return IfElseNode(condition, blockStatements, null, currentIfLine, currentIfColumn)
+        return IfElseNode(condition, blockStatements, null, blockLine, blockColumn)
     }
 
     private fun processStatement(tokens: List<Token>): StatementNode {
         val firstToken = tokens.firstOrNull() ?: throw RuntimeException("Empty token list")
-        val parser =
-            when (firstToken.type) {
-                TokenType.IDENTIFIER -> AssignationParser()
-                TokenType.LET -> VariableDeclarationParser()
-                TokenType.PRINT -> PrintParser()
-                TokenType.CONST -> ConstDeclarationParser()
-
-                else -> throw RuntimeException("Unsupported token type: ${firstToken.type}")
-            }
+        val parser = getParser(firstToken)
         return parser.parse(tokens)
     }
 
@@ -143,5 +131,29 @@ class ParserDirector(
         }
         currentToken = tokenProvider.nextToken()
         return BlockNode(blockAst, 0, 0)
+    }
+
+    private fun checkUnknownToken() {
+        if (currentToken.type == TokenType.UNKNOWN) {
+            throw RuntimeException(
+                "unknown token in variable assign at line: ${currentToken.line}, column: ${currentToken.column}",
+            )
+        }
+    }
+    private fun isIfOrElseTokenType(): Boolean {
+        return currentToken.type == TokenType.IF || currentToken.type == TokenType.ELSE
+    }
+    private fun isSemiColonType(): Boolean {
+        return currentToken.type == TokenType.SEMICOLON
+    }
+
+    private fun getParser(firstToken: Token): Parser {
+        return when (firstToken.type) {
+            TokenType.IDENTIFIER -> AssignationParser()
+            TokenType.LET -> VariableDeclarationParser()
+            TokenType.PRINT -> PrintParser()
+            TokenType.CONST -> ConstDeclarationParser()
+            else -> throw RuntimeException("Unsupported token type: ${firstToken.type}")
+        }
     }
 }

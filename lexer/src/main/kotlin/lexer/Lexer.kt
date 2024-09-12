@@ -17,6 +17,7 @@ class Lexer(
     override fun hasNextToken(): Boolean = currentChar != null
 
     override fun nextToken(): Token {
+        // Si no hay más caracteres, devolver un token nulo
         if (currentChar == null) {
             return Token(TokenType.UNKNOWN, TokenValue.NullValue, currentLine, currentColumn)
         }
@@ -52,34 +53,46 @@ class Lexer(
         val tokenType = searchInTokenPatterns(value)
 
         if (tokenType != null) {
-            return when (tokenType) {
-                TokenType.STRING ->
-                    Token(
-                        tokenType,
-                        TokenValue.StringValue(value.removeSurrounding("\"")),
-                        startLine,
-                        startColumn,
-                    )
-                TokenType.NUMBER ->
-                    Token(
-                        tokenType,
-                        TokenValue.NumberValue(value.toDouble()),
-                        startLine,
-                        startColumn,
-                    )
-                TokenType.BOOLEAN ->
-                    Token(
-                        tokenType,
-                        TokenValue.BooleanValue(value.toBoolean()),
-                        startLine,
-                        startColumn,
-                    )
-                else -> Token(tokenType, TokenValue.StringValue(value), startLine, startColumn)
-            }
+            return generateTokens(tokenType, value, startLine, startColumn)
         }
 
         // Si no se encuentra un patrón, es un identificador (como 'print')
         return Token(TokenType.IDENTIFIER, TokenValue.StringValue(value), startLine, startColumn)
+    }
+
+    private fun generateTokens(
+        tokenType: TokenType,
+        value: String,
+        startLine: Int,
+        startColumn: Int,
+    ): Token {
+        return when (tokenType) {
+            TokenType.STRING ->
+                Token(
+                    tokenType,
+                    TokenValue.StringValue(value.removeSurrounding("\"")),
+                    startLine,
+                    startColumn,
+                )
+
+            TokenType.NUMBER ->
+                Token(
+                    tokenType,
+                    TokenValue.NumberValue(value.toDouble()),
+                    startLine,
+                    startColumn,
+                )
+
+            TokenType.BOOLEAN ->
+                Token(
+                    tokenType,
+                    TokenValue.BooleanValue(value.toBoolean()),
+                    startLine,
+                    startColumn,
+                )
+
+            else -> Token(tokenType, TokenValue.StringValue(value), startLine, startColumn)
+        }
     }
 
     private fun handleStringLiteral(

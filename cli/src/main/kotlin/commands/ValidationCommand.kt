@@ -2,11 +2,11 @@ package commands
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
-import command.AssignationParser
-import command.PrintParser
-import command.VariableDeclarationParser
 import factory.LexerFactory
 import parser.ParserDirector
+import parserTypes.AssignationParser
+import parserTypes.PrintParser
+import parserTypes.VariableDeclarationParser
 import reader.Reader
 import token.TokenType
 import java.io.File
