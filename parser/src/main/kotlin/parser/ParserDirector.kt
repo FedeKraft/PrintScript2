@@ -59,13 +59,13 @@ class ParserDirector(private val tokenProvider: TokenProvider, private val comma
         val currentIfLine = currentToken.line
         val currentIfColumn = currentToken.column
         currentToken = tokenProvider.nextToken()
-        var condition = getIfCondition()
-        var blockAst = mutableListOf<StatementNode>() // armo listita vacia para agregar los statements
+        val condition = getIfCondition()
+        val blockAst = mutableListOf<StatementNode>() // armo listita vacia para agregar los statements
         currentToken = tokenProvider.nextToken()
         currentToken = tokenProvider.nextToken()
         currentToken = tokenProvider.nextToken()
         while (currentToken.type != TokenType.CLOSE_BRACE) {
-            var blockTokens = mutableListOf<Token>() // lista para los tokens antes de cada parseo de linea
+            val blockTokens = mutableListOf<Token>() // lista para los tokens antes de cada parseo de linea
             while (currentToken.type != TokenType.SEMICOLON) { // consigo todos los tokens de la linea
                 if (currentToken.type == TokenType.IF) {
                     blockAst.add(processBlockNode())
@@ -74,16 +74,16 @@ class ParserDirector(private val tokenProvider: TokenProvider, private val comma
                 currentToken = tokenProvider.nextToken()
             }
             currentToken = tokenProvider.nextToken()
-            var currentAst = processStatement(blockTokens) // parseo la linea
+            val currentAst = processStatement(blockTokens) // parseo la linea
             blockAst.add(currentAst) // la agrego a la list de statements y si no se cierra el if se corre la sig linea
         }
         currentToken = tokenProvider.nextToken()
         if (currentToken.type == TokenType.ELSE) {
-            var elseBlockNode = processElseBlockNode()
-            var blockStatements = BlockNode(blockAst, 0, 0)
+            val elseBlockNode = processElseBlockNode()
+            val blockStatements = BlockNode(blockAst, 0, 0)
             return IfElseNode(condition, blockStatements, elseBlockNode, currentIfLine, currentIfColumn)
         }
-        var blockStatements = BlockNode(blockAst, 0, 0)
+        val blockStatements = BlockNode(blockAst, 0, 0)
         return IfElseNode(condition, blockStatements, null, currentIfLine, currentIfColumn)
     }
 
@@ -119,12 +119,12 @@ class ParserDirector(private val tokenProvider: TokenProvider, private val comma
     }
 
     private fun processElseBlockNode(): BlockNode {
-        var blockAst = mutableListOf<StatementNode>() // armo listita vacia para agregar los statements
+        val blockAst = mutableListOf<StatementNode>() // armo listita vacia para agregar los statements
         currentToken = tokenProvider.nextToken()
         currentToken = tokenProvider.nextToken()
 
         while (currentToken.type != TokenType.CLOSE_BRACE) {
-            var blockTokens = mutableListOf<Token>() // lista para los tokens antes de cada parseo de linea
+            val blockTokens = mutableListOf<Token>() // lista para los tokens antes de cada parseo de linea
             while (currentToken.type != TokenType.SEMICOLON) { // consigo todos los tokens de la linea
                 if (currentToken.type == TokenType.IF) {
                     blockAst.add(processBlockNode())
@@ -133,7 +133,7 @@ class ParserDirector(private val tokenProvider: TokenProvider, private val comma
                 currentToken = tokenProvider.nextToken()
             }
             currentToken = tokenProvider.nextToken()
-            var currentAst = processStatement(blockTokens) // parseo la linea
+            val currentAst = processStatement(blockTokens) // parseo la linea
             blockAst.add(currentAst) // la agrego a la list de statements y si no se cierra el if se corre la sig linea
         }
         currentToken = tokenProvider.nextToken()
