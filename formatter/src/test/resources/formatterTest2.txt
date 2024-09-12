@@ -9,9 +9,3 @@ let    y   :   number = 2.71;
 let z    : number = x*y;
 let isTrue: string = "true";
 let isFalse: string = "false";
-if(true){
-    println("True");
-}
-else {
-    println("False");
-}
