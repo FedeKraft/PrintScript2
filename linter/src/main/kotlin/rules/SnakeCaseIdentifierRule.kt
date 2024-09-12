@@ -34,7 +34,7 @@ class SnakeCaseIdentifierRule(
         if (!identifier.name.matches(Regex("^[a-z]+(_[a-z]+)*$"))) {
             errors.add(
                 LinterError(
-                    message = "Identifier '${identifier.name}' should be in camelCase",
+                    message = "Identifier '${identifier.name}' should be in snake_case",
                     line = identifier.line,
                     column = identifier.column,
                 ),

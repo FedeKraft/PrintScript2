@@ -5,7 +5,7 @@ import parser.ASTProvider
 import rules.LinterRule
 
 class Linter(
-    private val rules: List<LinterRule>,
+    val rules: List<LinterRule>,
     private val astProvider: ASTProvider,
 ) {
     fun lint(): Sequence<LinterError> =

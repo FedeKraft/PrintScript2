@@ -121,4 +121,16 @@ class InterpreterTestWithParser {
         println(errorCollector.getErrors())
         assertEquals(0, errorCollector.getErrors().size)
     }
+
+    @Test
+    fun test11() {
+        val lexer = LexerFactory().createLexer1_1(Reader(File("src/test/resources/test11.txt").inputStream()))
+        val parser = ParserFactory().createParser1_1(lexer)
+        val errorCollector = ErrorCollector()
+        val interpreter = Interpreter(parser, TestInputProvider("world"), PrintEmitter(), errorCollector)
+
+        interpreter.interpret()
+        println(errorCollector.getErrors())
+        assertEquals(0, errorCollector.getErrors().size)
+    }
 }
