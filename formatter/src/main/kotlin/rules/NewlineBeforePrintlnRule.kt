@@ -2,7 +2,7 @@ package rules
 
 import ast.PrintStatementNode
 import ast.StatementNode
-import formatter.config.NewlineBeforePrintlnConfig
+import config.NewlineBeforePrintlnConfig
 
 class NewlineBeforePrintlnRule(private val config: NewlineBeforePrintlnConfig) : FormatterRule {
 

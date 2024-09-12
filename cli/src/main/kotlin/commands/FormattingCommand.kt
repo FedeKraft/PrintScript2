@@ -31,7 +31,7 @@ class FormattingCommand : CliktCommand(help = "Format the file") {
 
     override fun run() {
         val sourceCode = readSourceCodeFromFile(file)
-        val lexer = LexerFactory().createLexer1_0(Reader(sourceCode))
+        val lexer = LexerFactory().createLexer1_0(Reader(File(sourceCode).inputStream()))
         val parserDirector = ParserDirector(
             lexer,
             mapOf(

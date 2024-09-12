@@ -22,7 +22,7 @@ class LinterConfigLoaderErrorTests {
         } catch (e: FileNotFoundException) {
             println("Caught expected exception: ${e::class.simpleName}")
             // Verificar que se lance FileNotFoundException
-            assert(e is FileNotFoundException)
+            assert(true)
         } catch (e: Exception) {
             // Si se lanza alguna otra excepción, fallar el test
             println("Caught unexpected exception: ${e::class.simpleName}")
