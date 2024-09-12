@@ -10,7 +10,6 @@ import ast.ReadEnvNode
 import ast.ReadInputNode
 import ast.StatementNode
 import ast.StringLiteralNode
-import ast.VariableDeclarationNode
 import token.Token
 import token.TokenType
 import token.TokenValue
@@ -38,8 +37,8 @@ class ConstDeclarationParser : Parser {
                     )
                     val expressionNode = PrattParser(newArgs).parseExpression()
                     return ConstDeclarationNode(identifierNode, expressionNode, tokens[0].line, tokens[0].column)
-                        }
-                    }
+                }
+            }
             val node = lookForReadEnvOrReadInput(args)
             return ConstDeclarationNode(identifierNode, node, tokens[0].line, tokens[0].column)
         }
