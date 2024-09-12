@@ -6,5 +6,5 @@ data class Config(
     @JsonProperty("identifier_format")
     val identifierFormat: String = "none", // Default to none
     @JsonProperty("mandatory-variable-or-literal-in-println")
-    val mandatoryVariableOrLiteral: Boolean = false,
+    val mandatoryVariableOrLiteral: String = "none",
 )
