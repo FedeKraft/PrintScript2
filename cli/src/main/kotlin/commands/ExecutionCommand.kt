@@ -5,10 +5,11 @@ import com.github.ajalt.clikt.parameters.arguments.argument
 import command.AssignationParser
 import command.PrintParser
 import command.VariableDeclarationParser
+import emitter.PrintEmitter
 import factory.LexerFactory
-import inputProvider.TestInputProvider
 import interpreter.Interpreter
 import parser.ParserDirector
+import provider.TestInputProvider
 import reader.Reader
 import token.TokenType
 import java.io.File
@@ -26,7 +27,7 @@ class ExecutionCommand : CliktCommand(help = "Execute the file") {
                 TokenType.IDENTIFIER to AssignationParser(),
             ),
         )
-        val interpreter = Interpreter(parser, TestInputProvider("Hola"))
+        val interpreter = Interpreter(parser, TestInputProvider("Hola"), PrintEmitter())
         interpreter.interpret()
         println("file executed")
     }
