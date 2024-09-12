@@ -1,0 +1,1 @@
+let var3 : string = readInput("Ingresa un boolean");

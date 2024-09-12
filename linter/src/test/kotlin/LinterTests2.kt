@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test
 import parser.ASTProvider
 import rules.CamelCaseIdentifierRule
 import rules.SnakeCaseIdentifierRule
+import token.TokenType
 
 class LinterTests2 {
 
@@ -18,6 +19,7 @@ class LinterTests2 {
             private val nodes = listOf(
                 VariableDeclarationNode(
                     IdentifierNode("validCamelCase", line = 1, column = 1),
+                    TokenType.NUMBER_TYPE,
                     NumberLiteralNode(42.0, line = 1, column = 10),
                     line = 1,
                     column = 1,
@@ -50,6 +52,7 @@ class LinterTests2 {
             private val nodes = listOf(
                 VariableDeclarationNode(
                     IdentifierNode("Invalid_snake_case", line = 2, column = 3),
+                    TokenType.NUMBER_TYPE,
                     NumberLiteralNode(42.0, line = 2, column = 10),
                     line = 2,
                     column = 3,
@@ -89,6 +92,7 @@ class LinterTests2 {
                 hasMore = false // Solo devolver un nodo, luego detener el ciclo
                 return VariableDeclarationNode(
                     IdentifierNode("invalid_case", line = 3, column = 4),
+                    TokenType.NUMBER_TYPE,
                     NumberLiteralNode(42.0, line = 3, column = 12),
                     line = 3,
                     column = 4,

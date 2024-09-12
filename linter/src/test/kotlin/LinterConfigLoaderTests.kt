@@ -5,6 +5,7 @@ import config.LinterConfigLoader
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import parser.ASTProvider
+import token.TokenType
 import java.nio.file.Paths
 
 class LinterConfigLoaderTests {
@@ -21,6 +22,7 @@ class LinterConfigLoaderTests {
                 hasMore = false
                 return VariableDeclarationNode(
                     IdentifierNode("missingField", line = 2, column = 3),
+                    TokenType.NUMBER_TYPE,
                     NumberLiteralNode(42.0, line = 2, column = 10),
                     line = 2,
                     column = 3,
@@ -46,6 +48,7 @@ class LinterConfigLoaderTests {
                 hasMore = false
                 return VariableDeclarationNode(
                     IdentifierNode("anythingGoes", line = 1, column = 1),
+                    TokenType.NUMBER_TYPE,
                     NumberLiteralNode(42.0, line = 1, column = 5),
                     line = 1,
                     column = 1,
