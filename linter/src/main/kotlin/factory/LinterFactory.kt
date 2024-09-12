@@ -13,6 +13,7 @@ class LinterFactory {
             listOf(
                 CamelCaseIdentifierRule(),
                 PrintSimpleExpressionRule(),
+                SnakeCaseIdentifierRule(),
             )
         return Linter(rules, astProvider)
     }
