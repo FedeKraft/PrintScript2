@@ -12,7 +12,7 @@ class PrintSimpleExpressionRule(
 
         when (node) {
             is PrintStatementNode -> {
-                if (node.expression.toFormattedString(emptyMap()).length > 40) {
+                if (node.expression.toFormattedString(emptyMap()).length > 10) {
                     errors.add(
                         LinterError(
                             message = "Print statement too complex",

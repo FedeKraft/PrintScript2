@@ -73,8 +73,8 @@ class TestRule {
         val parser = ParserFactory().createParser1_0(lexer)
         val linter = LinterFactory().createLinter1_0(parser, inputStream)
 
-        linter.lint()
-    }
+        val errors = linter.lint().toList()
+        assertEquals(1, errors.size) }
 
     @Test
     fun testLinterFunctionalTest4() {
