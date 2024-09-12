@@ -16,13 +16,14 @@ import token.TokenType
 import token.TokenValue
 
 class VariableDeclarationParser : Parser {
-
+    private var tokenType: TokenType = TokenType.STRING
     override fun parse(tokens: List<Token>): StatementNode {
         val errorChecker = VariableDeclarationSyntaxErrorChecker()
         if (!errorChecker.check(tokens)) {
             throw RuntimeException("Syntax error in variable declaration statement")
         }
         val identifierToken = tokens[1]
+        tokenType = tokens[3].type
         val identifierNode =
             IdentifierNode(identifierToken.value.toString(), identifierToken.line, identifierToken.column)
 
@@ -42,11 +43,12 @@ class VariableDeclarationParser : Parser {
                         Token(TokenType.RIGHT_PARENTHESIS, TokenValue.StringValue(")"), 0, 0),
                     )
                     val expressionNode = PrattParser(newArgs).parseExpression()
-                    return VariableDeclarationNode(identifierNode, expressionNode, tokens[0].line, tokens[0].column)
+                    return VariableDeclarationNode(identifierNode,tokenType, expressionNode, tokens[0].line, tokens[0].column)
                 }
             }
+
             val node = lookForReadEnvOrReadInput(args)
-            return VariableDeclarationNode(identifierNode, node, tokens[0].line, tokens[0].column)
+            return VariableDeclarationNode(identifierNode,tokens[3].type, node, tokens[0].line, tokens[0].column)
         }
         val expressionToken = tokens[5]
 
@@ -83,7 +85,7 @@ class VariableDeclarationParser : Parser {
         }
 
         val variableNode =
-            VariableDeclarationNode(identifierNode, expressionNode, identifierToken.line, identifierToken.column)
+            VariableDeclarationNode(identifierNode,tokenType, expressionNode, identifierToken.line, identifierToken.column)
 
         return variableNode
     }

@@ -1,0 +1,2 @@
+let var2 : number = readInput("Ingresa un numero: ");
+var2 = readInput("Ingresa otro numero: ");
