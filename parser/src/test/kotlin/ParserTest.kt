@@ -49,7 +49,6 @@ class ParserTest {
                 PrintStatementNode(StringLiteralNode("Hello", 3, 9), 3, 1),
                 PrintStatementNode(BooleanLiteralNode(true, 4, 9), 4, 1),
             )
-        // Assert that the actual AST matches the expected AST
         assertEquals(expectedAst, actualAst, "The AST generated does not match the expected structure")
     }
 
