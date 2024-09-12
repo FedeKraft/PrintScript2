@@ -21,7 +21,7 @@ import token.TokenType
 
 class ParserTest {
     @Test
-    fun `test parser`(){
+    fun `test parser`() {
         val reader = Reader("src/test/resources/testCodeIdentifier.txt")
         val lexer = LexerFactory().createLexer1_1(reader)
         val parser = ParserFactory().createParser1_0(lexer)
@@ -66,7 +66,8 @@ class ParserTest {
             VariableDeclarationNode(
                 IdentifierNode("name", 1, 5),
                 StringLiteralNode("Olive", 1, 20),
-                1, 5
+                1,
+                5,
             ),
             VariableDeclarationNode(
                 IdentifierNode("age", 2, 5),
@@ -74,9 +75,11 @@ class ParserTest {
                     NumberLiteralNode(10.0, 2, 19),
                     TokenType.SUM,
                     NumberLiteralNode(5.0, 2, 24),
-                    2, 22
+                    2,
+                    22,
                 ),
-                2, 1
+                2,
+                1,
             ),
             VariableDeclarationNode(
                 IdentifierNode("age2", 3, 5),
@@ -85,7 +88,8 @@ class ParserTest {
                         IdentifierNode("age", 3, 20),
                         TokenType.SUM,
                         NumberLiteralNode(5.0, 3, 26),
-                        3, 24
+                        3,
+                        24,
                     ),
                     TokenType.SUBTRACT,
                     BinaryExpressionNode(
@@ -93,21 +97,26 @@ class ParserTest {
                             NumberLiteralNode(1.0, 3, 30),
                             TokenType.MULTIPLY,
                             NumberLiteralNode(2.0, 3, 34),
-                            3, 32
+                            3,
+                            32,
                         ),
                         TokenType.DIVIDE,
                         NumberLiteralNode(3.0, 3, 38),
-                        3, 36
+                        3,
+                        36,
                     ),
-                    3, 28
+                    3,
+                    28,
                 ),
-                3, 1
+                3,
+                1,
             ),
             VariableDeclarationNode(
                 IdentifierNode("isAlive", 4, 5),
                 BooleanLiteralNode(true, 4, 24),
-                4, 5
-            )
+                4,
+                5,
+            ),
         )
 
         // Assert that the actual AST matches the expected AST
@@ -286,11 +295,10 @@ class ParserTest {
                 BooleanLiteralNode(true, 4, 6),
                 4,
                 1,
-            )
+            ),
         )
         assertEquals(expectedAst, actualAst, "The AST generated does not match the expected structure")
     }
-
 
     @Test
     fun `test Const parsing`() {

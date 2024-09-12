@@ -10,7 +10,6 @@ import ast.ReadEnvNode
 import ast.ReadInputNode
 import ast.StatementNode
 import ast.StringLiteralNode
-import ast.VariableDeclarationNode
 import org.example.errorCheckers.syntactic.AssignationSyntaxErrorChecker
 import token.Token
 import token.TokenType
@@ -30,13 +29,20 @@ class AssignationParser : Parser {
         if (args.size > 1) {
             if (args[0].type != TokenType.READ_INPUT) {
                 if (args[0].type != TokenType.READ_ENV) {
-                    val newArgs = listOf(Token(TokenType.LEFT_PARENTHESIS, TokenValue.StringValue("("), 0, 0)) + args + listOf(
+                    val newArgs = listOf(
+                        Token(
+                            TokenType.LEFT_PARENTHESIS,
+                            TokenValue.StringValue("("),
+                            0,
+                            0,
+                        ),
+                    ) + args + listOf(
                         Token(TokenType.RIGHT_PARENTHESIS, TokenValue.StringValue(")"), 0, 0),
                     )
                     val expressionNode = PrattParser(newArgs).parseExpression()
                     return AssignationNode(identifierNode, expressionNode, tokens[0].line, tokens[0].column)
-                        }
-                    }
+                }
+            }
             val node = lookForReadEnvOrReadInput(args)
             return AssignationNode(identifierNode, node, tokens[0].line, tokens[0].column)
         }
