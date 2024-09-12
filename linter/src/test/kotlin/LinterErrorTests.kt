@@ -3,7 +3,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class LinterErrorTests {
-
     @Test
     fun testLinterErrorMessage() {
         val error = LinterError("Identifier 'x' should be in camelCase", line = 1, column = 1)
@@ -22,10 +21,11 @@ class LinterErrorTests {
 
     @Test
     fun testMultipleLinterErrors() {
-        val errors = listOf(
-            LinterError("Error 1", line = 1, column = 1),
-            LinterError("Error 2", line = 2, column = 2),
-        )
+        val errors =
+            listOf(
+                LinterError("Error 1", line = 1, column = 1),
+                LinterError("Error 2", line = 2, column = 2),
+            )
 
         assertEquals(2, errors.size)
         assertEquals("Error 1", errors[0].message)

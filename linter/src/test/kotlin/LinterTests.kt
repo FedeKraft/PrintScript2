@@ -17,24 +17,26 @@ import rules.SnakeCaseIdentifierRule
 import token.TokenType
 
 class LinterTests {
-
     @Test
     fun testLintNoErrors() {
-        val astProvider = object : ASTProvider {
-            private val nodes = listOf(
-                VariableDeclarationNode(
-                    IdentifierNode("validCamelCase", line = 1, column = 1),
-                    TokenType.NUMBER_TYPE,
-                    NumberLiteralNode(42.0, line = 1, column = 10),
-                    line = 1,
-                    column = 1,
-                ),
-            )
-            private var index = 0
+        val astProvider =
+            object : ASTProvider {
+                private val nodes =
+                    listOf(
+                        VariableDeclarationNode(
+                            IdentifierNode("validCamelCase", line = 1, column = 1),
+                            TokenType.NUMBER_TYPE,
+                            NumberLiteralNode(42.0, line = 1, column = 10),
+                            line = 1,
+                            column = 1,
+                        ),
+                    )
+                private var index = 0
 
-            override fun hasNextAST() = index < nodes.size
-            override fun getNextAST() = nodes[index++]
-        }
+                override fun hasNextAST() = index < nodes.size
+
+                override fun getNextAST() = nodes[index++]
+            }
 
         val camelCaseRule = CamelCaseIdentifierRule(isActive = true)
         val snakeCaseRule = SnakeCaseIdentifierRule(isActive = false)
@@ -48,21 +50,24 @@ class LinterTests {
 
     @Test
     fun testLintWithCamelCaseErrors() {
-        val astProvider = object : ASTProvider {
-            private val nodes = listOf(
-                VariableDeclarationNode(
-                    IdentifierNode("Invalid_snake_case", line = 1, column = 1),
-                    TokenType.NUMBER_TYPE,
-                    NumberLiteralNode(42.0, line = 1, column = 10),
-                    line = 1,
-                    column = 1,
-                ),
-            )
-            private var index = 0
+        val astProvider =
+            object : ASTProvider {
+                private val nodes =
+                    listOf(
+                        VariableDeclarationNode(
+                            IdentifierNode("Invalid_snake_case", line = 1, column = 1),
+                            TokenType.NUMBER_TYPE,
+                            NumberLiteralNode(42.0, line = 1, column = 10),
+                            line = 1,
+                            column = 1,
+                        ),
+                    )
+                private var index = 0
 
-            override fun hasNextAST() = index < nodes.size
-            override fun getNextAST() = nodes[index++]
-        }
+                override fun hasNextAST() = index < nodes.size
+
+                override fun getNextAST() = nodes[index++]
+            }
 
         val camelCaseRule = CamelCaseIdentifierRule(isActive = true)
 
@@ -73,6 +78,7 @@ class LinterTests {
         assertEquals(1, errors.size)
         assertEquals("Identifier 'Invalid_snake_case' should be in camelCase", errors[0].message)
     }
+
     private val camelCaseRule = CamelCaseIdentifierRule()
 
     @Test
@@ -103,6 +109,7 @@ class LinterTests {
         assertEquals(1, errors.size)
         assertEquals("Identifier 'Invalid_camelCase' should be in camelCase", errors[0].message)
     }
+
     private val snakeCaseRule = SnakeCaseIdentifierRule()
 
     @Test
@@ -133,6 +140,7 @@ class LinterTests {
         assertEquals(1, errors.size)
         assertEquals("Identifier 'InvalidSnakeCase' should be in camelCase", errors[0].message)
     }
+
     private val printRule = PrintSimpleExpressionRule()
 
     @Test

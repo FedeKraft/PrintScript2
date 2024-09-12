@@ -10,7 +10,9 @@ import ast.StatementNode
 import ast.VariableDeclarationNode
 import linter.LinterError
 
-class CamelCaseIdentifierRule(override var isActive: Boolean = true) : LinterRule {
+class CamelCaseIdentifierRule(
+    override var isActive: Boolean = true,
+) : LinterRule {
     override fun apply(node: StatementNode): List<LinterError> {
         val errors = mutableListOf<LinterError>()
 
@@ -35,7 +37,10 @@ class CamelCaseIdentifierRule(override var isActive: Boolean = true) : LinterRul
         return errors
     }
 
-    private fun checkIdentifier(identifier: IdentifierNode, errors: MutableList<LinterError>) {
+    private fun checkIdentifier(
+        identifier: IdentifierNode,
+        errors: MutableList<LinterError>,
+    ) {
         if (!identifier.name.matches(Regex("^[a-z]+([A-Z][a-z]*)*$"))) {
             errors.add(
                 LinterError(

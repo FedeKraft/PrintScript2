@@ -9,7 +9,6 @@ class CamelORSnakeRules(
     private val snakeCaseRule: SnakeCaseIdentifierRule,
     override var isActive: Boolean = true,
 ) : LinterRule {
-
     override fun apply(node: StatementNode): List<LinterError> {
         val errors = mutableListOf<LinterError>()
 

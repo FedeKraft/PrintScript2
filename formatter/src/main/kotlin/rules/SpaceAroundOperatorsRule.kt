@@ -3,7 +3,11 @@ package rules
 import ast.StatementNode
 
 class SpaceAroundOperatorsRule : FormatterRule {
-    override fun applyRule(node: StatementNode, variableTypes: Map<String, Any>, result: String): String {
+    override fun applyRule(
+        node: StatementNode,
+        variableTypes: Map<String, Any>,
+        result: String,
+    ): String {
         val operators = setOf('+', '-', '*', '/')
         val modifiedResult = StringBuilder()
         var i = 0

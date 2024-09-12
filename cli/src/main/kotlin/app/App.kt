@@ -10,5 +10,4 @@ fun main(args: Array<String>) =
             // AnalyzingCommand(),
             // FormattingCommand(),
             // ValidationCommand(),
-        )
-        .main(args)
+        ).main(args)

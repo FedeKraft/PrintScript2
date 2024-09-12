@@ -13,7 +13,8 @@ class PrintSyntaxErrorChecker : ErrorChecker {
     }
 
     private fun checkNecessaryTokens(tokens: List<Token>) {
-        if (tokens.size < 3 || (
+        if (tokens.size < 3 ||
+            (
                 tokens[1].type == TokenType.LEFT_PARENTHESIS &&
                     tokens[2].type == TokenType.RIGHT_PARENTHESIS
                 )
@@ -68,7 +69,8 @@ class PrintSyntaxErrorChecker : ErrorChecker {
         }
         val argsTokenTypes = args.map { it.type }
         for (i in 1 until args.size step 2) {
-            if (argsTokenTypes[i] !in listOf(
+            if (argsTokenTypes[i] !in
+                listOf(
                     TokenType.ARITHMETIC_OP,
                     TokenType.EQUALS,
                     TokenType.SUM,
@@ -89,7 +91,8 @@ class PrintSyntaxErrorChecker : ErrorChecker {
             }
         }
         for (i in args.indices step 2) {
-            if (argsTokenTypes[i] !in listOf(
+            if (argsTokenTypes[i] !in
+                listOf(
                     TokenType.IDENTIFIER,
                     TokenType.NUMBER,
                     TokenType.STRING,

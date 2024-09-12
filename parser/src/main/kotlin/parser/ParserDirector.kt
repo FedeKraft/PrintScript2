@@ -16,9 +16,12 @@ import token.TokenProvider
 import token.TokenType
 import token.TokenValue
 
-class ParserDirector(private val tokenProvider: TokenProvider, private val commands: Map<TokenType, Parser>) :
-    ASTProvider {
+class ParserDirector(
+    private val tokenProvider: TokenProvider,
+    private val commands: Map<TokenType, Parser>,
+) : ASTProvider {
     private var currentToken = tokenProvider.nextToken()
+
     fun nextStatement(): StatementNode {
         val tokens = mutableListOf<token.Token>()
         while (tokenProvider.hasNextToken()) {
@@ -47,13 +50,9 @@ class ParserDirector(private val tokenProvider: TokenProvider, private val comma
         return processStatement(tokens)
     }
 
-    override fun getNextAST(): StatementNode {
-        return nextStatement()
-    }
+    override fun getNextAST(): StatementNode = nextStatement()
 
-    override fun hasNextAST(): Boolean {
-        return tokenProvider.hasNextToken()
-    }
+    override fun hasNextAST(): Boolean = tokenProvider.hasNextToken()
 
     private fun processBlockNode(): StatementNode {
         val currentIfLine = currentToken.line
@@ -89,14 +88,15 @@ class ParserDirector(private val tokenProvider: TokenProvider, private val comma
 
     private fun processStatement(tokens: List<Token>): StatementNode {
         val firstToken = tokens.firstOrNull() ?: throw RuntimeException("Empty token list")
-        val parser = when (firstToken.type) {
-            TokenType.IDENTIFIER -> AssignationParser()
-            TokenType.LET -> VariableDeclarationParser()
-            TokenType.PRINT -> PrintParser()
-            TokenType.CONST -> ConstDeclarationParser()
+        val parser =
+            when (firstToken.type) {
+                TokenType.IDENTIFIER -> AssignationParser()
+                TokenType.LET -> VariableDeclarationParser()
+                TokenType.PRINT -> PrintParser()
+                TokenType.CONST -> ConstDeclarationParser()
 
-            else -> throw RuntimeException("Unsupported token type: ${firstToken.type}")
-        }
+                else -> throw RuntimeException("Unsupported token type: ${firstToken.type}")
+            }
         return parser.parse(tokens)
     }
 
@@ -104,16 +104,18 @@ class ParserDirector(private val tokenProvider: TokenProvider, private val comma
         currentToken = tokenProvider.nextToken()
 
         return when (currentToken.type) {
-            TokenType.STRING -> StringLiteralNode(
-                (currentToken.value as TokenValue.StringValue).value,
-                currentToken.line,
-                currentToken.column,
-            )
-            TokenType.BOOLEAN -> BooleanLiteralNode(
-                (currentToken.value as TokenValue.BooleanValue).value,
-                currentToken.line,
-                currentToken.column,
-            )
+            TokenType.STRING ->
+                StringLiteralNode(
+                    (currentToken.value as TokenValue.StringValue).value,
+                    currentToken.line,
+                    currentToken.column,
+                )
+            TokenType.BOOLEAN ->
+                BooleanLiteralNode(
+                    (currentToken.value as TokenValue.BooleanValue).value,
+                    currentToken.line,
+                    currentToken.column,
+                )
             else -> throw RuntimeException("Unsupported token type: ${currentToken.type}")
         }
     }

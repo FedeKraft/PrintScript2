@@ -13,15 +13,20 @@ data class VariableDeclarationNode(
     val line: Int,
     val column: Int,
 ) : StatementNode() {
-
     override fun toFormattedString(variableTypes: Map<String, String>): String {
         val type = inferType(value, variableTypes)
+        if (value == NullValueNode(0, 0)) {
+            return "let ${identifier.toFormattedString(variableTypes)}: $type;"
+        }
         return "let ${identifier.toFormattedString(variableTypes)}: " +
             "$type = ${value.toFormattedString(variableTypes)};"
     }
 
-    private fun inferType(expression: ExpressionNode, variableTypes: Map<String, String>): String {
-        return when (expression) {
+    private fun inferType(
+        expression: ExpressionNode,
+        variableTypes: Map<String, String>,
+    ): String =
+        when (expression) {
             is StringLiteralNode -> "string"
             is NumberLiteralNode -> "number"
             is BooleanLiteralNode -> "boolean"
@@ -33,7 +38,6 @@ data class VariableDeclarationNode(
             }
             else -> "UnknownType" // Agregado para manejar tipos no conocidos
         }
-    }
 }
 
 data class AssignationNode(
@@ -42,9 +46,8 @@ data class AssignationNode(
     val line: Int,
     val column: Int,
 ) : StatementNode() {
-    override fun toFormattedString(variableTypes: Map<String, String>): String {
-        return "${identifier.toFormattedString(variableTypes)} = ${value.toFormattedString(variableTypes)};"
-    }
+    override fun toFormattedString(variableTypes: Map<String, String>): String =
+        "${identifier.toFormattedString(variableTypes)} = ${value.toFormattedString(variableTypes)};"
 }
 
 data class PrintStatementNode(
@@ -52,9 +55,9 @@ data class PrintStatementNode(
     val line: Int,
     val column: Int,
 ) : StatementNode() {
-    override fun toFormattedString(variableTypes: Map<String, String>): String {
-        return "print(${expression.toFormattedString(variableTypes)});"
-    }
+    override fun toFormattedString(variableTypes: Map<String, String>): String = "print(${expression.toFormattedString(
+        variableTypes,
+    )});"
 }
 
 sealed class ExpressionNode {
@@ -66,9 +69,7 @@ data class IdentifierNode(
     val line: Int,
     val column: Int,
 ) : ExpressionNode() {
-    override fun toFormattedString(variableTypes: Map<String, String>): String {
-        return name
-    }
+    override fun toFormattedString(variableTypes: Map<String, String>): String = name
 }
 
 data class NumberLiteralNode(
@@ -76,15 +77,15 @@ data class NumberLiteralNode(
     val line: Int,
     val column: Int,
 ) : ExpressionNode() {
-    override fun toFormattedString(variableTypes: Map<String, String>): String {
-        return value.toString()
-    }
+    override fun toFormattedString(variableTypes: Map<String, String>): String = value.toString()
 }
 
-data class StringLiteralNode(val value: String, val line: Int, val column: Int) : ExpressionNode() {
-    override fun toFormattedString(variableTypes: Map<String, String>): String {
-        return "\"$value\""
-    }
+data class StringLiteralNode(
+    val value: String,
+    val line: Int,
+    val column: Int,
+) : ExpressionNode() {
+    override fun toFormattedString(variableTypes: Map<String, String>): String = "\"$value\""
 }
 
 data class BinaryExpressionNode(
@@ -95,13 +96,14 @@ data class BinaryExpressionNode(
     val column: Int,
 ) : ExpressionNode() {
     override fun toFormattedString(variableTypes: Map<String, String>): String {
-        val operatorSymbol = when (operator) {
-            TokenType.SUM -> "+"
-            TokenType.SUBTRACT -> "-"
-            TokenType.MULTIPLY -> "*"
-            TokenType.DIVIDE -> "/"
-            else -> operator.toString()
-        }
+        val operatorSymbol =
+            when (operator) {
+                TokenType.SUM -> "+"
+                TokenType.SUBTRACT -> "-"
+                TokenType.MULTIPLY -> "*"
+                TokenType.DIVIDE -> "/"
+                else -> operator.toString()
+            }
         return "${left.toFormattedString(variableTypes)} $operatorSymbol ${right.toFormattedString(variableTypes)}"
     }
 }
@@ -118,8 +120,11 @@ data class ConstDeclarationNode(
             "$type = ${value.toFormattedString(variableTypes)};"
     }
 
-    private fun inferType(expression: ExpressionNode, variableTypes: Map<String, String>): String {
-        return when (expression) {
+    private fun inferType(
+        expression: ExpressionNode,
+        variableTypes: Map<String, String>,
+    ): String =
+        when (expression) {
             is StringLiteralNode -> "string"
             is NumberLiteralNode -> "number"
             is BooleanLiteralNode -> "boolean"
@@ -131,7 +136,6 @@ data class ConstDeclarationNode(
             }
             else -> "UnknownType" // Agregado para manejar tipos no conocidos
         }
-    }
 }
 
 data class IfElseNode(
@@ -156,9 +160,8 @@ data class BlockNode(
     val line: Int,
     val column: Int,
 ) : StatementNode() {
-    override fun toFormattedString(variableTypes: Map<String, String>): String {
-        return statements.joinToString(separator = "\n") { it.toFormattedString(variableTypes) }
-    }
+    override fun toFormattedString(variableTypes: Map<String, String>): String =
+        statements.joinToString(separator = "\n") { it.toFormattedString(variableTypes) }
 }
 
 data class BooleanLiteralNode(
@@ -166,9 +169,7 @@ data class BooleanLiteralNode(
     val line: Int,
     val column: Int,
 ) : ExpressionNode() {
-    override fun toFormattedString(variableTypes: Map<String, String>): String {
-        return value.toString()
-    }
+    override fun toFormattedString(variableTypes: Map<String, String>): String = value.toString()
 }
 
 data class ReadInputNode(
@@ -176,13 +177,9 @@ data class ReadInputNode(
     val line: Int,
     val column: Int,
 ) : ExpressionNode() {
-    override fun toFormattedString(variableTypes: Map<String, String>): String {
-        return "readInput($value)"
-    }
+    override fun toFormattedString(variableTypes: Map<String, String>): String = "readInput($value)"
 
-    override fun toString(): String {
-        return "ReadInputNode(value=$value, line=$line, column=$column)"
-    }
+    override fun toString(): String = "ReadInputNode(value=$value, line=$line, column=$column)"
 }
 
 class ReadEnvNode(
@@ -190,11 +187,16 @@ class ReadEnvNode(
     val line: Int, // Línea donde ocurre la llamada a readEnv
     val column: Int, // Columna donde ocurre la llamada a readEnv
 ) : ExpressionNode() { // Cambiamos de ExpressionNode a StatementNode
-    override fun toFormattedString(variableTypes: Map<String, String>): String {
-        return "readEnv($value)"
-    }
+    override fun toFormattedString(variableTypes: Map<String, String>): String = "readEnv($value)"
 
-    override fun toString(): String {
-        return "ReadEnvNode(value=$value, line=$line, column=$column)"
-    }
+    override fun toString(): String = "ReadEnvNode(value=$value, line=$line, column=$column)"
+}
+
+class NullValueNode(
+    val line: Int,
+    val column: Int,
+) : ExpressionNode() {
+    override fun toFormattedString(variableTypes: Map<String, String>): String = ""
+
+    override fun toString(): String = "NullValueNode(line=$line, column=$column)"
 }

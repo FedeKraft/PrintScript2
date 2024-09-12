@@ -27,7 +27,6 @@ class Interpreter(
     private val printEmitter: PrintEmitter,
     private val errorCollector: ErrorCollector,
 ) {
-
     private var variables = ExecutionContext()
     private var constants = ExecutionContext()
 
@@ -93,9 +92,10 @@ class Interpreter(
                     statement.statements.forEach { interpretStatement(it) }
                     variables.exitBlock()
                 }
-                else -> errorCollector.reportError(
-                    "Tipo de declaración no soportada: ${statement::class.java.simpleName}",
-                )
+                else ->
+                    errorCollector.reportError(
+                        "Tipo de declaración no soportada: ${statement::class.java.simpleName}",
+                    )
             }
         } catch (e: Exception) {
             errorCollector.reportError("Error en la declaración: ${e.message}")
@@ -150,16 +150,18 @@ class Interpreter(
                             }
                             leftAsDouble / rightAsDouble
                         }
-                        else -> errorCollector.reportError(
-                            "Operador binario inesperado:" +
-                                " ${expression.operator}",
-                        )
+                        else ->
+                            errorCollector.reportError(
+                                "Operador binario inesperado:" +
+                                    " ${expression.operator}",
+                            )
                     }
                 }
-                else -> errorCollector.reportError(
-                    "Tipo de expresión no soportada: " +
-                        "${expression::class.java.simpleName}",
-                )
+                else ->
+                    errorCollector.reportError(
+                        "Tipo de expresión no soportada: " +
+                            "${expression::class.java.simpleName}",
+                    )
             }
         } catch (e: Exception) {
             errorCollector.reportError("Error al evaluar la expresion: ${e.message}")
@@ -167,24 +169,20 @@ class Interpreter(
         }
     }
 
-    private fun inferType(value: Any?): TokenType {
-        return when (value) {
+    private fun inferType(value: Any?): TokenType =
+        when (value) {
             is String -> TokenType.STRING_TYPE
             is Double, is Int -> TokenType.NUMBER_TYPE
             is Boolean -> TokenType.BOOLEAN_TYPE
             else -> throw IllegalArgumentException("Tipo desconocido: ${value?.javaClass?.simpleName}")
         }
-    }
 
-    private fun isTypeCompatible(inferredType: TokenType, declaredType: TokenType): Boolean {
-        return inferredType == declaredType
-    }
+    private fun isTypeCompatible(
+        inferredType: TokenType,
+        declaredType: TokenType,
+    ): Boolean = inferredType == declaredType
 
-    fun getContext(): ExecutionContext {
-        return variables
-    }
+    fun getContext(): ExecutionContext = variables
 
-    fun getPrintEmitter(): PrintEmitter {
-        return printEmitter
-    }
+    fun getPrintEmitter(): PrintEmitter = printEmitter
 }

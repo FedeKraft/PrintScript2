@@ -8,7 +8,6 @@ import ast.StatementNode
 import java.util.Stack
 
 class DummyASTProvider : ASTProvider {
-
     private val nodes = Stack<StatementNode>()
 
     init {
@@ -28,11 +27,7 @@ class DummyASTProvider : ASTProvider {
         )
     }
 
-    override fun getNextAST(): StatementNode {
-        return nodes.pop()
-    }
+    override fun getNextAST(): StatementNode = nodes.pop()
 
-    override fun hasNextAST(): Boolean {
-        return nodes.isNotEmpty()
-    }
+    override fun hasNextAST(): Boolean = nodes.isNotEmpty()
 }

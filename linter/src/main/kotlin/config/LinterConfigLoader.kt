@@ -9,8 +9,10 @@ import rules.PrintSimpleExpressionRule
 import rules.SnakeCaseIdentifierRule
 import java.io.InputStream
 
-class LinterConfigLoader(private val astProvider: ASTProvider, configInputStream: InputStream) {
-
+class LinterConfigLoader(
+    private val astProvider: ASTProvider,
+    configInputStream: InputStream,
+) {
     data class RuleConfig(
         val enabled: Boolean,
     )
@@ -26,12 +28,13 @@ class LinterConfigLoader(private val astProvider: ASTProvider, configInputStream
 
     init {
         val mapper = jacksonObjectMapper()
-        config = try {
-            mapper.readValue(configInputStream) // Leer desde InputStream en lugar de archivo
-        } catch (e: Exception) {
-            println("Error al cargar el archivo de configuración: ${e.message}")
-            Config() // Usar configuración por defecto si hay error
-        }
+        config =
+            try {
+                mapper.readValue(configInputStream) // Leer desde InputStream en lugar de archivo
+            } catch (e: Exception) {
+                println("Error al cargar el archivo de configuración: ${e.message}")
+                Config() // Usar configuración por defecto si hay error
+            }
     }
 
     fun load(): Linter {
