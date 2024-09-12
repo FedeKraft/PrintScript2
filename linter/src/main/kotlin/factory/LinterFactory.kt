@@ -22,8 +22,8 @@ class LinterFactory {
             Config() // Usa la configuración por defecto en caso de error
         }
 
-        val camelCaseRule = CamelCaseIdentifierRule(isActive = config.identifierFormat.format == "camel case")
-        val snakeCaseRule = SnakeCaseIdentifierRule(isActive = config.identifierFormat.format == "snake case")
+        val camelCaseRule = CamelCaseIdentifierRule(isActive = config.identifier_format == "camel case")
+        val snakeCaseRule = SnakeCaseIdentifierRule(isActive = config.identifier_format == "snake case")
         val printRule = PrintSimpleExpressionRule(isActive = config.printSimpleExpression.mandatoryVariableOrLiteral)
 
         // Logs for debugging rule states

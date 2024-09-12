@@ -1,6 +1,6 @@
 package config
 data class Config(
-    val identifierFormat: IdentifierFormatConfig = IdentifierFormatConfig(),
+    val identifier_format: String = "camel case", // Change to String
     val printSimpleExpression: PrintSimpleExpressionConfig = PrintSimpleExpressionConfig(),
 )
 
