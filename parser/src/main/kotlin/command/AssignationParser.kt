@@ -3,10 +3,14 @@ package command
 import PrattParser
 import ast.AssignationNode
 import ast.BooleanLiteralNode
+import ast.ExpressionNode
 import ast.IdentifierNode
 import ast.NumberLiteralNode
+import ast.ReadEnvNode
+import ast.ReadInputNode
 import ast.StatementNode
 import ast.StringLiteralNode
+import ast.VariableDeclarationNode
 import org.example.errorCheckers.syntactic.AssignationSyntaxErrorChecker
 import token.Token
 import token.TokenType
@@ -24,11 +28,17 @@ class AssignationParser : Parser {
         val args = tokens.subList(2, tokens.size)
         // a = "a"
         if (args.size > 1) {
-            val newArgs = listOf(Token(TokenType.LEFT_PARENTHESIS, TokenValue.StringValue("("), 0, 0)) + args + listOf(
-                Token(TokenType.RIGHT_PARENTHESIS, TokenValue.StringValue(")"), 0, 0),
-            )
-            val expressionNode = PrattParser(newArgs).parseExpression()
-            return AssignationNode(identifierNode, expressionNode, tokens[0].line, tokens[0].column)
+            if (args[0].type != TokenType.READ_INPUT) {
+                if (args[0].type != TokenType.READ_ENV) {
+                    val newArgs = listOf(Token(TokenType.LEFT_PARENTHESIS, TokenValue.StringValue("("), 0, 0)) + args + listOf(
+                        Token(TokenType.RIGHT_PARENTHESIS, TokenValue.StringValue(")"), 0, 0),
+                    )
+                    val expressionNode = PrattParser(newArgs).parseExpression()
+                    return AssignationNode(identifierNode, expressionNode, tokens[0].line, tokens[0].column)
+                        }
+                    }
+            val node = lookForReadEnvOrReadInput(args)
+            return AssignationNode(identifierNode, node, tokens[0].line, tokens[0].column)
         }
         val expressionToken = tokens[2]
 
@@ -67,5 +77,16 @@ class AssignationParser : Parser {
             AssignationNode(identifierNode, expressionNode, identifierToken.line, identifierToken.column)
 
         return assignationNode
+    }
+    private fun lookForReadEnvOrReadInput(tokens: List<Token>): ExpressionNode {
+        if (tokens[0].type == TokenType.READ_ENV) {
+            val value = (tokens[2].value as TokenValue.StringValue).value
+            return ReadEnvNode(value, tokens[0].line, tokens[0].column)
+        }
+        if (tokens[0].type == TokenType.READ_INPUT) {
+            val value = (tokens[2].value as TokenValue.StringValue).value
+            return ReadInputNode(value, tokens[0].line, tokens[0].column)
+        }
+        return null!!
     }
 }

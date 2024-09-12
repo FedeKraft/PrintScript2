@@ -14,9 +14,7 @@ class VariableDeclarationSyntaxErrorChecker : ErrorChecker {
     private fun checkNecessaryTokens(tokens: List<Token>) {
         val necessaryTokens =
             mutableListOf<TokenType>(TokenType.LET, TokenType.IDENTIFIER, TokenType.COLON, TokenType.ASSIGN)
-        if (tokens.size < 6 && !necessaryTokens.contains(TokenType.LET)) {
-            throw RuntimeException("Missing LET token in line: ${tokens.last().line}, column: ${tokens.last().column}")
-        }
+
         if (tokens.size < 6 && !necessaryTokens.contains(TokenType.COLON)) {
             throw RuntimeException(
                 "Missing COLON token after variable in line: ${tokens.last().line}, column: ${tokens[2].column}",
@@ -61,7 +59,7 @@ class VariableDeclarationSyntaxErrorChecker : ErrorChecker {
             != TokenType.BOOLEAN_TYPE
         ) {
             throw RuntimeException(
-                "Expected type 'STRING_TYPE' or 'NUMBER_TYPE', found " +
+                "Expected type 'STRING_TYPE' or 'NUMBER_TYPE' or 'BOOLEAN_TYPE', found " +
                     "${token.type} line: ${token.line}, column: ${token.column}",
             )
         }

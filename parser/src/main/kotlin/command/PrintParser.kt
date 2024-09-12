@@ -2,11 +2,15 @@ package command
 
 import PrattParser
 import ast.BooleanLiteralNode
+import ast.ExpressionNode
 import ast.IdentifierNode
 import ast.NumberLiteralNode
 import ast.PrintStatementNode
+import ast.ReadEnvNode
+import ast.ReadInputNode
 import ast.StatementNode
 import ast.StringLiteralNode
+import ast.VariableDeclarationNode
 import org.example.errorCheckers.syntactic.PrintSyntaxErrorChecker
 import token.Token
 import token.TokenType
@@ -22,8 +26,14 @@ class PrintParser : Parser {
         val args = tokens.subList(1, tokens.size)
 
         if (args.size > 3) {
-            val expressionNode = PrattParser(args).parseExpression()
-            return PrintStatementNode(expressionNode, tokens[0].line, tokens[0].column)
+            if (args[1].type != TokenType.READ_INPUT) {
+                if (args[1].type != TokenType.READ_ENV) {
+                    val expressionNode = PrattParser(args).parseExpression()
+                    return PrintStatementNode(expressionNode, tokens[0].line, tokens[0].column)
+                }
+            }
+            val node = lookForReadEnvOrReadInput(args)
+            return PrintStatementNode(node, tokens[0].line, tokens[0].column)
         }
 
         val expressionToken = tokens[2]
@@ -62,5 +72,17 @@ class PrintParser : Parser {
         // Create PrintStatementNode and return
         val printNode = PrintStatementNode(expressionNode, expressionToken.line, expressionToken.column)
         return printNode
+    }
+
+    private fun lookForReadEnvOrReadInput(tokens: List<Token>): ExpressionNode {
+        if (tokens[1].type == TokenType.READ_ENV) {
+            val value = (tokens[3].value as TokenValue.StringValue).value
+            return ReadEnvNode(value, tokens[0].line, tokens[0].column)
+        }
+        if (tokens[1].type == TokenType.READ_INPUT) {
+            val value = (tokens[3].value as TokenValue.StringValue).value
+            return ReadInputNode(value, tokens[0].line, tokens[0].column)
+        }
+        return null!!
     }
 }

@@ -72,6 +72,9 @@ class AssignationSyntaxErrorChecker : ErrorChecker {
                 TokenType.STRING,
                 TokenType.NUMBER,
                 TokenType.IDENTIFIER,
+                TokenType.BOOLEAN,
+                TokenType.READ_ENV,
+                TokenType.READ_INPUT,
             )
         ) {
             throw RuntimeException(

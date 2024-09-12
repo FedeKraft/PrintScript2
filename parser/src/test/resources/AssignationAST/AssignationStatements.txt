@@ -1,0 +1,4 @@
+name = "UruguayoNoTeConfiesFaltaUnaBielseada";
+a1 = 10;
+a2 = a1;
+a1 = true;
