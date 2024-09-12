@@ -1,4 +1,4 @@
-package inputProvider
+package provider
 interface InputProvider {
     fun readInput(prompt: Any): Any
 }
