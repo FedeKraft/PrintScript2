@@ -1,0 +1,58 @@
+
+@startuml
+class Lexer {
+    - Reader reader
+    - Map<Regex, TokenType> patternsMap
+    + hasNextToken(): Boolean
+    + nextToken(): Token
+}
+
+class Interpreter {
+    - ASTProvider provider
+    - InputProvider inputProvider
+    - ExecutionContext variables
+    - ExecutionContext constants
+    + interpret()
+    + interpretStatement(statement: StatementNode)
+    + evaluateExpression(expression: ExpressionNode): Any
+}
+
+class Formatter {
+    + format(node: ASTNode): String
+}
+
+class ASTNode {
+}
+
+class Cli {
+    + run(): Unit
+}
+
+class Linter {
+    - List<LinterRule> rules
+    - ASTProvider astProvider
+    + lint(): Sequence<LinterError>
+    + applyRules(node: StatementNode): List<LinterError>
+}
+
+class ParserDirector {
+    - TokenProvider tokenProvider
+    - Map<TokenType, Parser> commands
+    + nextStatement(): StatementNode
+    + getIfCondition(): ExpressionNode
+    + processElseBlockNode(): BlockNode
+}
+
+Interpreter --> ASTNode
+Interpreter --> ParserDirector
+Linter --> Formatter
+Linter --> ASTNode
+Linter --> ASTProvider
+Interpreter --> ASTProvider
+TokenProvider --> Lexer
+ParserDirector --> TokenProvider
+ParserDirector --> ASTProvider
+Cli --> Interpreter
+Cli --> Lexer
+
+@enduml
