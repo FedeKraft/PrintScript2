@@ -73,7 +73,7 @@ class Interpreter(
                 }
                 is PrintStatementNode -> {
                     val value = evaluateExpression(statement.expression)
-                    printEmitter.print(value.toString())
+                    printEmitter.print(value!!)
                 }
                 is IfElseNode -> {
                     val condition = evaluateExpression(statement.condition) as? Boolean
