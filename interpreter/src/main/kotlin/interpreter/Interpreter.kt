@@ -10,13 +10,16 @@ import ast.IdentifierNode
 import ast.IfElseNode
 import ast.NumberLiteralNode
 import ast.PrintStatementNode
+import ast.ReadEnvNode
+import ast.ReadInputNode
 import ast.StatementNode
 import ast.StringLiteralNode
 import ast.VariableDeclarationNode
+import inputProvider.InputProvider
 import parser.ASTProvider
 import token.TokenType
 
-class Interpreter(private val provider: ASTProvider) {
+class Interpreter(private val provider: ASTProvider,private val inputProvider: InputProvider) {
 
     private var variables = ExecutionContext()
     private var constants = ExecutionContext()
@@ -78,6 +81,15 @@ class Interpreter(private val provider: ASTProvider) {
     // Método para evaluar expresiones
     private fun evaluateExpression(expression: ExpressionNode): Any {
         return when (expression) {
+            is ReadInputNode -> {
+                val input = inputProvider.readInput(expression.value) // Usamos el InputProvider
+                return input
+            }
+            is ReadEnvNode -> {
+                val envValue = System.getenv(expression.value as String)
+                return envValue ?: throw IllegalArgumentException("La variable de entorno '${expression.value}' no está definida")
+            }
+
             is IdentifierNode -> {
                 val value = constants.get(expression.name) ?: variables.get(expression.name)
                 value ?: throw IllegalArgumentException("Identificador no definido: ${expression.name}")
