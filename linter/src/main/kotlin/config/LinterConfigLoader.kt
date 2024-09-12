@@ -7,9 +7,9 @@ import parser.ASTProvider
 import rules.CamelCaseIdentifierRule
 import rules.PrintSimpleExpressionRule
 import rules.SnakeCaseIdentifierRule
-import java.io.File
+import java.io.InputStream
 
-class LinterConfigLoader(private val astProvider: ASTProvider, configFilePath: String) {
+class LinterConfigLoader(private val astProvider: ASTProvider, configInputStream: InputStream) {
 
     data class RuleConfig(
         val enabled: Boolean,
@@ -27,7 +27,7 @@ class LinterConfigLoader(private val astProvider: ASTProvider, configFilePath: S
     init {
         val mapper = jacksonObjectMapper()
         config = try {
-            mapper.readValue(File(configFilePath))
+            mapper.readValue(configInputStream) // Leer desde InputStream en lugar de archivo
         } catch (e: Exception) {
             println("Error al cargar el archivo de configuración: ${e.message}")
             Config() // Usar configuración por defecto si hay error

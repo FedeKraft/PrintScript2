@@ -6,12 +6,17 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import parser.ASTProvider
 import token.TokenType
-import java.nio.file.Paths
 
 class LinterConfigLoaderTests {
+
     @Test
     fun testLoadConfigWithMissingFields() {
-        val missingFieldsConfigPath = Paths.get("src/test/resources/linterConfigWithMissingFields.json").toString()
+        // Simulación de un archivo de configuración con campos faltantes
+        val missingFieldsConfig = """
+            {
+                "camelCaseIdentifier": { "enabled": true }
+            }
+        """.trimIndent().byteInputStream()
 
         val astProvider = object : ASTProvider {
             private var hasMore = true
@@ -30,7 +35,7 @@ class LinterConfigLoaderTests {
             }
         }
 
-        val linter = LinterConfigLoader(astProvider, missingFieldsConfigPath).load()
+        val linter = LinterConfigLoader(astProvider, missingFieldsConfig).load()
 
         val errors = linter.lint().toList()
 
@@ -39,7 +44,14 @@ class LinterConfigLoaderTests {
 
     @Test
     fun testLoadConfigFromJsonWithAllRulesDisabled() {
-        val configFilePath = Paths.get("src/test/resources/linterConfigAllRulesDisabled.json").toString()
+        // Simulación de un archivo de configuración con todas las reglas desactivadas
+        val configFile = """
+            {
+                "printSimpleExpression": { "enabled": false },
+                "snakeCaseIdentifier": { "enabled": false },
+                "camelCaseIdentifier": { "enabled": false }
+            }
+        """.trimIndent().byteInputStream()
 
         val astProvider = object : ASTProvider {
             private var hasMore = true
@@ -56,7 +68,7 @@ class LinterConfigLoaderTests {
             }
         }
 
-        val linter = LinterConfigLoader(astProvider, configFilePath).load()
+        val linter = LinterConfigLoader(astProvider, configFile).load()
 
         val errors = linter.lint().toList()
 

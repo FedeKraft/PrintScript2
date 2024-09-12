@@ -1,32 +1,28 @@
 import config.LinterConfigLoader
 import org.junit.jupiter.api.Test
 import parser.ASTProvider
+import java.io.ByteArrayInputStream
 import java.io.FileNotFoundException
-import java.nio.file.Paths
 
 class LinterConfigLoaderErrorTests {
 
     @Test
-    fun testLoadConfigWithInvalidPath() {
-        val invalidConfigFilePath = Paths.get("src/test/resources/linterConfig.json").toString()
+    fun testLoadConfigWithInvalidStream() {
+        val invalidConfigInputStream = ByteArrayInputStream(ByteArray(0))
 
         try {
-            val invalidPathLoader = LinterConfigLoader(
+            val invalidStreamLoader = LinterConfigLoader(
                 object : ASTProvider {
                     override fun hasNextAST() = false
                     override fun getNextAST() = throw NotImplementedError()
                 },
-                invalidConfigFilePath,
+                invalidConfigInputStream, // Usar el InputStream vacío
             )
-            invalidPathLoader.load() // Intentar cargar una configuración desde un archivo inexistente
-        } catch (e: FileNotFoundException) {
-            println("Caught expected exception: ${e::class.simpleName}")
-            // Verificar que se lance FileNotFoundException
-            assert(true)
+            invalidStreamLoader.load() // Intentar cargar una configuración desde un InputStream vacío
         } catch (e: Exception) {
-            // Si se lanza alguna otra excepción, fallar el test
-            println("Caught unexpected exception: ${e::class.simpleName}")
-            throw e // Lanza la excepción para depurar qué está fallando
+            // Verificar que ocurra alguna excepción, ya que estamos simulando un archivo de configuración inválido
+            println("Caught expected exception: ${e::class.simpleName}")
+            assert(e is FileNotFoundException || e is IllegalArgumentException || e is IllegalStateException)
         }
     }
 }
