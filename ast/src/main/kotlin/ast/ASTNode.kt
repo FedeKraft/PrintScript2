@@ -8,6 +8,7 @@ sealed class StatementNode {
 
 data class VariableDeclarationNode(
     val identifier: IdentifierNode,
+    val type: TokenType,
     val value: ExpressionNode,
     val line: Int,
     val column: Int,

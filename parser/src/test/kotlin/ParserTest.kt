@@ -65,11 +65,13 @@ class ParserTest {
         val expectedAst = listOf(
             VariableDeclarationNode(
                 IdentifierNode("name", 1, 5),
+                TokenType.STRING_TYPE,
                 StringLiteralNode("Olive", 1, 20),
                 1, 5
             ),
             VariableDeclarationNode(
                 IdentifierNode("age", 2, 5),
+                TokenType.NUMBER_TYPE,
                 BinaryExpressionNode(
                     NumberLiteralNode(10.0, 2, 19),
                     TokenType.SUM,
@@ -80,6 +82,7 @@ class ParserTest {
             ),
             VariableDeclarationNode(
                 IdentifierNode("age2", 3, 5),
+                TokenType.NUMBER_TYPE,
                 BinaryExpressionNode(
                     BinaryExpressionNode(
                         IdentifierNode("age", 3, 20),
@@ -105,6 +108,7 @@ class ParserTest {
             ),
             VariableDeclarationNode(
                 IdentifierNode("isAlive", 4, 5),
+                TokenType.BOOLEAN_TYPE,
                 BooleanLiteralNode(true, 4, 24),
                 4, 5
             )
@@ -131,6 +135,7 @@ class ParserTest {
                     listOf(
                         VariableDeclarationNode(
                             IdentifierNode("a2", 2, 9),
+                            TokenType.STRING_TYPE,
                             StringLiteralNode("Bielsa", 2, 22),
                             2,
                             9,
@@ -164,6 +169,7 @@ class ParserTest {
                     listOf(
                         VariableDeclarationNode(
                             IdentifierNode("a2", 2, 9),
+                            TokenType.STRING_TYPE,
                             StringLiteralNode("Gordito", 2, 22),
                             2,
                             9,
@@ -174,6 +180,7 @@ class ParserTest {
                                 listOf(
                                     VariableDeclarationNode(
                                         IdentifierNode("a3", 4, 13),
+                                        TokenType.STRING_TYPE,
                                         StringLiteralNode("hdp", 4, 27),
                                         4,
                                         13,
@@ -224,6 +231,7 @@ class ParserTest {
                     listOf(
                         VariableDeclarationNode(
                             IdentifierNode("a2", 2, 9),
+                            TokenType.STRING_TYPE,
                             StringLiteralNode("Bielsa", 2, 22),
                             2,
                             9,
@@ -236,6 +244,7 @@ class ParserTest {
                     listOf(
                         VariableDeclarationNode(
                             IdentifierNode("a3", 5, 13),
+                            TokenType.STRING_TYPE,
                             StringLiteralNode("Bielseada", 5, 26),
                             5,
                             13,
@@ -322,5 +331,17 @@ class ParserTest {
             ),
         )
         assertEquals(expectedAst, actualAst, "The AST generated does not match the expected structure")
+    }
+    @Test
+    fun `test readInput in parsers`(){
+        val reader = Reader("src/test/resources/ReadEnvAndReadInput.txt")
+        val lexer = LexerFactory().createLexer1_1(reader)
+        val parser = ParserFactory().createParser1_0(lexer)
+        val actualAst = mutableListOf<StatementNode>()
+        while (parser.hasNextAST()) {
+            val ast = parser.getNextAST()
+            println(ast)
+            actualAst.add(ast)
+        }
     }
 }

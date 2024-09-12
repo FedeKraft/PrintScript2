@@ -1,0 +1,2 @@
+let var3 : boolean = readInput("Ingresa un boolean");
+var3 = readInput("Ingresa otro boolean");

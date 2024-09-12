@@ -37,6 +37,15 @@ class Interpreter(private val provider: ASTProvider,private val inputProvider: I
         when (statement) {
             is VariableDeclarationNode -> {
                 val value = evaluateExpression(statement.value)
+                val inferredType = inferType(value)
+
+                // Verificamos que el tipo de la expresión coincida con el tipo declarado
+                if (!isTypeCompatible(inferredType, statement.type)) {
+                    throw IllegalArgumentException(
+                        "Error de tipo: Se esperaba ${statement.type} pero se encontró $inferredType"
+                    )
+                }
+
                 variables.add(statement.identifier.name, value)
             }
             is ConstDeclarationNode -> {
@@ -143,5 +152,16 @@ class Interpreter(private val provider: ASTProvider,private val inputProvider: I
     }
     fun getContext(): ExecutionContext {
         return variables
+    }
+    private fun inferType(value: Any): TokenType {
+        return when (value) {
+            is String -> TokenType.STRING_TYPE
+            is Double, is Int -> TokenType.NUMBER_TYPE
+            is Boolean -> TokenType.BOOLEAN_TYPE
+            else -> throw IllegalArgumentException("Tipo desconocido: ${value::class.java.simpleName}")
+        }
+    }
+    private fun isTypeCompatible(inferredType: TokenType, declaredType: TokenType): Boolean {
+        return inferredType == declaredType
     }
 }
