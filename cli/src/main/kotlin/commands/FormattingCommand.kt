@@ -16,43 +16,37 @@ import token.TokenType
 import java.io.File
 
 class FormattingCommand : CliktCommand(help = "Format the file") {
+
     private val file by argument(help = "Source file to format")
-    private val configFile by option(help = "Configuration file for formatting")
-
-    private val config = FormatterConfigLoader.loadConfig("src/test/resources/formatter-config.json")
-
-    private val rules =
-        listOf(
-            SpaceAroundEqualsRule(config.spaceAroundEquals.enabled),
-        )
-
-    private fun readSourceCodeFromFile(filename: String): String =
-        File("src/test/resources/$filename").readText().replace(
-            "\r\n",
-            "\n",
-        )
+    private val configFile by option(
+        help = "C:\\Users\\vranc\\Projects\\Ingsis\\PrintScript2\\cli\\src\\main\\resources\\formatter-config.json\n",
+    )
 
     override fun run() {
-        val sourceCode = readSourceCodeFromFile(file)
+        val sourceCode = File(file).readText()
+
+        // Load the config file only after parsing the command line options
+        val config = configFile?.let {
+            FormatterConfigLoader.loadConfig(it)
+        } ?: FormatterConfigLoader.loadConfig("default-config.json")
+
+        val rules = listOf(SpaceAroundEqualsRule(config.spaceAroundEquals.enabled))
+
         val lexer = LexerFactory().createLexer1_0(Reader(File(sourceCode).inputStream()))
-        val parserDirector =
-            ParserDirector(
-                lexer,
-                mapOf(
-                    TokenType.PRINT to PrintParser(),
-                    TokenType.LET to VariableDeclarationParser(),
-                    TokenType.IDENTIFIER to AssignationParser(),
-                ),
-            )
+        val parserDirector = ParserDirector(
+            lexer,
+            mapOf(
+                TokenType.PRINT to PrintParser(),
+                TokenType.LET to VariableDeclarationParser(),
+                TokenType.IDENTIFIER to AssignationParser(),
+            ),
+        )
 
         val formatter = Formatter(rules, parserDirector)
         var result = ""
         for (formattedString in formatter.format()) {
-            if (parserDirector.hasNextAST()) {
-                result += formattedString.plus("\n")
-            } else {
-                result += formattedString
-            }
+            result += formattedString.plus("\n")
         }
+        println(result)
     }
 }
