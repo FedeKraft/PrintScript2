@@ -1,0 +1,8 @@
+let a: string = "gallardo";
+if (true) {
+    let a: string = "Bielsa";
+}
+else {
+    let a: string = "Bielseada";
+}
+const b: string = "river";

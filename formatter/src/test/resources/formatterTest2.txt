@@ -1,7 +1,13 @@
 a = "river";
-let a : string = "gallardo" ;
+let a: string = "gallardo" ;
 if (true) {
-    let a : string = "Bielsa";
+    let a: string = "Bielsa";
 } else {
-    let a : string = "Bielseada";
+    let a : string ="Bielseada";
 }
+if    (true )
+{println("hello world" + "hola") ;}
+else {a=2;}
+const b: string="river"- 1+2     +"plate"*   "hol";
+let a : string= "gallardo"+"river"+"campeon";
+println("hello world" + "hola");

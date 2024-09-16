@@ -17,7 +17,7 @@ data class VariableDeclarationNode(
         val inferredType = inferType(value, variableTypes)
         // Add the variable's type to the map
         (variableTypes as MutableMap)[identifier.name] = inferredType
-        return "let ${identifier.toFormattedString(variableTypes)}: " +
+        return "let ${identifier.toFormattedString(variableTypes)}:" +
             "$inferredType = ${value.toFormattedString(variableTypes)};"
     }
 
@@ -54,7 +54,9 @@ data class PrintStatementNode(
     val line: Int,
     val column: Int,
 ) : StatementNode() {
-    override fun toFormattedString(variableTypes: Map<String, String>): String = "print(${expression.toFormattedString(
+    override fun toFormattedString(
+        variableTypes: Map<String, String>,
+    ): String = "println(${expression.toFormattedString(
         variableTypes,
     )});"
 }
@@ -116,7 +118,7 @@ data class ConstDeclarationNode(
 ) : StatementNode() {
     override fun toFormattedString(variableTypes: Map<String, String>): String {
         val type = inferType(value, variableTypes)
-        return "const ${identifier.toFormattedString(variableTypes)}: " +
+        return "const ${identifier.toFormattedString(variableTypes)}:" +
             "$type = ${value.toFormattedString(variableTypes)};"
     }
 

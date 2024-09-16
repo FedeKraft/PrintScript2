@@ -1,7 +1,4 @@
 {
-  "singleSpaceBetweenTokens": {
-    "enabled": true
-  },
   "spaceBeforeColon": {
     "enabled": true
   },
@@ -14,12 +11,6 @@
   "newlineBeforePrintln": {
     "enabled": true,
     "newlineCount": 2
-  },
-  "newlineAfterSemicolon": {
-    "enabled": true
-  },
-  "spaceAroundOperators": {
-    "enabled": true
   },
   "indentation": {
     "enabled": true,
