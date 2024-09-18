@@ -11,11 +11,14 @@ import formatter.Formatter
 import formatter.FormatterConfigLoader
 import parser.ParserDirector
 import reader.Reader
+import rules.SpaceAfterColonRule
 import rules.SpaceAroundEqualsRule
+import rules.SpaceAroundOperatorsRule
+import rules.SpaceBeforeColonRule
 import token.TokenType
 import java.io.File
 
-class FormattingCommand : CliktCommand(help = "Format the file") {
+class FormattingCommand : CliktCommand(name = "format", help = "Format the file") {
 
     private val file by argument(help = "Source file to format")
     private val configFile by option(
@@ -25,14 +28,23 @@ class FormattingCommand : CliktCommand(help = "Format the file") {
     override fun run() {
         val sourceCode = File(file).readText()
 
-        // Load the config file only after parsing the command line options
+        // Cargar el archivo de configuración
         val config = configFile?.let {
             FormatterConfigLoader.loadConfig(it)
-        } ?: FormatterConfigLoader.loadConfig("default-config.json")
+        } ?: FormatterConfigLoader.loadConfig(javaClass.getResource("/formatter-config.json").path)
 
-        val rules = listOf(SpaceAroundEqualsRule(config.spaceAroundEquals.enabled))
+        // Reglas de formateo basadas en la configuración
+        val rules = listOf(
+            SpaceAroundEqualsRule(config.spaceAroundEquals.enabled),
+            SpaceBeforeColonRule(config.spaceBeforeColon.enabled),
+            SpaceAfterColonRule(config.spaceAfterColon.enabled),
+            SpaceAroundOperatorsRule(),
+        )
 
-        val lexer = LexerFactory().createLexer1_0(Reader(File(sourceCode).inputStream()))
+        // Lexer
+        val lexer = LexerFactory().createLexer1_0(Reader(sourceCode.byteInputStream()))
+
+        // ParserDirector
         val parserDirector = ParserDirector(
             lexer,
             mapOf(
@@ -42,11 +54,14 @@ class FormattingCommand : CliktCommand(help = "Format the file") {
             ),
         )
 
+        // Formatear el código fuente
         val formatter = Formatter(rules, parserDirector)
         var result = ""
         for (formattedString in formatter.format()) {
             result += formattedString.plus("\n")
         }
+
+        // Imprimir el resultado formateado
         println(result)
     }
 }

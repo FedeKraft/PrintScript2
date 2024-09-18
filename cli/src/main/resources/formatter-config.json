@@ -1,0 +1,24 @@
+{
+  "spaceBeforeColon": {
+    "enabled": true
+  },
+  "spaceAfterColon": {
+    "enabled": true
+  },
+  "spaceAroundEquals": {
+    "enabled": true
+  },
+  "newlineBeforePrintln": {
+    "enabled": true,
+    "newlineCount": 2
+  },
+  "newlineAfterSemicolon": {
+    "enabled": true
+  },
+  "singleSpaceBetweenTokens": {
+    "enabled": true
+  },
+  "spaceAroundOperators": {
+    "enabled": true
+  }
+}
