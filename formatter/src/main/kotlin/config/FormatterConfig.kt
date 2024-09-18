@@ -17,16 +17,9 @@ data class NewlineBeforePrintlnConfig(
     val newlineCount: Int,
 )
 
-data class NewlineAfterSemicolonConfig(
+data class Indentation(
     val enabled: Boolean,
-)
-
-data class SingleSpaceBetweenTokensConfig(
-    val enabled: Boolean,
-)
-
-data class SpaceAroundOperatorsConfig(
-    val enabled: Boolean,
+    val n: Int,
 )
 
 data class FormatterConfig(
@@ -34,7 +27,5 @@ data class FormatterConfig(
     val spaceAfterColon: SpaceAfterColonConfig,
     val spaceAroundEquals: SpaceAroundEqualsConfig,
     val newlineBeforePrintln: NewlineBeforePrintlnConfig,
-    val newlineAfterSemicolon: NewlineAfterSemicolonConfig,
-    val singleSpaceBetweenTokens: SingleSpaceBetweenTokensConfig,
-    val spaceAroundOperators: SpaceAroundOperatorsConfig,
+    val indentation: Indentation,
 )

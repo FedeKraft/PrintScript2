@@ -12,13 +12,8 @@
     "enabled": true,
     "newlineCount": 2
   },
-  "newlineAfterSemicolon": {
-    "enabled": true
-  },
-  "singleSpaceBetweenTokens": {
-    "enabled": true
-  },
-  "spaceAroundOperators": {
-    "enabled": true
+  "indentation": {
+    "enabled": true,
+    "n": 4
   }
 }

@@ -1,11 +1,13 @@
-let a   : number = 10;
-let b: number    = 20;
-let c  : number =   a + b + a;
-let name: string = "Alice";
-c=a+b;
-println(greeting);
-let    x    :  number = 3.14;
-let    y   :   number = 2.71;
-let z    : number = x*y;
-let isTrue: string = "true";
-let isFalse: string = "false";
+a = "river";
+let a: string = "gallardo" ;
+if (true) {
+    let a: string = "Bielsa";
+} else {
+    let a : string ="Bielseada";
+}
+if    (true )
+{println("hello world" + "hola") ;}
+else {a=2;}
+const b: string="river"- 1+2     +"plate"*   "hol";
+let a : string= "gallardo"+"river"+"campeon";
+println("hello world" + "hola");

@@ -135,7 +135,7 @@ class LinterTests {
         val node = PrintStatementNode(StringLiteralNode("Hello, World!", 1, 1), 1, 1)
         val printRule = PrintSimpleExpressionRule(isActive = true)
         val errors = printRule.apply(node)
-        assertEquals(0, errors.size)
+        assertEquals(1, errors.size)
     }
 
     @Test

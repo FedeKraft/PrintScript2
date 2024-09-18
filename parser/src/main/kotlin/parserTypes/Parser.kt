@@ -1,4 +1,4 @@
-package command
+package parserTypes
 
 import ast.StatementNode
 import token.Token

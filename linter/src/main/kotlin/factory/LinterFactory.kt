@@ -22,9 +22,9 @@ class LinterFactory {
             Config() // Usa la configuración por defecto en caso de error
         }
 
-        val camelCaseRule = CamelCaseIdentifierRule(isActive = config.identifierFormat.format == "camel case")
-        val snakeCaseRule = SnakeCaseIdentifierRule(isActive = config.identifierFormat.format == "snake case")
-        val printRule = PrintSimpleExpressionRule(isActive = config.printSimpleExpression.mandatoryVariableOrLiteral)
+        val camelCaseRule = CamelCaseIdentifierRule(isActive = config.identifierFormat == "camel case")
+        val snakeCaseRule = SnakeCaseIdentifierRule(isActive = config.identifierFormat == "snake case")
+        val printRule = PrintSimpleExpressionRule(isActive = config.mandatoryVariableOrLiteral == "true")
 
         // Logs for debugging rule states
         println("CamelCase Rule isActive: ${camelCaseRule.isActive}")

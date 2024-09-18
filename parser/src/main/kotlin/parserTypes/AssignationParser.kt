@@ -1,4 +1,4 @@
-package command
+package parserTypes
 
 import PrattParser
 import ast.AssignationNode

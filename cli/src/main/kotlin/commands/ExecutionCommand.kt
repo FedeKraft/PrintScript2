@@ -2,14 +2,14 @@ package commands
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
-import command.AssignationParser
-import command.PrintParser
-import command.VariableDeclarationParser
 import emitter.PrintEmitter
 import errorCollector.ErrorCollector
 import factory.LexerFactory
 import interpreter.Interpreter
 import parser.ParserDirector
+import parserTypes.AssignationParser
+import parserTypes.PrintParser
+import parserTypes.VariableDeclarationParser
 import provider.TestInputProvider
 import reader.Reader
 import token.TokenType
