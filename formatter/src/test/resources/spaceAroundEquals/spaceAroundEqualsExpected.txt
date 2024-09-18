@@ -1,0 +1,3 @@
+let a : string="river";
+let b : string="Ruggeri se cree que es ejemplo";
+a=b;

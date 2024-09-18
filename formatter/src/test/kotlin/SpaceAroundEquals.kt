@@ -1,22 +1,23 @@
+import command.AssignationParser
+import command.PrintParser
+import command.VariableDeclarationParser
 import factory.LexerFactory
 import formatter.Formatter
 import formatter.FormatterConfigLoader
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import parser.ParserDirector
-import parserTypes.AssignationParser
-import parserTypes.PrintParser
-import parserTypes.VariableDeclarationParser
 import reader.Reader
 import rules.Indentation
 import rules.NewlineBeforePrintlnRule
 import rules.SpaceAfterColonRule
+import rules.SpaceAroundEqualsRule
 import rules.SpaceBeforeColonRule
 import token.TokenType
 import java.io.ByteArrayInputStream
 import java.io.File
 
-class FormatterTests {
+class SpaceAroundEquals {
     private val config = FormatterConfigLoader.loadConfig("src/test/resources/formatter-config.json")
 
     private val rulesEnabled = listOf(
@@ -24,16 +25,17 @@ class FormatterTests {
         SpaceBeforeColonRule(config.spaceBeforeColon.enabled),
         SpaceAfterColonRule(config.spaceAfterColon.enabled),
         NewlineBeforePrintlnRule(config.newlineBeforePrintln),
+        SpaceAroundEqualsRule(config.spaceAroundEquals.enabled),
     )
 
     private fun readSourceCodeFromFile(filename: String): String {
-        return File("src/test/resources/$filename").readText().replace("\r\n", "\n")
+        return File("src/test/resources/spaceAroundEquals/$filename").readText().replace("\r\n", "\n")
     }
 
     @Test
-    fun `test SpaceBeforeColonRule enabled`() {
-        val expected = readSourceCodeFromFile("formatterTest2Expected.txt")
-        val unformattedCode = readSourceCodeFromFile("formatterTest2.txt").toByteArray()
+    fun `test space around equals enabled`() {
+        val expected = readSourceCodeFromFile("spaceAroundEqualsExpected.txt")
+        val unformattedCode = readSourceCodeFromFile("spaceAroundEquals.txt").toByteArray()
         val inputStream = ByteArrayInputStream(unformattedCode)
         val lexer = LexerFactory().createLexer1_1(Reader(inputStream))
         val parserDirector = ParserDirector(
