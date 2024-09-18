@@ -4,16 +4,12 @@ import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.option
-import command.AssignationParser
-import command.PrintParser
-import command.VariableDeclarationParser
 import factory.LexerFactory
-import parser.ParserDirector
+import parser.ParserFactory
 import reader.Reader
-import token.TokenType
 import java.io.File
 
-class ValidationCommand : CliktCommand(help = "Validate the syntax and semantics of the file") {
+class ValidationCommand : CliktCommand(name = "validate", help = "Validate the syntax and semantics of the file") {
     private val version by option(help = "Version of the language").default("1.0")
     private val file by argument(help = "Source file to validate")
 
@@ -23,18 +19,17 @@ class ValidationCommand : CliktCommand(help = "Validate the syntax and semantics
             "1.1" -> LexerFactory().createLexer1_1(reader)
             else -> LexerFactory().createLexer1_0(reader)
         }
-        val parser = ParserDirector(
-            lexer,
-            mapOf(
-                TokenType.LET to VariableDeclarationParser(),
-                TokenType.PRINT to PrintParser(),
-                TokenType.IDENTIFIER to AssignationParser(),
-            ),
-        )
-        var statement = parser.nextStatement()
-        while (statement != null) {
-            statement = parser.nextStatement()
+        val parser = when (version) {
+            "1.1" -> ParserFactory().createParser1_1(lexer)
+            else -> ParserFactory().createParser1_0(lexer)
         }
+
+        // Process statements while there are more tokens
+        while (parser.hasNextAST()) {
+            val statement = parser.nextStatement()
+            println(statement)
+        }
+
         println("file validated")
     }
 }

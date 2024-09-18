@@ -1,0 +1,6 @@
+let name: string = "Jorge";
+println(name);
+let age: number = 25;
+if (true) {
+    println(age);
+}

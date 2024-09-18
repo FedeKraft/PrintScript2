@@ -2,6 +2,7 @@ package commands
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
+import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.option
 import command.AssignationParser
 import command.PrintParser
@@ -24,6 +25,7 @@ class FormattingCommand : CliktCommand(name = "format", help = "Format the file"
     private val configFile by option(
         help = "C:\\Users\\vranc\\Projects\\Ingsis\\PrintScript2\\cli\\src\\main\\resources\\formatter-config.json\n",
     )
+    private val version by option(help = "Version of the language").default("1.0")
 
     override fun run() {
         val sourceCode = File(file).readText()
