@@ -1,4 +1,3 @@
-import config.Config
 import factory.LinterFactory
 import org.junit.jupiter.api.Test
 import parser.ASTProvider
@@ -21,8 +20,6 @@ class LinterConfigLoaderErrorTests {
             // Intentamos cargar la configuración con un InputStream inválido (vacío)
             val linter = LinterFactory().createLinter1_0(astProvider, invalidConfigInputStream)
 
-            // Verificamos que el linter cargó con la configuración por defecto
-            val config = Config() // Configuración por defecto
             assert(linter.rules.isNotEmpty()) // El linter debería haber cargado las reglas por defecto
             println("Configuración cargada correctamente con valores por defecto.")
         } catch (e: Exception) {

@@ -31,6 +31,5 @@ class ValidationCommand : CliktCommand(help = "Validate the syntax and semantics
             println(statement)
             statement = parserDirector.nextStatement()
         }
-
     }
 }
