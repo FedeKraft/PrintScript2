@@ -7,4 +7,6 @@ data class Config(
     val identifierFormat: String = "none", // Default to none
     @JsonProperty("mandatory-variable-or-literal-in-println")
     val mandatoryVariableOrLiteral: String = "none",
+    @JsonProperty("read-input-with-simple-argument")
+    val readInputWithSimpleArgument: String = "none",
 )

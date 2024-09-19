@@ -1,0 +1,9 @@
+println("hola");
+let a: number = 1;
+a = a + 1;
+println(a);
+if (true) {
+    println("a es 2");
+} else {
+    println("a no es 2");
+}

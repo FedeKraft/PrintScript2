@@ -1,7 +1,10 @@
 package rules
 
+import ast.IdentifierNode
+import ast.NumberLiteralNode
 import ast.PrintStatementNode
 import ast.StatementNode
+import ast.StringLiteralNode
 import linter.LinterError
 
 class PrintSimpleExpressionRule(
@@ -12,7 +15,12 @@ class PrintSimpleExpressionRule(
 
         when (node) {
             is PrintStatementNode -> {
-                if (node.expression.toFormattedString(emptyMap()).length > 10) {
+                val expression = node.expression
+
+                // Check if the expression is either a simple identifier or a literal
+                if (expression !is IdentifierNode && expression !is StringLiteralNode &&
+                    expression !is NumberLiteralNode
+                ) {
                     errors.add(
                         LinterError(
                             message = "Print statement too complex",
@@ -23,7 +31,7 @@ class PrintSimpleExpressionRule(
                 }
             }
             else -> {
-                // No hacemos nada con otros tipos de StatementNode en esta regla
+                // No action needed for other types of StatementNode
             }
         }
 

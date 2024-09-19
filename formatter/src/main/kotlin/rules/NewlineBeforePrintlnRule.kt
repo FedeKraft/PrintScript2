@@ -12,6 +12,9 @@ class NewlineBeforePrintlnRule(
         variableTypes: Map<String, Any>,
         result: String,
     ): String {
+        if (config.newlineCount > 2) {
+            throw IllegalArgumentException("Newline count must be less than 2")
+        }
         if (node is PrintStatementNode) {
             val formattedStatement = StringBuilder()
             if (config.enabled) {

@@ -1,4 +1,3 @@
-
 import factory.LexerFactory
 import formatter.Formatter
 import formatter.FormatterConfigLoader

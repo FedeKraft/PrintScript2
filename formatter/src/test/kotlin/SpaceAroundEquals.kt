@@ -1,4 +1,3 @@
-
 import factory.LexerFactory
 import formatter.Formatter
 import formatter.FormatterConfigLoader
@@ -11,8 +10,8 @@ import parserTypes.VariableDeclarationParser
 import reader.Reader
 import rules.Indentation
 import rules.NewlineBeforePrintlnRule
+import rules.NoSpaceAroundEqualsRule
 import rules.SpaceAfterColonRule
-import rules.SpaceAroundEqualsRule
 import rules.SpaceBeforeColonRule
 import token.TokenType
 import java.io.ByteArrayInputStream
@@ -26,7 +25,7 @@ class SpaceAroundEquals {
         SpaceBeforeColonRule(config.spaceBeforeColon.enabled),
         SpaceAfterColonRule(config.spaceAfterColon.enabled),
         NewlineBeforePrintlnRule(config.newlineBeforePrintln),
-        SpaceAroundEqualsRule(config.spaceAroundEquals.enabled),
+        NoSpaceAroundEqualsRule(config.spaceAroundEquals.enabled),
     )
 
     private fun readSourceCodeFromFile(filename: String): String {

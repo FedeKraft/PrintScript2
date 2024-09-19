@@ -1,0 +1,4 @@
+let name_surname: string = "Karl";
+println(name_surname);
+println(name_surname + " is here");
+a = readInput("Enter your name");
