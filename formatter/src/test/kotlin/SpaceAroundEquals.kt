@@ -1,17 +1,17 @@
-import command.AssignationParser
-import command.PrintParser
-import command.VariableDeclarationParser
 import factory.LexerFactory
 import formatter.Formatter
 import formatter.FormatterConfigLoader
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import parser.ParserDirector
+import parserTypes.AssignationParser
+import parserTypes.PrintParser
+import parserTypes.VariableDeclarationParser
 import reader.Reader
 import rules.Indentation
 import rules.NewlineBeforePrintlnRule
+import rules.NoSpaceAroundEqualsRule
 import rules.SpaceAfterColonRule
-import rules.SpaceAroundEqualsRule
 import rules.SpaceBeforeColonRule
 import token.TokenType
 import java.io.ByteArrayInputStream
@@ -25,7 +25,7 @@ class SpaceAroundEquals {
         SpaceBeforeColonRule(config.spaceBeforeColon.enabled),
         SpaceAfterColonRule(config.spaceAfterColon.enabled),
         NewlineBeforePrintlnRule(config.newlineBeforePrintln),
-        SpaceAroundEqualsRule(config.spaceAroundEquals.enabled),
+        NoSpaceAroundEqualsRule(config.spaceAroundEquals.enabled),
     )
 
     private fun readSourceCodeFromFile(filename: String): String {

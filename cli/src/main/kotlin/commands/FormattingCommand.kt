@@ -2,56 +2,61 @@ package commands
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
+import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.option
 import factory.LexerFactory
 import formatter.Formatter
 import formatter.FormatterConfigLoader
-import parser.ParserDirector
-import parserTypes.AssignationParser
-import parserTypes.PrintParser
-import parserTypes.VariableDeclarationParser
+import parser.ParserFactory
 import reader.Reader
-import rules.SpaceAroundEqualsRule
-import token.TokenType
+import rules.Indentation
+import rules.NewlineBeforePrintlnRule
+import rules.NoSpaceAroundEqualsRule
+import rules.SpaceAfterColonRule
+import rules.SpaceBeforeColonRule
 import java.io.File
 
-class FormattingCommand : CliktCommand(help = "Format the file") {
+class FormattingCommand : CliktCommand(name = "format", help = "Format the file") {
+
     private val file by argument(help = "Source file to format")
-    private val configFile by option(help = "Configuration file for formatting")
-
-    private val config = FormatterConfigLoader.loadConfig("src/test/resources/formatter-config.json")
-
-    private val rules =
-        listOf(
-            SpaceAroundEqualsRule(config.spaceAroundEquals.enabled),
-        )
-
-    private fun readSourceCodeFromFile(filename: String): String =
-        File("src/test/resources/$filename").readText().replace(
-            "\r\n",
-            "\n",
-        )
+    private val version by option(help = "Version of the language").default("1.0")
+    private val configFilePath =
+        "C:\\Users\\vranc\\Projects\\Ingsis\\PrintScript2\\cli\\src\\main\\resources\\formatter-config.json"
 
     override fun run() {
-        val sourceCode = readSourceCodeFromFile(file)
-        val lexer = LexerFactory().createLexer1_0(Reader(File(sourceCode).inputStream()))
-        val parserDirector =
-            ParserDirector(
-                lexer,
-                mapOf(
-                    TokenType.PRINT to PrintParser(),
-                    TokenType.LET to VariableDeclarationParser(),
-                    TokenType.IDENTIFIER to AssignationParser(),
-                ),
-            )
+        val reader = Reader(File(file).inputStream())
 
+        // Load the configuration file (ignoring the version for now)
+        val config = FormatterConfigLoader.loadConfig(configFilePath)
+
+        // Define the formatting rules based on the loaded configuration
+        val rules = listOf(
+            Indentation(config.indentation),
+            NoSpaceAroundEqualsRule(config.spaceAroundEquals.enabled),
+            SpaceBeforeColonRule(config.spaceBeforeColon.enabled),
+            SpaceAfterColonRule(config.spaceAfterColon.enabled),
+            // Add other rules based on the provided config
+            NewlineBeforePrintlnRule(config.newlineBeforePrintln),
+        )
+
+        // Lexer
+        val lexer = when (version) {
+            "1.1" -> LexerFactory().createLexer1_1(reader)
+            else -> LexerFactory().createLexer1_0(reader)
+        }
+
+        val parserDirector = when (version) {
+            "1.1" -> ParserFactory().createParser1_1(lexer)
+            else -> ParserFactory().createParser1_0(lexer)
+        }
+
+        // Format the source code
         val formatter = Formatter(rules, parserDirector)
-        var result = ""
-        for (formattedString in formatter.format()) {
-            if (parserDirector.hasNextAST()) {
-                result += formattedString.plus("\n")
-            } else {
-                result += formattedString
+
+        File(file).bufferedWriter().use { writer ->
+            for (formattedString in formatter.format()) {
+                writer.write(formattedString)
+                writer.newLine()
             }
         }
     }

@@ -2,7 +2,7 @@ package rules
 
 import ast.StatementNode
 
-class SpaceAroundEqualsRule(
+class NoSpaceAroundEqualsRule(
     private val enabled: Boolean,
 ) : FormatterRule {
     override fun applyRule(

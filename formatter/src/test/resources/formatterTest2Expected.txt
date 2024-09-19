@@ -1,8 +1,8 @@
-a = " river ";
-let a : string = " gallardo ";
+a = "river";
+let a : string = "gallardo";
 if (true) {
-    let a: string = "Bielsa";
+    let a : string = "Bielsa";
 }
 else {
-    let a: string = "Bielseada";
+    let a : string = "Bielseada";
 }
