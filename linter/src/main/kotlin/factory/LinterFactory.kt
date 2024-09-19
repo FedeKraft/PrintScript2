@@ -22,9 +22,9 @@ class LinterFactory {
             Config() // Usa la configuración por defecto en caso de error
         }
 
-        val camelCaseRule = CamelCaseIdentifierRule(isActive = config.identifierFormat.format == "camel case")
-        val snakeCaseRule = SnakeCaseIdentifierRule(isActive = config.identifierFormat.format == "snake case")
-        val printRule = PrintSimpleExpressionRule(isActive = config.printSimpleExpression.mandatoryVariableOrLiteral)
+        val camelCaseRule = CamelCaseIdentifierRule(isActive = config.identifierFormat == "camel case")
+        val snakeCaseRule = SnakeCaseIdentifierRule(isActive = config.identifierFormat == "snake case")
+        val printRule = PrintSimpleExpressionRule(isActive = config.mandatoryVariableOrLiteral == "true")
 
         // Logs for debugging rule states
         println("CamelCase Rule isActive: ${camelCaseRule.isActive}")
@@ -35,14 +35,30 @@ class LinterFactory {
         return Linter(rules, astProvider)
     }
 
-    fun createLinter1_1(astProvider: ASTProvider): Linter {
-        val rules =
-            listOf(
-                CamelCaseIdentifierRule(),
-                SnakeCaseIdentifierRule(),
-                PrintSimpleExpressionRule(),
-                ReadInputWithSimpleArgumentRule(),
-            )
+    fun createLinter1_1(astProvider: ASTProvider, configInputStream: InputStream): Linter {
+        val mapper = jacksonObjectMapper()
+        val config: Config = try {
+            mapper.readValue(configInputStream)
+        } catch (e: Exception) {
+            println("Error al cargar el archivo de configuración: ${e.message}")
+            Config() // Usa la configuración por defecto en caso de error
+        }
+
+        val camelCaseRule = CamelCaseIdentifierRule(isActive = config.identifierFormat == "camel case")
+        val snakeCaseRule = SnakeCaseIdentifierRule(isActive = config.identifierFormat == "snake case")
+        val printRule = PrintSimpleExpressionRule(isActive = config.mandatoryVariableOrLiteral == "true")
+        val readInputWithSimpleArgumentRule = ReadInputWithSimpleArgumentRule(
+            isActive =
+            config.readInputWithSimpleArgument == "true",
+        )
+
+        // Logs for debugging rule states
+        println("CamelCase Rule isActive: ${camelCaseRule.isActive}")
+        println("SnakeCase Rule isActive: ${snakeCaseRule.isActive}")
+        println("PrintSimpleExpression Rule isActive: ${printRule.isActive}")
+        println("ReadInputWithSimpleArgument Rule isActive: ${readInputWithSimpleArgumentRule.isActive}")
+
+        val rules = listOf(camelCaseRule, snakeCaseRule, printRule, readInputWithSimpleArgumentRule)
         return Linter(rules, astProvider)
     }
 }

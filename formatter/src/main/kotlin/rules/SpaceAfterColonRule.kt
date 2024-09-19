@@ -1,7 +1,7 @@
 package rules
 
+import ast.PrintStatementNode
 import ast.StatementNode
-import ast.VariableDeclarationNode
 
 class SpaceAfterColonRule(
     private val enabled: Boolean,
@@ -11,7 +11,7 @@ class SpaceAfterColonRule(
         variableTypes: Map<String, Any>,
         result: String,
     ): String {
-        if (node is VariableDeclarationNode) {
+        if (node !is PrintStatementNode) {
             val modifiedResult = StringBuilder()
             for (i in result.indices) {
                 if (result[i] == ':') {

@@ -9,31 +9,28 @@ import parserTypes.PrintParser
 import parserTypes.VariableDeclarationParser
 import reader.Reader
 import rules.Indentation
-import rules.NewlineBeforePrintlnRule
 import rules.SpaceAfterColonRule
-import rules.SpaceBeforeColonRule
 import token.TokenType
 import java.io.ByteArrayInputStream
 import java.io.File
 
-class FormatterTests {
+class ColonTests {
     private val config = FormatterConfigLoader.loadConfig("src/test/resources/formatter-config.json")
 
     private val rulesEnabled = listOf(
         Indentation(config.indentation),
-        SpaceBeforeColonRule(config.spaceBeforeColon.enabled),
         SpaceAfterColonRule(config.spaceAfterColon.enabled),
-        NewlineBeforePrintlnRule(config.newlineBeforePrintln),
+
     )
 
     private fun readSourceCodeFromFile(filename: String): String {
-        return File("src/test/resources/$filename").readText().replace("\r\n", "\n")
+        return File("src/test/resources/colonTests/$filename").readText().replace("\r\n", "\n")
     }
 
     @Test
     fun `test SpaceBeforeColonRule enabled`() {
-        val expected = readSourceCodeFromFile("formatterTest2Expected.txt")
-        val unformattedCode = readSourceCodeFromFile("formatterTest2.txt").toByteArray()
+        val expected = readSourceCodeFromFile("spaceAfterColonTestExpected.txt")
+        val unformattedCode = readSourceCodeFromFile("spaceAfterColonTest.txt").toByteArray()
         val inputStream = ByteArrayInputStream(unformattedCode)
         val lexer = LexerFactory().createLexer1_1(Reader(inputStream))
         val parserDirector = ParserDirector(

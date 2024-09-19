@@ -1,13 +1,12 @@
 package config
+
+import com.fasterxml.jackson.annotation.JsonProperty
+
 data class Config(
-    val identifierFormat: IdentifierFormatConfig = IdentifierFormatConfig(),
-    val printSimpleExpression: PrintSimpleExpressionConfig = PrintSimpleExpressionConfig(),
-)
-
-data class IdentifierFormatConfig(
-    val format: String = "camel case", // Valor por defecto
-)
-
-data class PrintSimpleExpressionConfig(
-    val mandatoryVariableOrLiteral: Boolean = false, // Valor por defecto
+    @JsonProperty("identifier_format")
+    val identifierFormat: String = "none", // Default to none
+    @JsonProperty("mandatory-variable-or-literal-in-println")
+    val mandatoryVariableOrLiteral: String = "none",
+    @JsonProperty("read-input-with-simple-argument")
+    val readInputWithSimpleArgument: String = "none",
 )

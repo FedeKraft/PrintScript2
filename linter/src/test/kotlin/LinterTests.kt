@@ -1,3 +1,4 @@
+import ast.BinaryExpressionNode
 import ast.IdentifierNode
 import ast.NumberLiteralNode
 import ast.PrintStatementNode
@@ -140,8 +141,10 @@ class LinterTests {
 
     @Test
     fun `test complex print expression`() {
+        val a = IdentifierNode("hello", 1, 1)
+        val b = IdentifierNode("world", 1, 1)
         val node = PrintStatementNode(
-            StringLiteralNode("This is a very long and complex expression that exceeds the limit", 1, 1),
+            BinaryExpressionNode(a, TokenType.SUM, b, 1, 1),
             1,
             1,
         )
@@ -178,7 +181,7 @@ class LinterTests {
         val linter = LinterFactory().createLinter1_0(DummyASTProvider(), "{}".byteInputStream())
         linter.lint()
 
-        val linter1 = LinterFactory().createLinter1_1(DummyASTProvider())
+        val linter1 = LinterFactory().createLinter1_1(DummyASTProvider(), "{}".byteInputStream())
         linter1.lint()
     }
 }
