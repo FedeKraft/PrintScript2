@@ -1,21 +1,6 @@
 package interpreter
 
-import ast.AssignationNode
-import ast.BinaryExpressionNode
-import ast.BlockNode
-import ast.BooleanLiteralNode
-import ast.ConstDeclarationNode
-import ast.ExpressionNode
-import ast.IdentifierNode
-import ast.IfElseNode
-import ast.NullValueNode
-import ast.NumberLiteralNode
-import ast.PrintStatementNode
-import ast.ReadEnvNode
-import ast.ReadInputNode
-import ast.StatementNode
-import ast.StringLiteralNode
-import ast.VariableDeclarationNode
+import ast.*
 import emitter.PrintEmitter
 import errorCollector.ErrorCollector
 import parser.ASTProvider
@@ -48,11 +33,10 @@ class Interpreter(
                 is VariableDeclarationNode -> {
                     val value = evaluateExpression(statement.value)
                     val inferredType = inferType(value)
-
                     if (!isTypeCompatible(inferredType, statement.type)) {
                         errorCollector.reportError(
                             "Error de tipo en declaración de variable: Se esperaba " +
-                                "${statement.type} pero se encontró $inferredType",
+                                    "${statement.type} pero se encontró $inferredType",
                         )
                         return
                     }
@@ -61,6 +45,14 @@ class Interpreter(
                 }
                 is ConstDeclarationNode -> {
                     val value = evaluateExpression(statement.value)
+                    val inferredType = inferType(value)
+                    if (!isTypeCompatible(inferredType, statement.type)) {
+                        errorCollector.reportError(
+                            "Error de tipo en declaración de constante: Se esperaba " +
+                                    "${statement.type} pero se encontró $inferredType",
+                        )
+                        return
+                    }
                     constants.add(statement.identifier.name, value)
                 }
                 is AssignationNode -> {
@@ -94,9 +86,7 @@ class Interpreter(
                     variables.exitBlock()
                 }
                 else ->
-                    errorCollector.reportError(
-                        "Tipo de declaración no soportada: ${statement::class.java.simpleName}",
-                    )
+                    errorCollector.reportError("Tipo de declaración no soportada: ${statement::class.java.simpleName}")
             }
         } catch (e: Exception) {
             errorCollector.reportError("Error en la declaración: ${e.message}")
@@ -106,17 +96,21 @@ class Interpreter(
     private fun evaluateExpression(expression: ExpressionNode): Any? {
         return try {
             when (expression) {
-                is ReadInputNode -> inputProvider.readInput(expression.value)
+                is ReadInputNode -> {
+                    println("Enter input for: ${expression.value}")
+                    val input = inputProvider.readInput(expression.value)
+                    println("Received input: $input")
+                    input
+                }
                 is ReadEnvNode -> {
                     val envValue = System.getenv(expression.value as String)
                     envValue ?: errorCollector.reportError(
-                        "La variable de entorno '${expression.value}" +
-                            "' no esta definida",
+                        "La variable de entorno '${expression.value}' no está definida"
                     )
                 }
                 is IdentifierNode -> {
                     constants.get(expression.name) ?: variables.get(expression.name)
-                        ?: errorCollector.reportError("Identificador no definido: ${expression.name}")
+                    ?: errorCollector.reportError("Identificador no definido: ${expression.name}")
                 }
                 is StringLiteralNode -> expression.value
                 is NumberLiteralNode -> expression.value
@@ -135,8 +129,7 @@ class Interpreter(
 
                     if (leftAsDouble == null || rightAsDouble == null) {
                         errorCollector.reportError(
-                            "Operación no soportada entre los operandos: " +
-                                "$leftValue y $rightValue",
+                            "Operación no soportada entre los operandos: $leftValue y $rightValue"
                         )
                         return null
                     }
@@ -152,18 +145,13 @@ class Interpreter(
                             }
                             leftAsDouble / rightAsDouble
                         }
-                        else ->
-                            errorCollector.reportError(
-                                "Operador binario inesperado:" +
-                                    " ${expression.operator}",
-                            )
+                        else -> errorCollector.reportError("Operador binario inesperado: ${expression.operator}")
                     }
                 }
-                else ->
-                    errorCollector.reportError("")
+                else -> errorCollector.reportError("Error al evaluar la expresión")
             }
-        } catch (e: Exception) {
-            errorCollector.reportError("Error al evaluar la expresion: ${e.message}")
+        }  catch (e: Exception) {
+            errorCollector.reportError("Error al evaluar la expresión: ${e.message}")
             null
         }
     }
@@ -179,12 +167,8 @@ class Interpreter(
             else -> throw IllegalArgumentException("Tipo desconocido: ${value?.javaClass?.simpleName}")
         }
 
-    private fun isTypeCompatible(
-        inferredType: TokenType,
-        declaredType: TokenType,
-    ): Boolean = inferredType == declaredType
+    private fun isTypeCompatible(inferredType: TokenType, declaredType: TokenType): Boolean = inferredType == declaredType
 
-    fun getContext(): ExecutionContext = variables
 
     fun getPrintEmitter(): PrintEmitter = printEmitter
 }

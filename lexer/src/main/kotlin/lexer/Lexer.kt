@@ -2,7 +2,6 @@ package lexer
 
 import reader.Reader
 import token.Token
-import token.TokenProvider
 import token.TokenType
 import token.TokenValue
 

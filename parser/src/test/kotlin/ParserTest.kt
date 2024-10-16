@@ -14,6 +14,7 @@ import ast.StatementNode
 import ast.StringLiteralNode
 import ast.VariableDeclarationNode
 import factory.LexerFactory
+import factory.ParserFactory
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import reader.Reader
