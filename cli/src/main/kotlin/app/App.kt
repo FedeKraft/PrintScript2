@@ -15,4 +15,3 @@ fun main(args: Array<String>) =
             FormattingCommand(),
             ValidationCommand(),
         ).main(args)
-

@@ -5,9 +5,9 @@ import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.option
 import factory.LexerFactory
+import factory.ParserFactory
 import formatter.Formatter
 import formatter.FormatterConfigLoader
-import factory.ParserFactory
 import reader.Reader
 import rules.Indentation
 import rules.NewlineBeforePrintlnRule

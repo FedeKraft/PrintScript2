@@ -20,7 +20,6 @@ class AssignationSyntaxErrorChecker : ErrorChecker {
         val requiredTokenTypes = listOf(TokenType.IDENTIFIER, TokenType.ASSIGN)
         val tokenTypes = getTokenTypes(tokens)
 
-
         for (tokenType in requiredTokenTypes) {
             lookForTokenInRequiredTokens(tokens, tokenType)
         }
@@ -29,19 +28,19 @@ class AssignationSyntaxErrorChecker : ErrorChecker {
 
     private fun checkValueOfAssign(
         tokenTypes: List<TokenType>,
-        tokens: List<Token>
+        tokens: List<Token>,
     ) {
-        val valueTokenType = tokenTypes.last()
+        val valueTokenType = tokenTypes[2]
         if (valueTokenType != TokenType.STRING &&
             valueTokenType != TokenType.NUMBER &&
             valueTokenType != TokenType.IDENTIFIER &&
             valueTokenType != TokenType.BOOLEAN &&
             valueTokenType != TokenType.READ_ENV &&
             valueTokenType != TokenType.READ_INPUT
-        ){
+        ) {
             throw RuntimeException(
                 "Missing value token in variable " +
-                        "assignment line: ${tokens.last().line}, column: ${tokens.last().column}",
+                    "assignment line: ${tokens.last().line}, column: ${tokens.last().column}",
             )
         }
     }
@@ -51,7 +50,7 @@ class AssignationSyntaxErrorChecker : ErrorChecker {
         if (token == null) {
             throw RuntimeException(
                 "Missing $tokenType token in variable assignmen" +
-                        " line: ${tokens.last().line}, column: ${tokens.last().column}",
+                    " line: ${tokens.last().line}, column: ${tokens.last().column}",
             )
         }
     }
@@ -94,5 +93,4 @@ class AssignationSyntaxErrorChecker : ErrorChecker {
             }
         }
     }
-
 }

@@ -51,7 +51,7 @@ class SyntaxErrorTests {
             listOf(
                 "Missing value token after = in line: 1, column: 3",
                 "Missing ASSIGN token line: 2, column: 3",
-                "Invalid value token in variable assignment line: 3, column: 5",
+                "Missing value token in variable assignment line: 3, column: 5",
             )
         assertEquals(expectedErrors, actualErrors, "The error messages do not match the expected ones")
     }
@@ -72,9 +72,9 @@ class SyntaxErrorTests {
         val expectedErrors =
             listOf(
                 "Print statement is missing a RIGHT_PARENTHESIS token line: 1, column: 1",
-                "Missing args in print statement line: 2, column: 8",
+                "Missing arguments in print statement line: 2, column: 8",
                 "Print statement is missing a LEFT_PARENTHESIS token line: 3, column: 1",
-                "Unexpected token order in print statement line: 4, column: 8",
+                "Invalid order of tokens in print statement line: 4, column: 1",
                 "Invalid number of arguments in print statement line: 5, column: 14",
                 "Invalid argument in print statement line: 6, column: 9",
             )

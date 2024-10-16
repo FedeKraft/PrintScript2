@@ -7,8 +7,8 @@ import com.github.ajalt.clikt.parameters.options.option
 import emitter.PrintEmitter
 import errorCollector.ErrorCollector
 import factory.LexerFactory
-import interpreter.Interpreter
 import factory.ParserFactory
+import interpreter.Interpreter
 import provider.ConsoleInputProvider
 import reader.Reader
 import java.io.File
@@ -39,9 +39,9 @@ class ExecutionCommand : CliktCommand(name = "execute", help = "Execute the file
         // Step 3: Initialize and run the interpreter, handling console input as needed
         val interpreter = Interpreter(
             provider = parser,
-            inputProvider = ConsoleInputProvider(),  // Handles user input dynamically
+            inputProvider = ConsoleInputProvider(), // Handles user input dynamically
             printEmitter = PrintEmitter(),
-            errorCollector = ErrorCollector()
+            errorCollector = ErrorCollector(),
         )
         interpreter.interpret()
 

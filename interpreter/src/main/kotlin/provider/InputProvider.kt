@@ -13,13 +13,11 @@ class ConsoleInputProvider : InputProvider {
     }
 }
 
-
-
 class TestInputProvider(
     private val mockInput: Any,
 ) : InputProvider {
     override fun readInput(prompt: Any): Any {
         println("Simulated input for test: $mockInput")
-        return mockInput
+        throw IllegalArgumentException("Error al leer la entrada del usuario")
     }
 }

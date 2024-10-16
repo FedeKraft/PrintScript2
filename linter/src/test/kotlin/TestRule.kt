@@ -3,9 +3,9 @@ import ast.ReadInputNode
 import ast.VariableDeclarationNode
 import factory.LexerFactory
 import factory.LinterFactory
+import factory.ParserFactory
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import factory.ParserFactory
 import reader.Reader
 import rules.ReadInputWithSimpleArgumentRule
 import token.TokenType

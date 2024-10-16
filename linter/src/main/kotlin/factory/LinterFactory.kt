@@ -26,7 +26,7 @@ class LinterFactory {
         val snakeCaseRule = SnakeCaseIdentifierRule(isActive = config.identifierFormat == "snake case")
         val printRule = PrintSimpleExpressionRule(isActive = config.mandatoryVariableOrLiteral == "true")
 
-        // Logs for debugging rule states
+        // Logs para debugguear rule states
         println("CamelCase Rule isActive: ${camelCaseRule.isActive}")
         println("SnakeCase Rule isActive: ${snakeCaseRule.isActive}")
         println("PrintSimpleExpression Rule isActive: ${printRule.isActive}")

@@ -14,7 +14,6 @@ class PrintSyntaxErrorChecker : ErrorChecker {
     }
 
     private fun checkNecessaryTokens(tokens: List<Token>) {
-
         lookForUnknownTokens(tokens)
 
         lookForRequiredTokens(tokens)
@@ -30,7 +29,7 @@ class PrintSyntaxErrorChecker : ErrorChecker {
             if (token == null) {
                 throw RuntimeException(
                     "Print statement is missing a $tokenType token line:" +
-                            " ${tokens.first().line}, column: ${tokens.first().column}",
+                        " ${tokens.first().line}, column: ${tokens.first().column}",
                 )
             }
         }
@@ -39,21 +38,21 @@ class PrintSyntaxErrorChecker : ErrorChecker {
     private fun lookForMissingTokens(tokens: List<Token>) {
         if (tokens.size < 3) {
             throw RuntimeException(
-                "Missing tokens in print statement line: ${tokens[0].line}"
+                "Missing tokens in print statement line: ${tokens[0].line}",
             )
         }
     }
     private fun lookForMissingArgs(tokens: List<Token>) {
-    val leftParenthesis = tokens.indexOfFirst { it.type == TokenType.LEFT_PARENTHESIS }
-    val rightParenthesis = tokens.indexOfFirst { it.type == TokenType.RIGHT_PARENTHESIS }
+        val leftParenthesis = tokens.indexOfFirst { it.type == TokenType.LEFT_PARENTHESIS }
+        val rightParenthesis = tokens.indexOfFirst { it.type == TokenType.RIGHT_PARENTHESIS }
 
-
-    if (rightParenthesis != -1 && leftParenthesis != -1 && abs(rightParenthesis - leftParenthesis) == 1) {
-        throw RuntimeException(
-            "Missing arguments in print statement line: ${tokens[leftParenthesis].line}, column: ${tokens[leftParenthesis].column}"
-        )
+        if (rightParenthesis != -1 && leftParenthesis != -1 && abs(rightParenthesis - leftParenthesis) == 1) {
+            throw RuntimeException(
+                "Missing arguments in print statement line: ${tokens[leftParenthesis].line}, column: " +
+                    "${tokens[leftParenthesis].column}",
+            )
+        }
     }
-}
     private fun lookForUnknownTokens(tokens: List<Token>) {
         val unknownToken = tokens.find { it.type == TokenType.UNKNOWN }
         if (unknownToken != null) {
@@ -66,13 +65,14 @@ class PrintSyntaxErrorChecker : ErrorChecker {
     private fun checkNecessaryTokensOrder(tokens: List<Token>) {
         val expectedOrder = listOf(TokenType.PRINT, TokenType.LEFT_PARENTHESIS, TokenType.RIGHT_PARENTHESIS)
         val statementTokenTypes = getStatementTokenTypes(tokens)
-        for ((index, expectedTokenType) in expectedOrder.withIndex()) {
-            if (statementTokenTypes[index] != expectedTokenType) {
-                throw RuntimeException(
-                    "Invalid token order in print statement" +
-                            " line: ${tokens[index].line}, column: ${tokens[index].column}",
-                )
-            }
+
+        if (statementTokenTypes[0] != expectedOrder[0] || statementTokenTypes[1] != expectedOrder[1] ||
+            statementTokenTypes[statementTokenTypes.size - 1] != expectedOrder[2]
+        ) {
+            throw RuntimeException(
+                "Invalid order of tokens in print statement line: ${tokens.first().line}, column: " +
+                    "${tokens.first().column}",
+            )
         }
     }
 
@@ -85,7 +85,7 @@ class PrintSyntaxErrorChecker : ErrorChecker {
 
     private fun checkForValidOperands(
         args: List<Token>,
-        argsTokenTypes: List<TokenType>
+        argsTokenTypes: List<TokenType>,
     ) {
         for (i in args.indices step 2) {
             if (argsTokenTypes[i] !in
@@ -107,7 +107,7 @@ class PrintSyntaxErrorChecker : ErrorChecker {
 
     private fun checkForValidOperators(
         args: List<Token>,
-        argsTokenTypes: List<TokenType>
+        argsTokenTypes: List<TokenType>,
     ) {
         for (i in 1 until args.size step 2) {
             if (argsTokenTypes[i] !in
@@ -127,7 +127,7 @@ class PrintSyntaxErrorChecker : ErrorChecker {
             ) {
                 throw RuntimeException(
                     "Invalid arithmetic operator in print statement" +
-                            " line: ${args[i].line}, column: ${args[i].column}",
+                        " line: ${args[i].line}, column: ${args[i].column}",
                 )
             }
         }
@@ -137,7 +137,7 @@ class PrintSyntaxErrorChecker : ErrorChecker {
         if (args.size % 2 == 0) {
             throw RuntimeException(
                 "Invalid number of arguments in print statement " +
-                        "line: ${args.last().line}, column: ${args.last().column - 1}",
+                    "line: ${args.last().line}, column: ${args.last().column - 1}",
             )
         }
     }

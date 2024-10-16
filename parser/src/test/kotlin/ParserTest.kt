@@ -26,7 +26,7 @@ class ParserTest {
     fun `test parser`() {
         val reader = Reader(File("src/test/resources/testCodeIdentifier.txt").inputStream())
         val lexer = LexerFactory().createLexer1_1(reader)
-        val parser = ParserFactory().createParser1_0(lexer)
+        val parser = ParserFactory().createParser1_1(lexer)
         val actualAst = mutableListOf<StatementNode>()
         while (parser.hasNextAST()) {
             actualAst.add(parser.getNextAST())
