@@ -2,6 +2,7 @@ package parser
 
 import ast.StatementNode
 import factory.LexerFactory
+import factory.ParserFactory
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import reader.Reader

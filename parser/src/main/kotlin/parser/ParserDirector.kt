@@ -6,13 +6,13 @@ import ast.ExpressionNode
 import ast.IdentifierNode
 import ast.IfElseNode
 import ast.StatementNode
+import lexer.TokenProvider
 import parserTypes.AssignationParser
 import parserTypes.ConstDeclarationParser
 import parserTypes.Parser
 import parserTypes.PrintParser
 import parserTypes.VariableDeclarationParser
 import token.Token
-import token.TokenProvider
 import token.TokenType
 import token.TokenValue
 

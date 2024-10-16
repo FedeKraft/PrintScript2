@@ -6,7 +6,7 @@ import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.option
 import factory.LexerFactory
 import factory.LinterFactory
-import parser.ParserFactory
+import factory.ParserFactory
 import reader.Reader
 import java.io.File
 import java.io.InputStream

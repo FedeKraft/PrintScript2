@@ -4,7 +4,7 @@ import factory.LexerFactory
 import interpreter.Interpreter
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import parser.ParserFactory
+import factory.ParserFactory
 import provider.TestInputProvider
 import reader.Reader
 import java.io.File

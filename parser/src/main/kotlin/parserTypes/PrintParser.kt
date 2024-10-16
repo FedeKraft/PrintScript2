@@ -10,7 +10,7 @@ import ast.ReadEnvNode
 import ast.ReadInputNode
 import ast.StatementNode
 import ast.StringLiteralNode
-import org.example.errorCheckers.syntactic.PrintSyntaxErrorChecker
+import errorCheckers.syntactic.PrintSyntaxErrorChecker
 import token.Token
 import token.TokenType
 import token.TokenValue

@@ -7,7 +7,7 @@ import com.github.ajalt.clikt.parameters.options.option
 import factory.LexerFactory
 import formatter.Formatter
 import formatter.FormatterConfigLoader
-import parser.ParserFactory
+import factory.ParserFactory
 import reader.Reader
 import rules.Indentation
 import rules.NewlineBeforePrintlnRule

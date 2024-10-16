@@ -5,7 +5,7 @@ import factory.LexerFactory
 import factory.LinterFactory
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import parser.ParserFactory
+import factory.ParserFactory
 import reader.Reader
 import rules.ReadInputWithSimpleArgumentRule
 import token.TokenType

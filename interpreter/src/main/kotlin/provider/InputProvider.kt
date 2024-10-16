@@ -6,10 +6,14 @@ interface InputProvider {
 
 class ConsoleInputProvider : InputProvider {
     override fun readInput(prompt: Any): Any {
-        println(prompt)
-        return readlnOrNull() ?: throw IllegalArgumentException("Error al leer la entrada del usuario")
+        println("Prompt: $prompt")
+        val input = readln()
+        println("Input received: $input")
+        return input
     }
 }
+
+
 
 class TestInputProvider(
     private val mockInput: Any,
