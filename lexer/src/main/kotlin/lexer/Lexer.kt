@@ -176,7 +176,6 @@ class Lexer(
     }
 
     private fun isDelimiter(char: Char): Boolean {
-        // Incluir llaves en los delimitadores
         val delimiters = ";:=+-*/(){}[]".toCharArray()
         return delimiters.contains(char)
     }
