@@ -26,7 +26,7 @@ class ParserDirector(
         val tokens = mutableListOf<Token>()
         while (tokenProvider.hasNextToken()) {
             checkUnknownToken()
-            if (isIfOrElseTokenType()) {
+            if (isIfTokenType() || isElseTokenType()) {
                 return processBlockNode()
             }
             if (isSemiColonType()) {
@@ -57,7 +57,7 @@ class ParserDirector(
         advanceToStartOfBlock() // Me posiciono directamente dentro del bloque
         val ifBlock = parseBlockStatements()
         // Check for 'else' block
-        val elseBlock = if (currentToken.type == TokenType.ELSE) {
+        val elseBlock = if (isElseTokenType()) {
             currentToken = tokenProvider.nextToken() // Skip 'else'
             advanceToStartOfBlock() // Position at the start of the else block
             BlockNode(parseBlockStatements(),0, 0)
@@ -73,7 +73,7 @@ class ParserDirector(
     }
 
     private fun advanceToStartOfBlock() {
-        while (currentToken.type != TokenType.OPEN_BRACE && tokenProvider.hasNextToken()) {
+        while (!isOpenBraceType() && tokenProvider.hasNextToken()) {
             currentToken = tokenProvider.nextToken()
         }
         currentToken = tokenProvider.nextToken() // me muevo hasta el token despues de la llave
@@ -82,11 +82,11 @@ class ParserDirector(
     private fun parseBlockStatements(): List<StatementNode> {
         val blockAst = mutableListOf<StatementNode>()
         // parseo los statments hasta encontrar una llave de cierre
-        while (currentToken.type != TokenType.CLOSE_BRACE && tokenProvider.hasNextToken()) {
+        while (!isCloseBraceType() && tokenProvider.hasNextToken()) {
             val blockTokens = mutableListOf<Token>()
             // armo cada statement con los tokens
-            while (currentToken.type != TokenType.SEMICOLON && currentToken.type != TokenType.CLOSE_BRACE) {
-                if (currentToken.type == TokenType.IF) {
+            while (!isSemiColonType() && !isCloseBraceType()) {
+                if (isIfTokenType()) {
                     blockAst.add(processBlockNode()) // en caso de doble if
                 } else {
                     blockTokens.add(currentToken)
@@ -94,7 +94,7 @@ class ParserDirector(
                 }
             }
             // avanzo un token despues del semicolon
-            if (currentToken.type == TokenType.SEMICOLON) {
+            if (isSemiColonType()) {
                 currentToken = tokenProvider.nextToken()
             }
             // parseo el statement que tengo hasta ahora y lo agrego al conjunto de statements en el bloque
@@ -138,12 +138,24 @@ class ParserDirector(
         }
     }
 
-    private fun isIfOrElseTokenType(): Boolean {
-        return currentToken.type == TokenType.IF || currentToken.type == TokenType.ELSE
+    private fun isElseTokenType(): Boolean {
+        return currentToken.type == TokenType.ELSE
+    }
+
+    private fun isIfTokenType(): Boolean {
+        return currentToken.type == TokenType.IF
     }
 
     private fun isSemiColonType(): Boolean {
         return currentToken.type == TokenType.SEMICOLON
+    }
+
+    private fun isCloseBraceType(): Boolean{
+        return currentToken.type == TokenType.CLOSE_BRACE
+    }
+
+    private fun isOpenBraceType(): Boolean{
+        return currentToken.type == TokenType.OPEN_BRACE
     }
 
     private fun getParser(firstToken: Token): Parser {
