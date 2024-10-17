@@ -7,11 +7,7 @@ import ast.IdentifierNode
 import ast.IfElseNode
 import ast.StatementNode
 import lexer.TokenProvider
-import parserTypes.AssignationParser
-import parserTypes.ConstDeclarationParser
 import parserTypes.Parser
-import parserTypes.PrintParser
-import parserTypes.VariableDeclarationParser
 import token.Token
 import token.TokenType
 import token.TokenValue
@@ -58,9 +54,9 @@ class ParserDirector(
         val ifBlock = parseBlockStatements()
         // Check for 'else' block
         val elseBlock = if (isElseTokenType()) {
-            currentToken = tokenProvider.nextToken() // Skip 'else'
-            advanceToStartOfBlock() // Position at the start of the else block
-            BlockNode(parseBlockStatements(),0, 0)
+            currentToken = tokenProvider.nextToken() // salteo el else
+            advanceToStartOfBlock() // me muevo dentro del bloque
+            BlockNode(parseBlockStatements(), 0, 0)
         } else {
             null
         }
@@ -112,13 +108,13 @@ class ParserDirector(
                 IdentifierNode(
                     currentToken.value.toString(),
                     currentToken.line,
-                    currentToken.column
+                    currentToken.column,
                 )
             TokenType.BOOLEAN ->
                 BooleanLiteralNode(
                     (currentToken.value as TokenValue.BooleanValue).value,
                     currentToken.line,
-                    currentToken.column
+                    currentToken.column,
                 )
             else -> throw RuntimeException("Unsupported token type: ${currentToken.type}")
         }
@@ -133,7 +129,7 @@ class ParserDirector(
     private fun checkUnknownToken() {
         if (currentToken.type == TokenType.UNKNOWN) {
             throw RuntimeException(
-                "Unknown token at line: ${currentToken.line}, column: ${currentToken.column}"
+                "Unknown token at line: ${currentToken.line}, column: ${currentToken.column}",
             )
         }
     }
@@ -150,21 +146,20 @@ class ParserDirector(
         return currentToken.type == TokenType.SEMICOLON
     }
 
-    private fun isCloseBraceType(): Boolean{
+    private fun isCloseBraceType(): Boolean {
         return currentToken.type == TokenType.CLOSE_BRACE
     }
 
-    private fun isOpenBraceType(): Boolean{
+    private fun isOpenBraceType(): Boolean {
         return currentToken.type == TokenType.OPEN_BRACE
     }
 
     private fun getParser(firstToken: Token): Parser {
-        return commands[firstToken.type] ?: when (firstToken.type) {
-            TokenType.IDENTIFIER -> AssignationParser()
-            TokenType.LET -> VariableDeclarationParser()
-            TokenType.PRINT -> PrintParser()
-            TokenType.CONST -> ConstDeclarationParser()
-            else -> throw RuntimeException("Unsupported token type: ${firstToken.type}")
+        val parser = commands[firstToken.type]
+        if (parser != null) {
+            return parser
+        } else {
+            throw RuntimeException("Unsupported token type: ${firstToken.type}")
         }
     }
 }

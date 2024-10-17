@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import parser.ParserDirector
 import parserTypes.AssignationParser
+import parserTypes.ConstDeclarationParser
 import parserTypes.PrintParser
 import parserTypes.VariableDeclarationParser
 import reader.Reader
@@ -39,6 +40,7 @@ class ColonTests {
                 TokenType.PRINT to PrintParser(),
                 TokenType.LET to VariableDeclarationParser(),
                 TokenType.IDENTIFIER to AssignationParser(),
+                TokenType.CONST to ConstDeclarationParser(),
             ),
         )
 
