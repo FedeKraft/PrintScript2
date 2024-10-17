@@ -23,7 +23,7 @@ class ParserDirector(
     private var currentToken = tokenProvider.nextToken()
 
     fun nextStatement(): StatementNode {
-        val tokens = mutableListOf<token.Token>()
+        val tokens = mutableListOf<Token>()
         while (tokenProvider.hasNextToken()) {
             checkUnknownToken()
             if (isIfOrElseTokenType()) {
@@ -33,7 +33,6 @@ class ParserDirector(
                 currentToken = tokenProvider.nextToken()
                 return processStatement(tokens)
             }
-
             tokens.add(currentToken)
             currentToken = tokenProvider.nextToken()
         }
@@ -51,38 +50,78 @@ class ParserDirector(
     override fun hasNextAST(): Boolean = tokenProvider.hasNextToken()
 
     private fun processBlockNode(): StatementNode {
-        // guardo la linea y columna del if
         val blockLine = currentToken.line
         val blockColumn = currentToken.column
-        // me salteo la palabra reservada if
-        currentToken = tokenProvider.nextToken()
-
+        currentToken = tokenProvider.nextToken() // salteo el token de if
         val condition = getIfCondition()
+        advanceToStartOfBlock() // Me posiciono directamente dentro del bloque
+        val ifBlock = parseBlockStatements()
+        // Check for 'else' block
+        val elseBlock = if (currentToken.type == TokenType.ELSE) {
+            currentToken = tokenProvider.nextToken() // Skip 'else'
+            advanceToStartOfBlock() // Position at the start of the else block
+            BlockNode(parseBlockStatements(),0, 0)
+        } else {
+            null
+        }
+        return IfElseNode(condition, BlockNode(ifBlock, blockLine, blockColumn), elseBlock, blockLine, blockColumn)
+    }
+
+    private fun getIfCondition(): ExpressionNode {
+        currentToken = tokenProvider.nextToken() // Me muevo uno mas para estar en la condicion
+        return parseExpression()
+    }
+
+    private fun advanceToStartOfBlock() {
+        while (currentToken.type != TokenType.OPEN_BRACE && tokenProvider.hasNextToken()) {
+            currentToken = tokenProvider.nextToken()
+        }
+        currentToken = tokenProvider.nextToken() // me muevo hasta el token despues de la llave
+    }
+
+    private fun parseBlockStatements(): List<StatementNode> {
         val blockAst = mutableListOf<StatementNode>()
-        currentToken = tokenProvider.nextToken()
-        currentToken = tokenProvider.nextToken()
-        currentToken = tokenProvider.nextToken()
-        while (currentToken.type != TokenType.CLOSE_BRACE) {
-            val blockTokens = mutableListOf<Token>() // lista para los tokens antes de cada parseo de linea
-            while (currentToken.type != TokenType.SEMICOLON) { // consigo todos los tokens de la linea
+        // parseo los statments hasta encontrar una llave de cierre
+        while (currentToken.type != TokenType.CLOSE_BRACE && tokenProvider.hasNextToken()) {
+            val blockTokens = mutableListOf<Token>()
+            // armo cada statement con los tokens
+            while (currentToken.type != TokenType.SEMICOLON && currentToken.type != TokenType.CLOSE_BRACE) {
                 if (currentToken.type == TokenType.IF) {
-                    blockAst.add(processBlockNode())
+                    blockAst.add(processBlockNode()) // en caso de doble if
+                } else {
+                    blockTokens.add(currentToken)
+                    currentToken = tokenProvider.nextToken()
                 }
-                blockTokens.add(currentToken)
+            }
+            // avanzo un token despues del semicolon
+            if (currentToken.type == TokenType.SEMICOLON) {
                 currentToken = tokenProvider.nextToken()
             }
-            currentToken = tokenProvider.nextToken()
-            val currentAst = processStatement(blockTokens) // parseo la linea
-            blockAst.add(currentAst) // la agrego a la list de statements y si no se cierra el if se corre la sig linea
+            // parseo el statement que tengo hasta ahora y lo agrego al conjunto de statements en el bloque
+            if (blockTokens.isNotEmpty()) {
+                blockAst.add(processStatement(blockTokens))
+            }
         }
-        currentToken = tokenProvider.nextToken()
-        if (currentToken.type == TokenType.ELSE) {
-            val elseBlockNode = processElseBlockNode()
-            val blockStatements = BlockNode(blockAst, 0, 0)
-            return IfElseNode(condition, blockStatements, elseBlockNode, blockLine, blockColumn)
+        currentToken = tokenProvider.nextToken() // cuando encuentro la llave, avanzo uno y devuelvo el bloque
+        return blockAst
+    }
+
+    private fun parseExpression(): ExpressionNode {
+        return when (currentToken.type) {
+            TokenType.IDENTIFIER ->
+                IdentifierNode(
+                    currentToken.value.toString(),
+                    currentToken.line,
+                    currentToken.column
+                )
+            TokenType.BOOLEAN ->
+                BooleanLiteralNode(
+                    (currentToken.value as TokenValue.BooleanValue).value,
+                    currentToken.line,
+                    currentToken.column
+                )
+            else -> throw RuntimeException("Unsupported token type: ${currentToken.type}")
         }
-        val blockStatements = BlockNode(blockAst, 0, 0)
-        return IfElseNode(condition, blockStatements, null, blockLine, blockColumn)
     }
 
     private fun processStatement(tokens: List<Token>): StatementNode {
@@ -91,64 +130,24 @@ class ParserDirector(
         return parser.parse(tokens)
     }
 
-    private fun getIfCondition(): ExpressionNode {
-        currentToken = tokenProvider.nextToken()
-
-        return when (currentToken.type) {
-            TokenType.IDENTIFIER -> IdentifierNode(
-                (currentToken.value as TokenValue.StringValue).value,
-                currentToken.line,
-                currentToken.column,
-            )
-            TokenType.BOOLEAN ->
-                BooleanLiteralNode(
-                    (currentToken.value as TokenValue.BooleanValue).value,
-                    currentToken.line,
-                    currentToken.column,
-                )
-
-            else -> throw RuntimeException("Unsupported token type: ${currentToken.type}")
-        }
-    }
-
-    private fun processElseBlockNode(): BlockNode {
-        val blockAst = mutableListOf<StatementNode>() // armo listita vacia para agregar los statements
-        currentToken = tokenProvider.nextToken()
-        currentToken = tokenProvider.nextToken()
-
-        while (currentToken.type != TokenType.CLOSE_BRACE) {
-            val blockTokens = mutableListOf<Token>() // lista para los tokens antes de cada parseo de linea
-            while (currentToken.type != TokenType.SEMICOLON) { // consigo todos los tokens de la linea
-                if (currentToken.type == TokenType.IF) {
-                    blockAst.add(processBlockNode())
-                }
-                blockTokens.add(currentToken)
-                currentToken = tokenProvider.nextToken()
-            }
-            currentToken = tokenProvider.nextToken()
-            val currentAst = processStatement(blockTokens) // parseo la linea
-            blockAst.add(currentAst) // la agrego a la list de statements y si no se cierra el if se corre la sig linea
-        }
-        currentToken = tokenProvider.nextToken()
-        return BlockNode(blockAst, 0, 0)
-    }
-
     private fun checkUnknownToken() {
         if (currentToken.type == TokenType.UNKNOWN) {
             throw RuntimeException(
-                "unknown token in variable assign at line: ${currentToken.line}, column: ${currentToken.column}",
+                "Unknown token at line: ${currentToken.line}, column: ${currentToken.column}"
             )
         }
     }
+
     private fun isIfOrElseTokenType(): Boolean {
         return currentToken.type == TokenType.IF || currentToken.type == TokenType.ELSE
     }
+
     private fun isSemiColonType(): Boolean {
         return currentToken.type == TokenType.SEMICOLON
     }
 
     private fun getParser(firstToken: Token): Parser {
-        return when (firstToken.type) {
+        return commands[firstToken.type] ?: when (firstToken.type) {
             TokenType.IDENTIFIER -> AssignationParser()
             TokenType.LET -> VariableDeclarationParser()
             TokenType.PRINT -> PrintParser()

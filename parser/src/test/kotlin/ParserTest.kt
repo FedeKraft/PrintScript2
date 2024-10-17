@@ -149,8 +149,8 @@ class ParserTest {
                                 5, // Adjusted column
                             ),
                         ),
-                        0,
-                        0,
+                        1,
+                        1,
                     ),
                     null,
                     1,
@@ -199,8 +199,8 @@ class ParserTest {
                                             9, // Adjusted column
                                         ),
                                     ),
-                                    0,
-                                    0,
+                                    3,
+                                    5,
                                 ),
                                 null,
                                 3,
@@ -212,8 +212,8 @@ class ParserTest {
                                 5, // Adjusted column
                             ),
                         ),
-                        0,
-                        0,
+                        1,
+                        1,
                     ),
                     null,
                     1,
@@ -246,8 +246,8 @@ class ParserTest {
                                 5, // Adjusted column
                             ),
                         ),
-                        0,
-                        0,
+                        1,
+                        1,
                     ),
                     BlockNode(
                         listOf(
