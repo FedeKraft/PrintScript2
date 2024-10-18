@@ -64,7 +64,7 @@ class ParserDirector(
     }
 
     private fun getIfCondition(): ExpressionNode {
-        currentToken = tokenProvider.nextToken() // Me muevo uno mas para estar en la condicion
+        currentToken = tokenProvider.nextToken() // me muevo uno mas para estar en la condicion
         return parseExpression()
     }
 
