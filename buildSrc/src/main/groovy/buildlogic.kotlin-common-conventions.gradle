@@ -30,7 +30,7 @@ java {
 }
 group = "printScript"
 
-version = "1.1.20"
+version = "1.1.21"
 
 
 tasks.named('test') {
