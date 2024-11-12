@@ -31,7 +31,7 @@ class Interpreter(
     private var variables = ExecutionContext()
     private var constants = ExecutionContext()
 
-    fun interpret() {
+    fun interpret(): List<Any?> {
         while (provider.hasNextAST()) {
             val statement = provider.getNextAST()
             try {
@@ -40,6 +40,7 @@ class Interpreter(
                 errorCollector.reportError("Error al interpretar la instrucción: ${e.message}")
             }
         }
+        return printEmitter.getPrintedValues()
     }
 
     private fun interpretStatement(statement: StatementNode) {
