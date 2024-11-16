@@ -371,7 +371,7 @@ class ParserTest {
     }
 
     @Test
-    fun `testReadInputAST`(){
+    fun testReadInputAST() {
         val reader = Reader(File("src/test/resources/ReadInputExample.txt").inputStream())
         val lexer = LexerFactory().createLexer1_1(reader)
         val parser = ParserFactory().createParser1_1(lexer)
@@ -381,6 +381,5 @@ class ParserTest {
             println(ast)
             actualAst.add(ast)
         }
-
     }
 }

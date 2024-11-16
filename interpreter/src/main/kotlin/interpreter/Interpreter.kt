@@ -119,7 +119,10 @@ class Interpreter(
                     val inputAsString = input.toString()
 
                     val processedInput = when {
-                        inputAsString.equals("true", ignoreCase = true) || inputAsString.equals("false", ignoreCase = true) -> {
+                        inputAsString.equals("true", ignoreCase = true) || inputAsString.equals(
+                            "false",
+                            ignoreCase = true,
+                        ) -> {
                             inputAsString.toBoolean()
                         }
                         inputAsString.toDoubleOrNull() != null -> {
