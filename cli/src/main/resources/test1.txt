@@ -1,2 +1,4 @@
-let a: string = readInput("Enter your name");
+let a: number = readInput("Enter your name");
 println("Hello, " + a + "!");
+let b: boolean = readEnv("MY_VAR");
+println("MY_VAR is " + b);

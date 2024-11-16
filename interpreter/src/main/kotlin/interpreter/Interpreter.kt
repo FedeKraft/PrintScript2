@@ -50,6 +50,7 @@ class Interpreter(
                     val value = evaluateExpression(statement.value)
                     val inferredType = inferType(value)
                     if (!isTypeCompatible(inferredType, statement.type)) {
+                        println("error")
                         errorCollector.reportError(
                             "Error de tipo en declaración de variable: Se esperaba " +
                                 "${statement.type} pero se encontró $inferredType",
@@ -115,15 +116,47 @@ class Interpreter(
                 is ReadInputNode -> {
                     println("Enter input for: ${expression.value}")
                     val input = inputProvider.readInput(expression.value)
-                    println("Received input: $input")
-                    input
+                    val inputAsString = input.toString()
+
+                    val processedInput = when {
+                        inputAsString.equals("true", ignoreCase = true) || inputAsString.equals("false", ignoreCase = true) -> {
+                            inputAsString.toBoolean()
+                        }
+                        inputAsString.toDoubleOrNull() != null -> {
+                            inputAsString.toDouble()
+                        }
+                        else -> inputAsString
+                    }
+
+                    println("Processed input: $processedInput")
+                    processedInput
                 }
+
                 is ReadEnvNode -> {
+                    println("Reading environment variable: ${expression.value}")
+
                     val envValue = System.getenv(expression.value as String)
-                    envValue ?: errorCollector.reportError(
-                        "La variable de entorno '${expression.value}' no está definida",
-                    )
+                    if (envValue == null) {
+                        errorCollector.reportError(
+                            "La variable de entorno '${expression.value}' no está definida",
+                        )
+                        return null
+                    }
+
+                    val processedEnvValue = when {
+                        envValue.equals("true", ignoreCase = true) || envValue.equals("false", ignoreCase = true) -> {
+                            envValue.toBoolean()
+                        }
+                        envValue.toDoubleOrNull() != null -> {
+                            envValue.toDouble()
+                        }
+                        else -> envValue
+                    }
+
+                    println("Processed environment value: $processedEnvValue")
+                    processedEnvValue
                 }
+
                 is IdentifierNode -> {
                     constants.get(expression.name) ?: variables.get(expression.name)
                         ?: errorCollector.reportError("Identificador no definido: ${expression.name}")
