@@ -23,8 +23,17 @@ class Formatter(
 
     private fun applyRules(node: StatementNode): String {
         var result = node.toFormattedString(variableTypes)
-        for (rule in rules) {
-            result = rule.applyRule(node, variableTypes, result)
+        for (
+        rule in
+
+        rules
+        ) {
+            result = rule.applyRule(
+
+                node,
+                variableTypes,
+                result,
+            )
         }
         return result
     }

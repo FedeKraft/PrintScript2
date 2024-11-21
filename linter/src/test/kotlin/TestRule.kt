@@ -47,7 +47,8 @@ class TestRule {
         )
         val parser = ParserFactory().createParser1_0(lexer)
         val linter = LinterFactory().createLinter1_0(parser, inputStream)
-        linter.lint()
+        val result = linter.lint()
+        println(result.toList())
     }
 
     @Test
