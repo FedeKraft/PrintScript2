@@ -15,6 +15,4 @@ open class PrintEmitter {
     fun getPrintedValues(): List<Any?> = printedValues
 
     open fun getCount(): Int = count
-
-    fun getOutput(): String = output.joinToString(separator = "\n")
 }
