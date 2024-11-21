@@ -1,0 +1,4 @@
+let name: string="Formatter";
+let age : number =20.0;
+age=21.0;
+println(name);

@@ -18,7 +18,7 @@ class AnalyzingCommand : CliktCommand(name = "analyze", help = "Analyze the file
     private val file by argument(help = "Source file to analyze")
     private val version by option(help = "Version of the language").default("1.0")
     private val configFilePath =
-        "C:\\Users\\vranc\\Projects\\Ingsis\\PrintScript2\\cli\\src\\main\\resources\\linter-config.json"
+        "src\\main\\resources\\linter-config.json"
 
     override fun run() {
         val reader = Reader(File(file).inputStream())

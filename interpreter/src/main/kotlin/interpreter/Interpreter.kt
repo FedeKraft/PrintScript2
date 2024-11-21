@@ -50,7 +50,6 @@ class Interpreter(
                     val value = evaluateExpression(statement.value)
                     val inferredType = inferType(value)
                     if (!isTypeCompatible(inferredType, statement.type)) {
-                        println("error")
                         errorCollector.reportError(
                             "Error de tipo en declaración de variable: Se esperaba " +
                                 "${statement.type} pero se encontró $inferredType",

@@ -1,0 +1,5 @@
+let age: number = 20.0;
+println(age);
+let name2: string = "Juan";
+let a: number = 1;
+a = 5;

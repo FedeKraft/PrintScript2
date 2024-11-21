@@ -1,0 +1,10 @@
+let age: number = 20.0;
+println(age);
+const name: string= "cli";
+let name2: string = "Juan";
+if (true) {
+    if (true) {
+    age=30.0;
+}
+    println(age);
+}

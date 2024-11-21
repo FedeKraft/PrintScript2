@@ -21,7 +21,7 @@ class FormattingCommand : CliktCommand(name = "format", help = "Format the file"
     private val file by argument(help = "Source file to format")
     private val version by option(help = "Version of the language").default("1.0")
     private val configFilePath =
-        "C:\\Users\\vranc\\Projects\\Ingsis\\PrintScript2\\cli\\src\\main\\resources\\formatter-config.json"
+        "src\\main\\resources\\formatter-config.json"
 
     override fun run() {
         val reader = Reader(File(file).inputStream())

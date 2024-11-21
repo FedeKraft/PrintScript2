@@ -1,0 +1,9 @@
+let name: string="Formatter";
+let age : number =20.0;
+const isStudent: boolean=true;
+let isStudent2: boolean=false;
+if (isStudent2) {
+    println("Student");
+} else {
+    println("Not a student");
+}

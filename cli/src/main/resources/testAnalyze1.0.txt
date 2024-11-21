@@ -1,0 +1,3 @@
+let nameSurname: string = "Joe";
+let name_surname: string = "Snippet";
+println(name_surname + " is here");

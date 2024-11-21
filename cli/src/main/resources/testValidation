@@ -1,6 +1,0 @@
-if (true) {
-    if (true) {
-    age=30.0;
-}
-    println(age);
-}

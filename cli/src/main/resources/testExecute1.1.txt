@@ -1,0 +1,19 @@
+println("hola");
+let a: number = 1;
+a = a + 1;
+println(a);
+if (true) {
+    println("a es 2");
+} else {
+    println("a no es 2");
+}
+const b: string = "palabra";
+println(b);
+let d: number = a + 6;
+println(d);
+let e:boolean = true;
+if (e) {
+    println("fin");
+} else {
+    println("algo salió mal");
+}

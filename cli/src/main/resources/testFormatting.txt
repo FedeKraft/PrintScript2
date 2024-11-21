@@ -1,5 +1,0 @@
-let name : string="Formatter";
-let age : number=20.0;
-if (age>18) {
-    println("You are an adult");
-}

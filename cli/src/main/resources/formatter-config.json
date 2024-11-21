@@ -6,7 +6,7 @@
     "enabled": true
   },
   "spaceAroundEquals": {
-    "enabled": true
+    "enabled": false
   },
   "newlineBeforePrintln": {
     "enabled": true,

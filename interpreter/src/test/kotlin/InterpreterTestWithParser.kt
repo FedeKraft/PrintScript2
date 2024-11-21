@@ -70,7 +70,11 @@ class InterpreterTestWithParser {
 
         // Verificamos que el error esperado se haya registrado en el ErrorCollector
         val errors = errorCollector.getErrors()
-        assertEquals(0, errors.size)
+        assertEquals(1, errors.size)
+        assertEquals(
+            "Error de tipo en declaración de variable: Se esperaba STRING_TYPE pero se encontró BOOLEAN_TYPE",
+            errors[0],
+        )
     }
 
     @Test
