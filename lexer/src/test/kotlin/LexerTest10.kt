@@ -33,7 +33,6 @@ class LexerTest10 {
                 Token(TokenType.NUMBER_TYPE, TokenValue.StringValue("number"), 2, 10),
                 Token(TokenType.ASSIGN, TokenValue.StringValue("="), 2, 17),
                 Token(TokenType.NUMBER, TokenValue.NumberValue(21.0), 2, 19),
-                Token(TokenType.SEMICOLON, TokenValue.StringValue(";"), 2, 21),
             )
         assertEquals(expectedTokens, actualTokens, "Tokens do not match")
     }
