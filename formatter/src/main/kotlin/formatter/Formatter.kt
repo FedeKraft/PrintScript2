@@ -54,19 +54,18 @@ class Formatter(
         return result
     }
 
-
     fun formatNode(node: Any, variableTypes: MutableMap<String, String> = mutableMapOf()): String {
         return when (node) {
             is VariableDeclarationNode -> {
                 val inferredType = inferType(node.value, variableTypes)
                 variableTypes[node.identifier.name] = inferredType
                 "let ${formatNode(node.identifier, variableTypes)}:" +
-                        "$inferredType = ${formatNode(node.value, variableTypes)};"
+                    "$inferredType = ${formatNode(node.value, variableTypes)};"
             }
             is ConstDeclarationNode -> {
                 val inferredType = inferType(node.value, variableTypes)
                 "const ${formatNode(node.identifier, variableTypes)}:" +
-                        "$inferredType = ${formatNode(node.value, variableTypes)};"
+                    "$inferredType = ${formatNode(node.value, variableTypes)};"
             }
             is AssignationNode -> {
                 "${formatNode(node.identifier, variableTypes)} = ${formatNode(node.value, variableTypes)};"
@@ -102,7 +101,8 @@ class Formatter(
                 if (node.elseBlock == null) {
                     "if (${formatNode(node.condition, variableTypes)}) {\n$ifBlockString\n}"
                 } else {
-                    "if (${formatNode(node.condition, variableTypes)}) {\n$ifBlockString\n}\nelse {\n$elseBlockString\n}"
+                    "if (${formatNode(node.condition, variableTypes)}) " +
+                        "{\n$ifBlockString\n}\nelse {\n$elseBlockString\n}"
                 }
             }
             is BlockNode -> {
