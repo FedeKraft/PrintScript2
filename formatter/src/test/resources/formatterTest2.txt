@@ -5,3 +5,5 @@ if (true) {
 } else {
     let a : string = "Bielseada";
 }
+a =  a   +   b   -  c    /  d    *   e;
+a = 2 + 2 / 7;
