@@ -5,7 +5,7 @@ import config.Indentation
 
 class Indentation(private val config: Indentation) : FormatterRule {
 
-    override fun applyRule(node: StatementNode, variableTypes: Map<String, Any>, result: String): String {
+    override fun applyRule(node: StatementNode, result: String): String {
         val lines = result.split("\n")
         val formattedLines = mutableListOf<String>()
         var currentIndentation = 0

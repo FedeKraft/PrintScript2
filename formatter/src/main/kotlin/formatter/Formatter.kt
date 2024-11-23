@@ -24,7 +24,6 @@ class Formatter(
     private val rules: List<FormatterRule>,
     private val astProvider: ASTProvider,
 ) {
-    private val variableTypes = mutableMapOf<String, String>()
 
     fun format(): Sequence<String> =
         sequence {
@@ -47,31 +46,29 @@ class Formatter(
             result = rule.applyRule(
 
                 node,
-                variableTypes,
                 result,
             )
         }
         return result
     }
 
-    fun formatNode(node: Any, variableTypes: MutableMap<String, String> = mutableMapOf()): String {
+    fun formatNode(node: Any): String {
         return when (node) {
             is VariableDeclarationNode -> {
-                val inferredType = inferType(node.value, variableTypes)
-                variableTypes[node.identifier.name] = inferredType
-                "let ${formatNode(node.identifier, variableTypes)}:" +
-                    "$inferredType = ${formatNode(node.value, variableTypes)};"
+                val inferredType = inferType(node.value)
+                "let ${formatNode(node.identifier)}:" +
+                    "$inferredType = ${formatNode(node.value)};"
             }
             is ConstDeclarationNode -> {
-                val inferredType = inferType(node.value, variableTypes)
-                "const ${formatNode(node.identifier, variableTypes)}:" +
-                    "$inferredType = ${formatNode(node.value, variableTypes)};"
+                val inferredType = inferType(node.value)
+                "const ${formatNode(node.identifier)}:" +
+                    "$inferredType = ${formatNode(node.value)};"
             }
             is AssignationNode -> {
-                "${formatNode(node.identifier, variableTypes)} = ${formatNode(node.value, variableTypes)};"
+                "${formatNode(node.identifier)} = ${formatNode(node.value)};"
             }
             is PrintStatementNode -> {
-                "println(${formatNode(node.expression, variableTypes)});"
+                "println(${formatNode(node.expression)});"
             }
             is IdentifierNode -> {
                 node.name
@@ -93,20 +90,20 @@ class Formatter(
                     TokenType.DIVIDE -> "/"
                     else -> node.operator.toString()
                 }
-                "${formatNode(node.left, variableTypes)} $operatorSymbol ${formatNode(node.right, variableTypes)}"
+                "${formatNode(node.left)} $operatorSymbol ${formatNode(node.right)}"
             }
             is IfElseNode -> {
-                val ifBlockString = formatNode(node.ifBlock, variableTypes)
-                val elseBlockString = node.elseBlock?.let { formatNode(it, variableTypes) } ?: ""
+                val ifBlockString = formatNode(node.ifBlock)
+                val elseBlockString = node.elseBlock?.let { formatNode(it) } ?: ""
                 if (node.elseBlock == null) {
-                    "if (${formatNode(node.condition, variableTypes)}) {\n$ifBlockString\n}"
+                    "if (${formatNode(node.condition)}) {\n$ifBlockString\n}"
                 } else {
-                    "if (${formatNode(node.condition, variableTypes)}) " +
+                    "if (${formatNode(node.condition)}) " +
                         "{\n$ifBlockString\n}\nelse {\n$elseBlockString\n}"
                 }
             }
             is BlockNode -> {
-                node.statements.joinToString(separator = "\n") { formatNode(it, variableTypes) }
+                node.statements.joinToString(separator = "\n") { formatNode(it) }
             }
             is ReadInputNode -> {
                 "readInput(${node.value})"
@@ -121,15 +118,14 @@ class Formatter(
         }
     }
 
-    fun inferType(expression: ExpressionNode, variableTypes: Map<String, String>): String {
+    fun inferType(expression: ExpressionNode): String {
         return when (expression) {
             is StringLiteralNode -> "string"
             is NumberLiteralNode -> "number"
             is BooleanLiteralNode -> "boolean"
-            is IdentifierNode -> variableTypes[expression.name] ?: "UnknownType"
             is BinaryExpressionNode -> {
-                val leftType = inferType(expression.left, variableTypes)
-                val rightType = inferType(expression.right, variableTypes)
+                val leftType = inferType(expression.left)
+                val rightType = inferType(expression.right)
                 if (leftType == rightType) leftType else "UnknownType"
             }
             else -> "UnknownType"
