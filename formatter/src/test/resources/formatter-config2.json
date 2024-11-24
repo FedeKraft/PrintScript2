@@ -1,5 +1,5 @@
 {
-  "space-before-colon": false,
+  "space-before-colon": true,
   "space-after-colon": true,
   "space-around-equals": false,
   "newline-before-println": 2,

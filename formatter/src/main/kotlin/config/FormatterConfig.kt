@@ -1,31 +1,16 @@
 package config
 
-data class SpaceBeforeColonConfig(
-    val enabled: Boolean,
-)
-
-data class SpaceAfterColonConfig(
-    val enabled: Boolean,
-)
-
-data class SpaceAroundEqualsConfig(
-    val enabled: Boolean,
-)
-
-data class NewlineBeforePrintlnConfig(
-    val enabled: Boolean,
-    val newlineCount: Int,
-)
-
-data class Indentation(
-    val enabled: Boolean,
-    val n: Int,
-)
+import com.fasterxml.jackson.annotation.JsonProperty
 
 data class FormatterConfig(
-    val spaceBeforeColon: SpaceBeforeColonConfig,
-    val spaceAfterColon: SpaceAfterColonConfig,
-    val spaceAroundEquals: SpaceAroundEqualsConfig,
-    val newlineBeforePrintln: NewlineBeforePrintlnConfig,
-    val indentation: Indentation,
+    @JsonProperty("space-before-colon")
+    val spaceBeforeColon: Boolean = false,
+    @JsonProperty("space-after-colon")
+    val spaceAfterColon: Boolean = false,
+    @JsonProperty("space-around-equals")
+    val spaceAroundEquals: Boolean = false,
+    @JsonProperty("newline-before-println")
+    val newlineBeforePrintln: Int = 0,
+    @JsonProperty("indentation")
+    val indentation: Int = 4,
 )

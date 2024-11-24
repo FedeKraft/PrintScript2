@@ -15,6 +15,7 @@ class LinterFactory {
 
     fun createLinter1_0(astProvider: ASTProvider, configInputStream: InputStream): Linter {
         val mapper = jacksonObjectMapper()
+
         val config: Config = try {
             mapper.readValue(configInputStream)
         } catch (e: Exception) {

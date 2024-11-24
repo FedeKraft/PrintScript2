@@ -1,6 +1,5 @@
+import factory.FormatterFactory
 import factory.LexerFactory
-import formatter.Formatter
-import formatter.FormatterConfigLoader
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import parser.ParserDirector
@@ -9,20 +8,14 @@ import parserTypes.ConstDeclarationParser
 import parserTypes.PrintParser
 import parserTypes.VariableDeclarationParser
 import reader.Reader
-import rules.Indentation
-import rules.SpaceAfterColonRule
 import token.TokenType
 import java.io.ByteArrayInputStream
 import java.io.File
+import java.io.InputStream
+import java.nio.file.Files
+import java.nio.file.Paths
 
 class ColonTests {
-    private val config = FormatterConfigLoader.loadConfig("src/test/resources/formatter-config.json")
-
-    private val rulesEnabled = listOf(
-        Indentation(config.indentation),
-        SpaceAfterColonRule(config.spaceAfterColon.enabled),
-
-    )
 
     private fun readSourceCodeFromFile(filename: String): String {
         return File("src/test/resources/colonTests/$filename").readText().replace("\r\n", "\n")
@@ -44,7 +37,10 @@ class ColonTests {
             ),
         )
 
-        val formatter = Formatter(rulesEnabled, parserDirector)
+        val path = Paths.get("src/test/resources/formatter-config.json")
+        val configFromJSON: InputStream = Files.newInputStream(path)
+        val formatter = FormatterFactory().createFormatter1_1(parserDirector, configFromJSON)
+
         var result = ""
         for (formattedString in formatter.format()) {
             if (parserDirector.hasNextAST()) {

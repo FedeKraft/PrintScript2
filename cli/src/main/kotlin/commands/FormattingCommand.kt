@@ -32,10 +32,9 @@ class FormattingCommand : CliktCommand(name = "format", help = "Format the file"
         // Define the formatting rules based on configuration
         val rules = listOf(
             Indentation(config.indentation),
-            NoSpaceAroundEqualsRule(config.spaceAroundEquals.enabled),
-            SpaceBeforeColonRule(config.spaceBeforeColon.enabled),
-            SpaceAfterColonRule(config.spaceAfterColon.enabled),
-            // Add other rules based on the provided config
+            NoSpaceAroundEqualsRule(config.spaceAroundEquals),
+            SpaceBeforeColonRule(config.spaceBeforeColon),
+            SpaceAfterColonRule(config.spaceAfterColon),
             NewlineBeforePrintlnRule(config.newlineBeforePrintln),
         )
 

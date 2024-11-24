@@ -1,6 +1,5 @@
+import factory.FormatterFactory
 import factory.LexerFactory
-import formatter.Formatter
-import formatter.FormatterConfigLoader
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import parser.ParserDirector
@@ -8,25 +7,14 @@ import parserTypes.AssignationParser
 import parserTypes.PrintParser
 import parserTypes.VariableDeclarationParser
 import reader.Reader
-import rules.Indentation
-import rules.NewlineBeforePrintlnRule
-import rules.NoSpaceAroundEqualsRule
-import rules.SpaceAfterColonRule
-import rules.SpaceBeforeColonRule
 import token.TokenType
 import java.io.ByteArrayInputStream
 import java.io.File
+import java.io.InputStream
+import java.nio.file.Files
+import java.nio.file.Paths
 
 class SpaceAroundEquals {
-    private val config = FormatterConfigLoader.loadConfig("src/test/resources/formatter-config.json")
-
-    private val rulesEnabled = listOf(
-        Indentation(config.indentation),
-        SpaceBeforeColonRule(config.spaceBeforeColon.enabled),
-        SpaceAfterColonRule(config.spaceAfterColon.enabled),
-        NewlineBeforePrintlnRule(config.newlineBeforePrintln),
-        NoSpaceAroundEqualsRule(config.spaceAroundEquals.enabled),
-    )
 
     private fun readSourceCodeFromFile(filename: String): String {
         return File("src/test/resources/spaceAroundEquals/$filename").readText().replace("\r\n", "\n")
@@ -47,7 +35,9 @@ class SpaceAroundEquals {
             ),
         )
 
-        val formatter = Formatter(rulesEnabled, parserDirector)
+        val path = Paths.get("src/test/resources/formatter-config3.json")
+        val configFromJSON: InputStream = Files.newInputStream(path)
+        val formatter = FormatterFactory().createFormatter1_1(parserDirector, configFromJSON)
         var result = ""
         for (formattedString in formatter.format()) {
             if (parserDirector.hasNextAST()) {
